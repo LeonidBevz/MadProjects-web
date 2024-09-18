@@ -1,0 +1,27 @@
+html, body, head {
+  margin: 0;
+  padding: 0;
+}
+
+
+body { 
+  font-family: 'Roboto Flex', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+:root{
+  --main-blue-color: #005AAA;
+  --main-red-color: #E4003A;
+  --main-text-color:#000000;
+  --alt-text-color:#ffffff;
+  --bg-color:#F7F9FA;
+  --card-color:#FFFFFF;
+  --border-color:#D9D9D9;
+}
