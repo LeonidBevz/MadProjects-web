@@ -24,4 +24,9 @@ code {
   --bg-color:#F7F9FA;
   --card-color:#FFFFFF;
   --border-color:#D9D9D9;
+  --main-gradient: linear-gradient(270deg,var(--main-red-color), var(--main-blue-color));
+  --activity-100: #005AAA;
+  --activity-75: #337BCC;
+  --activity-50: #66A3E6;
+  --activity-25: #99C8FF;
 }

@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import LogoIMG from "./../images/logo.svg"
 import "./login.css"
 
 const LoginPage = () => {
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -11,6 +13,7 @@ const LoginPage = () => {
     const handleSubmit = (event) =>{
         event.preventDefault();
         setErrorMessage("Бека нет")
+        navigate("/profile/")
     } 
      const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -55,7 +58,6 @@ const LoginPage = () => {
                                     value={password}
                                     onChange={handlePasswordChange}
                                     required
-
                                 />
                             </div>
                             {errorMessage && (<p className="error-message">{errorMessage}</p>)}

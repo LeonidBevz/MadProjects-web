@@ -1,6 +1,6 @@
 import React from "react";
 
-const ConstPage = () => {
+const TopMenuPage = () => {
 
   
     return (
@@ -11,4 +11,4 @@ const ConstPage = () => {
     );
   }
   
-  export default ConstPage;
+  export default TopMenuPage ;
