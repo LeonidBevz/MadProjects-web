@@ -1,0 +1,67 @@
+.activity-page{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.commits-tile{
+    width: 720px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    margin: 0;
+    box-sizing: border-box;
+}
+.commits-controls-container{
+    width: 100%;
+    display: flex;
+    gap: 3%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.commits-controls-container p{
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.year{
+    flex: 0 0 25%;
+}
+.member{
+    flex: 0 0 30%;
+}
+.repo{
+    flex: 0 0 37%;
+}
+.flex1{
+    flex: 1;
+}
+@media (max-width: 399px)  {
+    .commits-tile{
+        width: 97vw;
+    }
+    .commits-controls-container{
+        display: block;
+    }
+}
+@media (min-width: 400px) and (max-width: 719px) {
+    .commits-tile{
+        width: 97vw;
+    }
+    .commits-controls-container{
+        display: block;
+    }
+}
+@media (min-width: 720px) and (max-width: 1399px) {
+
+}
+@media (min-width: 1400px){
+    .activity-page-tile{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 20px; 
+        max-width: 1400px;
+    }
+}

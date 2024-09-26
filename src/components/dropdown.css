@@ -1,0 +1,98 @@
+.search-dd-container{
+    position: relative;
+  }
+  
+  .search-dd-button{
+    width: 100%;
+    font-size: 14px;
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    outline: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--border-color);
+    padding: 0px 10px;
+    cursor: pointer;
+    display: flex;
+    
+  }
+  .input-text{
+    display: block;
+    width: calc(100% - 20px);
+    padding: 10px 0px;
+    border-radius: 10px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    margin: 0;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }  
+  
+ 
+  .search-dd-button img{
+    cursor: pointer;
+    width: 15px;
+  }
+  
+  .search-dropdown{
+    border: 1px solid var(--main-green-color); 
+    border-radius: 0px 0px 10px 10px;
+    position: absolute;
+    width: 100%;
+    z-index: 5; 
+    background-color: var(--card-color); 
+    box-sizing: border-box;
+    height: 217px;
+    margin-top: -1px;
+  }
+  .search-dropdown input{
+    padding: 8px;
+    border-radius: 10px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: calc(100% - 10px);
+    font-size: 14px;
+    border: 1px solid var(--main-green-color);
+    margin: 5px;
+    box-sizing: border-box;
+  }
+  .search-dropdown  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .search-dropdown ul li {
+    padding: 8px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+  }
+  
+  .search-dropdown ul li:hover {
+    background-color: var(--bg-color);
+    cursor: pointer;
+  }
+  .isddactive{
+    border: 1px solid var(--main-green-color);
+    border-radius: 10px 10px 0px 0px;
+  }
+  .liactive{
+    background-color: var(--main-blue-color);
+    color: var(--alt-text-color);
+  }
+  .liactive:hover{
+    background-color: var(--main-blue-color) !important;
+    color: var(--alt-text-color)!important;
+  }
+

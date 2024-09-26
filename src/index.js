@@ -9,6 +9,7 @@ import "./index.css"
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import ProfilePage from "./pages/profilepage";
+import ActivityPage from "./pages/activitypage";
 
 const App = () => { 
 
@@ -17,7 +18,7 @@ const App = () => {
       <Routes> 
         <Route index element={<Navigate to="/welcome" />} />
         <Route path="/" element={<TopMenuPage/>}>
-        
+          <Route path=":project/activity/" element={<ActivityPage/>}/>
         </Route>
         <Route path='/profile/' element={<ProfilePage/>}/>
 

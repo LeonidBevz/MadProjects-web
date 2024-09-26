@@ -1,0 +1,54 @@
+.top-menu{
+    width: 100%;
+    height: 45px;
+    background-color: var(--card-color);
+    position: relative;
+}
+.sepline{
+    background: var(--main-gradient);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 5px;
+
+}
+.top-menu-content{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+.flex-start{
+   flex:1;
+}
+.flex-center{
+    flex:1;
+    display: flex;
+    justify-content: center;
+ }
+.flex-end{
+    flex:1;
+    display: flex;
+    justify-content: end;
+ }
+ .logo{
+    height: 60px;
+    margin-top: 15px;
+    z-index: 1;
+ }
+ .topmenu-button{
+   height: 25px;
+   padding: 0;
+   border: none;
+   background-color: var(--card-color);
+   margin-right: 20px;
+   cursor: pointer;
+ }
+ .topmenu-button-left{
+    height: 25px;
+    padding: 0;
+    border: none;
+    background-color: var(--card-color);
+    margin-left: 20px;
+    cursor: pointer;
+ }

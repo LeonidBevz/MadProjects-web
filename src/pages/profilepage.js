@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import LogoIMG from "./../images/logo.svg"
 import SunIMG from "./../images/sun.svg"
 import NightIMG from "./../images/night.svg"
@@ -12,6 +13,8 @@ const ProfilePage = () => {
     const [username,setUsername] = useState("Абобус")
     const [gitLink,setGitLink] = useState("https://github.com/Kaelesty")
     const [EmailLink,setEmailLink] = useState("example@gmail.com")
+
+    const navigate = useNavigate()
   
     return (
       <div className="profile-page">          
@@ -54,7 +57,7 @@ const ProfilePage = () => {
             <h1>Мои проекты</h1>
             <div className="profile-projects">
                 <div className="profile-projects-item">
-                    <div className="profile-projects-content">
+                    <div className="profile-projects-content" onClick={()=>navigate("/audionautica/activity/")}>
                         <p>audionautica</p>
                         <img src={ArrowIMG} alt="arrow" />
                     </div>

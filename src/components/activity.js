@@ -73,8 +73,7 @@ const Activity = () => {
     const year = 2025
     const date = new Date(`${year}-01-01`); 
     const FirstJanDayOfWeek = getDayOfWeek(date);
-    const [isTooltipVisible, setIsTooltipVisible] = useState(() => Array(378).fill(false));
-    const [activities,setActivities] = useState({
+    const [activities, setActivities] = useState({
       1: 57,
       3: 82,
       5: 76,
@@ -129,21 +128,25 @@ const Activity = () => {
     const handleClick = (day) =>{
       console.log(getDateFromDayNumber(day, year))
     }
-    const handleMouseEnter = (index) => {
-      setIsTooltipVisible(prev => {
-        const newTooltipVisible = [...prev];
-        newTooltipVisible[index] = true;
-        return newTooltipVisible;
-      });
-    };
+
+    const handleMouseEnter = (event) => {
+      const tooltip = event.currentTarget.querySelector('.tooltip');
+      const { clientWidth } = tooltip;
+
+      const { left } = event.currentTarget.getBoundingClientRect();
+
+      if (left - clientWidth/2 < 0){ //выходит за пределы слева
+        tooltip.style.transform = `translateX(100%)`
+      } 
+      else if (left + clientWidth/2  > window.innerWidth) {//выходит за пределы справа
+        tooltip.style.transform = `translateX(0%)`; 
+      }
+      else {
+        tooltip.style.transform = `translateX(50%)`; 
+      }
   
-    const handleMouseLeave = (index) => {
-      setIsTooltipVisible(prev => {
-        const newTooltipVisible = [...prev];
-        newTooltipVisible[index] = false;
-        return newTooltipVisible;
-      });
     };
+    
     return (
       <div className="activity">
         <div className="act-container">
@@ -160,8 +163,8 @@ const Activity = () => {
             </div>
             {Array.from({ length: 54 }, (_, i) => (<div key={i}>
               {Array.from({ length: 7 }, (_, j) => (
-                <div className={
-                  activities[i * 7 + j - FirstJanDayOfWeek] <= Q[0] ? 
+                <div className={"grid-item " + 
+                  (activities[i * 7 + j - FirstJanDayOfWeek] <= Q[0] ? 
                     "grid-item-25" :
                   activities[i * 7 + j - FirstJanDayOfWeek] > Q[0] && activities[i * 7 + j - FirstJanDayOfWeek] <= Q[1] ? 
                     "grid-item-50" :
@@ -169,13 +172,15 @@ const Activity = () => {
                     "grid-item-75" : 
                   activities[i * 7 + j - FirstJanDayOfWeek] > Q[2] ?
                     "grid-item-100" :
-                    "grid-item"
+                    "grid-item-0")
                   } 
-                  onMouseEnter={()=>handleMouseEnter(i * 7 + j)}
-                  onMouseLeave={()=>handleMouseLeave(i * 7 + j)}
+                  onMouseEnter={(event) => handleMouseEnter(event)}
                   key={i * 7 + j - FirstJanDayOfWeek} 
-                  onClick={() => handleClick(i * 7 + j - FirstJanDayOfWeek)}>
-                    {isTooltipVisible[i * 7 + j] && (<div className="tooltip">{`${getCommitCountString(i * 7 + j - FirstJanDayOfWeek, activities)} за ${getStrDateFromDayNumber(i * 7 + j - FirstJanDayOfWeek,year)}`}</div>)}
+                  onClick={() => handleClick(i * 7 + j - FirstJanDayOfWeek)}
+                >
+                  <div className="tooltip">
+                    {`${getCommitCountString(i * 7 + j - FirstJanDayOfWeek, activities)} за ${getStrDateFromDayNumber(i * 7 + j - FirstJanDayOfWeek, year)}`}
+                  </div>
                 </div>
               ))}
             </div>))}
@@ -186,8 +191,8 @@ const Activity = () => {
           <div className="act-bottom-right">
             <p>Меньше</p>
             {Array.from({ length: 5 }, (_, index) => (
-                <div className={`nopoint ${
-                  index === 0 ? "grid-item" :
+                <div className={`nopoint grid-item ${
+                  index === 0 ? "grid-item-0" :
                   index === 1 ? "grid-item-25" :
                   index === 2 ? "grid-item-50" :
                   index === 3 ? "grid-item-75" :
