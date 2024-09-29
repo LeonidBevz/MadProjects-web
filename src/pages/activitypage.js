@@ -4,8 +4,9 @@ import "./activitypage.css"
 import SearchDropDown from "../components/searchdropdown";
 import Commit from "../components/commit";
 import LastActivity from "../components/lastactivity";
-import ArrowIMG from "./../images/arrow.svg"
 import { useNavigate } from "react-router-dom";
+import RightArrowIco from "../images/arrowrightico";
+import useToken from "../hooks/useToken";
 
 function formatDate(date) {
   const dateParts = date.slice(0, 10).split('-'); 
@@ -18,6 +19,7 @@ const ActivityPage = () => {
     const [chosenMember,setChosenMember] = useState("Kaelesty") 
     const [chosenRepo,setChosenRepo] = useState("Audionautica-web") 
     const navigate = useNavigate()
+    const {isNightTheme} = useToken()
     const lastActivityData = [{date: "2024-08-29T10:00:00Z", link: "audoinautica-neuro", text: "Andrey Butyrev привязал новый репозиторий ", linkTo: "/profile"},{date: "2024-03-29T10:00:00Z", link: "audoinautica-neuro", text: "Andrey Butyrev привязал новый репозиторий ", linkTo: "/profile"}]
     const sprints = [{name: "Последние правки (текущий)", linkTo: "/bomba/"},{name: "Плейлисты & Поиск (25.08.24)",linkTo: "/bomba/"},{name:"Пилим MVP (28.04.24)",linkTo: "/bomba/"}]
     const commitData = [
@@ -135,7 +137,7 @@ const ActivityPage = () => {
                 <div className="sprint" key={index}>
                   <div className="sprints-flex">
                     <p>{sprint.name}</p>
-                    <img src={ArrowIMG} alt="arrow" onClick={()=>navigate(sprint.linkTo)}/>
+                    <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                   </div>
                   <div className="grad-separator"></div>
                 </div>

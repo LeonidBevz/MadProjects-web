@@ -1,14 +1,15 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import LogoIMG from "./../images/logo.svg"
+import LogoIco from "../images/logoico";
 import SunIMG from "./../images/sun.svg"
 import NightIMG from "./../images/night.svg"
 import LogoutIMG from "./../images/logout.svg"
-import ArrowIMG from "./../images/arrow.svg"
+import useToken from "../hooks/useToken";
 import "./profilepage.css"
+import RightArrowIco from "../images/arrowrightico";
 
 const ProfilePage = () => {
-    const [isNightTheme, setIsNightTheme] = useState(false)
+    const {isNightTheme, setIsNightTheme} = useToken()
     const [username,setUsername] = useState("Абобус")
     const [gitLink,setGitLink] = useState("https://github.com/Kaelesty")
     const [EmailLink,setEmailLink] = useState("example@gmail.com")
@@ -21,10 +22,10 @@ const ProfilePage = () => {
           <div className="profile-sepline"></div>
           <div className="profile-top-content">
             <div className="flex-start"></div>
-            <div className="flex-center"><img className="logo" src={LogoIMG} alt="logo"/></div>
+            <div className="flex-center"><LogoIco color={isNightTheme ? "white": "black"} className="logo"/></div>
             <div className="flex-end">
                 <button className="topmenu-button" onClick={()=>{setIsNightTheme(!isNightTheme)}}>
-                    <img src={isNightTheme ? NightIMG :SunIMG} alt="theme"/>
+                    <img src={isNightTheme ? NightIMG : SunIMG} alt="theme"/>
                 </button>
                 <button className="topmenu-button"><img src={LogoutIMG} alt="theme"/></button>
             </div>
@@ -53,26 +54,26 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </div>
-            <h1>Мои проекты</h1>
+            <h2>Мои проекты</h2>
             <div className="profile-projects">
                 <div className="profile-projects-item">
                     <div className="profile-projects-content" onClick={()=>navigate("/audionautica/activity/")}>
                         <p>audionautica</p>
-                        <img src={ArrowIMG} alt="arrow" />
+                        <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="profile-projects-separator"></div>
                 </div>
                 <div className="profile-projects-item">
                     <div className="profile-projects-content">
                         <p>Создать проект...</p>
-                        <img src={ArrowIMG} alt="arrow" />
+                        <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="profile-projects-separator"></div>
                 </div>
                 <div className="profile-projects-item">
                     <div className="profile-projects-content">
                         <p>Присоединиться к проекту...</p>
-                        <img src={ArrowIMG} alt="arrow" />
+                        <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="profile-projects-separator"></div>
                 </div>

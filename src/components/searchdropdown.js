@@ -1,13 +1,15 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./dropdown.css"
-import downArrowIMG from "./../images/downarrow.svg"
-import upArrowIMG from "./../images/uparrow.svg"
+import UpArrowIco from "../images/arrowupico";
+import DownArrowIco from "../images/arrowdown";
+import useToken from "../hooks/useToken";
 
 
 const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) => {
     const [isDropdownOpen,setIsDropdownOpen] = useState(false);
     const [searchValue,setSearchValue]= useState("")
     const [filteredValues, setFilteredValues] = useState(values)
+    const {isNightTheme} = useToken();
 
     
     const container = useRef()
@@ -65,7 +67,9 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
       <div className="search-dd-container" ref={container}>
         <div className={isDropdownOpen ? "search-dd-button isddactive" : "search-dd-button"} onClick={()=>setIsDropdownOpen(!isDropdownOpen)}>
             <div className="input-text">{chosenOption}</div>
-            <img alt="ico" src={isDropdownOpen ? upArrowIMG : downArrowIMG}/>
+            {isDropdownOpen ? 
+              <DownArrowIco color={isNightTheme ? "#d4d3cf" : "#D9D9D9"} className="search-dd-button-img"/>
+              :<UpArrowIco color={isNightTheme ? "#d4d3cf" : "#D9D9D9"} className="search-dd-button-img"/>}
           </div>
         {isDropdownOpen && (
           <div className="search-dropdown">

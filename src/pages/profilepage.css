@@ -33,8 +33,7 @@
  }
  .logo{
     height: 60px;
-    margin-top: 15px;
-    margin: 0px 20px;
+    margin-top: 5px;
     z-index: 1;
  }
  .topmenu-button{
@@ -100,11 +99,14 @@
     width: 100%;
     background: var(--main-gradient)
 }
-.profile-page-content h1{
-    font-size: 30px;
-    font-weight: 500;
+.profile-page-content h2{
+    font-size: 1.8rem;
+    padding-left: 2rem;
+    padding-top: 20px;
+    margin: 0;
+    margin-bottom: 10px;
     width: 50rem;
-    padding: 0 2rem;
+    color: var(--main-text-color)
 }
 .profile-projects{
     width: 50rem;
@@ -118,7 +120,7 @@
     display: flex;
     cursor: pointer;
 }
-.profile-projects-content img{
+.profile-projects-content-img{
     width: 1.5rem;
     cursor: pointer;
 }
@@ -134,6 +136,9 @@
 }
 .profile-projects-item{
     margin: 10px 0px;
+}
+.profile-link a{
+    color: var(--main-text-color);
 }
  @media (width < 25rem) {
     .logo{

@@ -7,7 +7,7 @@
 .commit:not(:last-child){
     border-bottom: 1px solid var(--border-color);
 }
-.commit img{
+.commit-img{
     width: 2rem;
     height: 2rem;
 }

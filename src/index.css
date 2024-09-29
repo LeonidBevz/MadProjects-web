@@ -14,7 +14,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-color);
 }
-
+body p{
+  color: var(--main-text-color)
+} 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -34,6 +36,7 @@ code {
   --activity-50: #66A3E6;
   --activity-25: #99C8FF;
   --main-green-color: #009A49;
+
 }
 @supports (-moz-appearance: none) {
   * {

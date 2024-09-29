@@ -1,10 +1,12 @@
 import React from "react";
 import "./commit.css"
-import ArrowIMG from "./../images/arrow.svg"
+import useToken from "../hooks/useToken";
 import { Link } from "react-router-dom";
+import RightArrowIco from "../images/arrowrightico";
 
 
 const Commit = ({name,date,username,link,profilepic}) => {
+    const {isNightTheme} = useToken()
     const getTimeAgo = (date) => {
       const getWordEnding = (number, one, two, five) => {
           number = Math.abs(number) % 100;
@@ -59,7 +61,7 @@ const Commit = ({name,date,username,link,profilepic}) => {
                 </div>
             </div>
             <Link to={link}>
-                <img src={ArrowIMG} alt="link"/>
+                <RightArrowIco className="commit-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
             </Link>
       </div>
       

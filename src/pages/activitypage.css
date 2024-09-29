@@ -16,6 +16,7 @@
     padding-top: 20px;
     margin: 0;
     margin-bottom: 10px;
+    color: var(--main-text-color)
 }
 .commits-tile{
     width: 720px;
@@ -90,7 +91,7 @@
     display: flex;
 }
 
-.sprints-flex img{
+.sprints-flex-img{
     cursor: pointer;
     width: 2rem;
 }
