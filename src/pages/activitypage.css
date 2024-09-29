@@ -114,10 +114,11 @@
         display: block;
         width: 100%;
     }
+    .controls-block{
+        margin-bottom: 8px;
+    }
 }
-@media (width >= 730px) and (width < 1460px) {
-    
-}
+
 @media (width >= 1460px){
     .activity-page-container{
         columns: 2;

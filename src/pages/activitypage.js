@@ -17,7 +17,7 @@ function formatDate(date) {
 const ActivityPage = () => {
     const [year,setYear] = useState(2024)
     const [chosenMember,setChosenMember] = useState("Kaelesty") 
-    const [chosenRepo,setChosenRepo] = useState("Audionautica-web") 
+    const [chosenRepo,setChosenRepo] = useState("audionautica-web") 
     const navigate = useNavigate()
     const {isNightTheme} = useToken()
     const lastActivityData = [{date: "2024-08-29T10:00:00Z", link: "audoinautica-neuro", text: "Andrey Butyrev привязал новый репозиторий ", linkTo: "/profile"},{date: "2024-03-29T10:00:00Z", link: "audoinautica-neuro", text: "Andrey Butyrev привязал новый репозиторий ", linkTo: "/profile"}]

@@ -14,7 +14,7 @@
     padding: 0px 10px;
     cursor: pointer;
     display: flex;
-    
+    user-select: none;    
   }
   .input-text{
     display: block;

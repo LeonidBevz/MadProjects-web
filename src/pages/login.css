@@ -8,7 +8,9 @@
     min-height: 25rem;
     background-color: var(--card-color);
 }
-
+.welcome-right label{
+    color: var(--main-text-color)
+}
 .welcome-separator {
     background: linear-gradient(-45deg, var(--main-red-color), var(--main-blue-color));
     position: absolute;
@@ -57,12 +59,16 @@
     margin: 10px 0px;
     outline: none;
     border: 1px solid var(--border-color);
+    background-color: var(--card-color);
+    color: var(--main-text-color)
 }
 .welcome-container input:user-invalid{
     outline: 1px solid var(--main-red-color);
+    border: 1px solid var(--main-red-color);
 }
 .welcome-container input:user-valid{
     outline: 1px solid var(--main-green-color);
+    border: 1px solid var(--main-green-color);
 }
 .login-but{
     width: 100%;

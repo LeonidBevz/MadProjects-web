@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogoIMG from "./../images/logo.svg"
 import "./login.css"
+import LogoIco from '../images/logoico';
+import useToken from '../hooks/useToken';
 
 const LoginPage = () => {
     const navigate = useNavigate()
@@ -9,6 +10,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const {isNightTheme} = useToken()
 
     const handleSubmit = (event) =>{
         event.preventDefault();
@@ -30,7 +32,7 @@ const LoginPage = () => {
                     <p>Вход</p>
                 </div>
                 <div className='welcome-right'>
-                    <img className='welcome-logo'alt='logo' src={LogoIMG}/>
+                    <LogoIco color={isNightTheme ? "white" : "black"} className="welcome-logo"/>
                     <div className='welcome-separator'></div>
                     <div className='welcome-content'>
                         <form onSubmit={handleSubmit}>
@@ -44,8 +46,8 @@ const LoginPage = () => {
                                     name="email"
                                     value={email}
                                     onChange={handleEmailChange}
+                                    maxLength={64}
                                     required
-
                                 />
                             </div>
                             <div className='last-input'>
@@ -57,6 +59,8 @@ const LoginPage = () => {
                                     name="password"
                                     value={password}
                                     onChange={handlePasswordChange}
+                                    maxLength={64}
+                                    minLength={8}
                                     required
                                 />
                             </div>

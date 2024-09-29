@@ -14,10 +14,6 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
     
     const container = useRef()
 
-    const handleDropdownClick = ()=>{
-        setIsDropdownOpen(true)
-    }
-
     const handleLiClicked = (item)=>{
         setChosenOption(item)
         setSearchValue("")

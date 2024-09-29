@@ -1,6 +1,7 @@
 import React, { useState} from 'react';
-import LogoIMG from "./../images/logo.svg"
 import "./login.css"
+import LogoIco from '../images/logoico';
+import useToken from '../hooks/useToken';
 
 const RegisterPage = () => {
     const [username, setUsername] = useState('');
@@ -11,6 +12,7 @@ const RegisterPage = () => {
     const [code, setCode] = useState('');
     const [isEmailConfirm, setIsEmailConfirm] = useState(false)
     const [errorMessage, setErrorMessage] = useState('');
+    const {isNightTheme} = useToken()
 
 
     const handleRegSubmit = (event) =>{
@@ -56,7 +58,7 @@ const RegisterPage = () => {
                     <p>Регистрация</p>
                 </div>
                 <div className='welcome-right'>
-                    <img className='welcome-logo'alt='logo' src={LogoIMG}/>
+                    <LogoIco color={isNightTheme ? "white" : "black"} className="welcome-logo"/>
                     <div className='welcome-separator'></div>
                     <div className='welcome-content'>
                         {isEmailConfirm && (

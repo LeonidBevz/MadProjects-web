@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from "react";
-import LogoIMG from "./../images/logo.svg"
 import SunIMG from "./../images/sun.svg"
 import NightIMG from "./../images/night.svg"
 import LogoutIMG from "./../images/logout.svg"
