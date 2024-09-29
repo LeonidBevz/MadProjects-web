@@ -1,3 +1,6 @@
+.main-container{
+    overflow: hidden;
+}
 .top-menu{
     width: 100%;
     height: 45px;

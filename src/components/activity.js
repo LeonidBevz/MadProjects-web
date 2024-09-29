@@ -135,10 +135,10 @@ const Activity = () => {
 
       const { left } = event.currentTarget.getBoundingClientRect();
 
-      if (left - clientWidth/2 < 0){ //выходит за пределы слева
+      if (left - clientWidth/2 - 50 < 0){ //выходит за пределы слева
         tooltip.style.transform = `translateX(100%)`
       } 
-      else if (left + clientWidth/2  > window.innerWidth) {//выходит за пределы справа
+      else if (left + clientWidth/2 + 60  > window.innerWidth) {//выходит за пределы справа
         tooltip.style.transform = `translateX(0%)`; 
       }
       else {

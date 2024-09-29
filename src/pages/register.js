@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import LogoIMG from "./../images/logo.svg"
 import "./login.css"
 
@@ -11,6 +11,7 @@ const RegisterPage = () => {
     const [code, setCode] = useState('');
     const [isEmailConfirm, setIsEmailConfirm] = useState(false)
     const [errorMessage, setErrorMessage] = useState('');
+
 
     const handleRegSubmit = (event) =>{
         event.preventDefault();
@@ -132,6 +133,7 @@ const RegisterPage = () => {
                                     value={password}
                                     onChange={handlePasswordChange}
                                     maxLength={64}
+                                    minLength={8}
                                     required
                                 />
                             </div>
@@ -140,11 +142,12 @@ const RegisterPage = () => {
                                 <input
                                     placeholder="Подтвердите пароль"
                                     type="password"
-                                    id="password"
-                                    name="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
                                     value={confirmPassword}
                                     onChange={handleConfirmPasswordChange}
                                     maxLength={64}
+                                    minLength={8}
                                     required
 
                                 />

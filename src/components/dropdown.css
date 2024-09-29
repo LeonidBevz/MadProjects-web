@@ -4,7 +4,7 @@
   
   .search-dd-button{
     width: 100%;
-    font-size: 14px;
+    font-size: 0.9rem;
     background-color: var(--card-color);
     color: var(--main-text-color);
     outline: none;
@@ -24,13 +24,12 @@
     background-color: transparent;
     border: none;
     outline: none;
-    font-size: 14px;
+    font-size: 0.9rem;
     margin: 0;
     text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }  
-  
  
   .search-dd-button img{
     cursor: pointer;
@@ -55,7 +54,7 @@
     border: none;
     outline: none;
     width: calc(100% - 10px);
-    font-size: 14px;
+    font-size: 0.9rem;
     border: 1px solid var(--main-green-color);
     margin: 5px;
     box-sizing: border-box;

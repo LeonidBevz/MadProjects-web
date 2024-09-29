@@ -1,7 +1,21 @@
 .activity-page{
     width: 100vw;
+    height: calc(100vh - 45px);
     display: flex;
     justify-content: center;
+    box-sizing: border-box;
+    overflow: auto;
+}
+.activity-page-container{
+    padding-bottom: 10px;
+    
+}
+.activity-page h2{
+    font-size: 1.8rem;
+    padding-left: 2rem;
+    padding-top: 20px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 .commits-tile{
     width: 720px;
@@ -12,7 +26,7 @@
     background-color: var(--card-color);
     border-radius: 10px;
     margin: 0;
-    box-sizing: border-box;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 .commits-controls-container{
     width: 100%;
@@ -27,41 +41,89 @@
 }
 
 .year{
-    flex: 0 0 25%;
+    flex: 0 0 20%;
 }
 .member{
-    flex: 0 0 30%;
+    flex: 0 0 36%;
 }
 .repo{
-    flex: 0 0 37%;
+    flex: 0 0 36%;
 }
 .flex1{
     flex: 1;
 }
-@media (max-width: 399px)  {
-    .commits-tile{
-        width: 97vw;
-    }
-    .commits-controls-container{
-        display: block;
-    }
+.commits{
+    display: block;
+    width: 100%;
 }
-@media (min-width: 400px) and (max-width: 719px) {
-    .commits-tile{
-        width: 97vw;
-    }
-    .commits-controls-container{
-        display: block;
-    }
+.commits-date-container{
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
 }
-@media (min-width: 720px) and (max-width: 1399px) {
 
+
+.last-activity-tile{
+    padding: 0px 15px;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    margin: 0;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
-@media (min-width: 1400px){
-    .activity-page-tile{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 20px; 
-        max-width: 1400px;
+.sprints-tile{
+    padding: 15px;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    margin: 0;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+.sprints-tile button{
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding: 0.6rem 0px;
+    color: var(--alt-text-color);
+    background-color: var(--main-blue-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.sprints-flex{
+    display: flex;
+}
+
+.sprints-flex img{
+    cursor: pointer;
+    width: 2rem;
+}
+.sprints-flex p{
+    flex: 1;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+.grad-separator{
+    height: 2px;
+    background: var(--main-gradient);
+}
+@media (width < 730px) {
+    .commits-controls-container{
+        display: block;
+    }
+    .commits-tile{
+        display: block;
+        width: 100%;
+    }
+}
+@media (width >= 730px) and (width < 1460px) {
+    
+}
+@media (width >= 1460px){
+    .activity-page-container{
+        columns: 2;
+        max-width: 1460px;
+      
+    }
+    .activity-page-container div {
+        break-inside: avoid;
     }
 }

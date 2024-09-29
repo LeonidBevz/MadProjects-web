@@ -4,9 +4,8 @@ import LogoIMG from "./../images/logo.svg"
 import SunIMG from "./../images/sun.svg"
 import NightIMG from "./../images/night.svg"
 import LogoutIMG from "./../images/logout.svg"
-import ArrowIMG from "./../images/arrow-.svg"
+import ArrowIMG from "./../images/arrow.svg"
 import "./profilepage.css"
-import Activity from "../components/activity";
 
 const ProfilePage = () => {
     const [isNightTheme, setIsNightTheme] = useState(false)
@@ -79,7 +78,6 @@ const ProfilePage = () => {
                 </div>
                 
             </div>
-            <Activity/>
         </div>
       </div>
       

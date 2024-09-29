@@ -1,0 +1,13 @@
+.last-activity{
+    display: flex;
+}
+.last-activity hr{
+    margin: 0 30px;
+    border: none; 
+    border-left: 2px solid var(--main-blue-color); 
+}
+.act-flex{
+    display: flex;
+    align-items: center;
+    gap:5px
+}

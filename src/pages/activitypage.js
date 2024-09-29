@@ -2,13 +2,66 @@ import React, { useState } from "react";
 import Activity from "../components/activity";
 import "./activitypage.css"
 import SearchDropDown from "../components/searchdropdown";
+import Commit from "../components/commit";
+import LastActivity from "../components/lastactivity";
+import ArrowIMG from "./../images/arrow.svg"
+import { useNavigate } from "react-router-dom";
+
+function formatDate(date) {
+  const dateParts = date.slice(0, 10).split('-'); 
+  const formattedDate = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`; 
+  return formattedDate;
+}
 
 const ActivityPage = () => {
     const [year,setYear] = useState(2024)
     const [chosenMember,setChosenMember] = useState("Kaelesty") 
     const [chosenRepo,setChosenRepo] = useState("Audionautica-web") 
+    const navigate = useNavigate()
+    const lastActivityData = [{date: "2024-08-29T10:00:00Z", link: "audoinautica-neuro", text: "Andrey Butyrev привязал новый репозиторий ", linkTo: "/profile"},{date: "2024-03-29T10:00:00Z", link: "audoinautica-neuro", text: "Andrey Butyrev привязал новый репозиторий ", linkTo: "/profile"}]
+    const sprints = [{name: "Последние правки (текущий)", linkTo: "/bomba/"},{name: "Плейлисты & Поиск (25.08.24)",linkTo: "/bomba/"},{name:"Пилим MVP (28.04.24)",linkTo: "/bomba/"}]
+    const commitData = [
+      [
+        {
+          name: "Initial commit",
+          date: "2024-08-29T10:00:00Z", 
+          username: "johndoe",
+          link: "https://github.com/johndoe/repo/commit/1",
+          profilepic: "https://avatars.githubusercontent.com/u/123456?v=4"
+        },
+        {
+          name: "Fix bug in login",
+          date: "2024-08-29T11:13:00Z",
+          username: "janedoe",
+          link: "https://github.com/janedoe/repo/commit/2",
+          profilepic: "https://avatars.githubusercontent.com/u/789012?v=4"
+        }
+      ],
+      [
+        {
+          name: "Update README",
+          date: "2024-09-28T12:30:00Z", 
+          username: "johndoe",
+          link: "https://github.com/johndoe/repo/commit/3",
+          profilepic: "https://avatars.githubusercontent.com/u/123456?v=4"
+        },
+        {
+          name: "Update README",
+          date: "2024-09-28T12:30:00Z", 
+          username: "johndoe",
+          link: "https://github.com/johndoe/repo/commit/3",
+          profilepic: "https://avatars.githubusercontent.com/u/123456?v=4"
+        },
+        {
+          name: "Update README",
+          date: "2024-09-28T12:30:00Z", 
+          username: "johndoe",
+          link: "https://github.com/johndoe/repo/commit/3",
+          profilepic: "https://avatars.githubusercontent.com/u/123456?v=4"
+        }
+      ]
+    ];
 
-  
     return (
       <div className="activity-page">
         <div className="activity-page-container">
@@ -37,15 +90,59 @@ const ActivityPage = () => {
               </div>
               <Activity/>
               <div className="commits">
-                <div>
-                  <p>Коммиты за 17.09.2024</p>
-                </div>
+                {commitData.map((commitList,i)=>(
+                  <div key={i} >
+                    <p>{`Коммиты за ${formatDate(commitData[i][0].date)}`}</p>
+                    <div className="commits-date-container">
+                      {commitData[i].map((commit,j)=>(
+                        <Commit 
+                          name={commit.name} 
+                          date={commit.date} 
+                          username={commit.username} 
+                          link={commit.link} 
+                          profilepic={commit.profilepic}
+                          key={j}/>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                
               </div>
             </div>
           </div>
-          
-
-        </div>          
+          {lastActivityData.length !== 0 &&(
+            <div className="last-activity-container">
+              <h2>{`Последняя активность`}</h2>
+              <div className="last-activity-tile">
+                  {lastActivityData.map((data,index)=>(
+                    <LastActivity 
+                      date={data.date}
+                      link={data.link} 
+                      linkTo={data.linkTo}
+                      text={data.text}
+                      key={index}
+                      />
+                  ))}
+                  
+              </div>
+            </div>
+          )}
+          <div className="sprints-container">
+            <h2>{`Спринты`}</h2>
+            <div className="sprints-tile">
+              <button onClick={()=>navigate("/sprints/create/")}>Начать спринт</button>
+              {sprints.map((sprint, index)=>(
+                <div className="sprint" key={index}>
+                  <div className="sprints-flex">
+                    <p>{sprint.name}</p>
+                    <img src={ArrowIMG} alt="arrow" onClick={()=>navigate(sprint.linkTo)}/>
+                  </div>
+                  <div className="grad-separator"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>    
       </div>
       
     );

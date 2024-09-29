@@ -1,5 +1,5 @@
 .activity{
-    width: 688px;
+    width: 100%;
 }
 .act-container{
     padding: 10px;
@@ -41,7 +41,7 @@
     position: absolute;
     right: 0px; 
     bottom: 120%;
-    text-wrap: nowrap;
+    white-space: nowrap;
     background-color: var(--card-color);
     padding: 5px 10px;
     border-radius: 10px;
@@ -49,13 +49,14 @@
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     z-index: 3;
     opacity: 0;
-    transition: opacity 0.15s ease-in-out; 
+    font-size: 0.8rem;
+    transition: opacity 0.2s ease-in-out, font-size 0.2s ease-in-out; 
     pointer-events: none; 
-    
 }
 
 .grid-item:hover .tooltip {
     opacity: 1;
+    font-size: 1rem;
   }
 
 .act-mounth-container{
@@ -94,10 +95,11 @@
 
 @media (max-width: 719px) {
     .activity{
-        width: 95vw;
+        width: 92vw;
     }
     .act-container{
-        width: 95vw;
+        padding: 16px;
+        width: 92vw;
         overflow-x: auto;
         box-sizing: border-box;
         
