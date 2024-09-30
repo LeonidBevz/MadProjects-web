@@ -13,15 +13,39 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-color);
+  transition: background-color 1s ease;
 }
+/*Для переключения темы*/
+.bg-trans{
+  transition: background-color 1s ease;
+}
+.cl-trans{
+  transition: color 1s ease;
+}
+
+.svg-trans{
+  transition: fill 1s ease, stroke 1s ease;
+ 
+}
+.no-trans{
+  transition: none;
+}
+
 body p{
-  color: var(--main-text-color)
+  color: var(--main-text-color);
+  transition: color 1s ease;
 } 
+.no-trans * {
+  transition: none !important; 
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
+/*
 :root{
   --main-blue-color: #005AAA;
   --main-red-color: #E4003A;
@@ -36,8 +60,8 @@ code {
   --activity-50: #66A3E6;
   --activity-25: #99C8FF;
   --main-green-color: #009A49;
-
 }
+*/
 @supports (-moz-appearance: none) {
   * {
       scrollbar-width: thin;

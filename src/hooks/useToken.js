@@ -10,18 +10,20 @@ export function useToken() {
 
 export function TokenProvider({children}){
     const [username, setUsername] = useState("")
-    const [isNightTheme, setIsNightTheme] = useState(false)
+    const [isNightTheme, setIsNightTheme] = useState(localStorage.getItem('theme') === 'true' || false)
 
     useEffect(()=>{
+      document.body.classList.add('no-trans');
+
       const lastUsername = localStorage.getItem('username')
       if (lastUsername){
         setUsername(lastUsername)
       }
-
-      const lastTheme = localStorage.getItem('theme')
-      if (lastTheme){
-        setIsNightTheme(lastTheme === 'true')
-      }
+      
+      const timeoutId = setTimeout(() => {
+        document.body.classList.remove('no-trans');
+      }, 0);
+      return () => clearTimeout(timeoutId);
     },[])
 
     useEffect(() => {
@@ -40,10 +42,19 @@ export function TokenProvider({children}){
         document.documentElement.style.setProperty('--activity-25', '#99C8FF');
         document.documentElement.style.setProperty('--main-green-color', '#009A49');
       } else {
+        document.documentElement.style.setProperty('--main-blue-color', '#005AAA');
+        document.documentElement.style.setProperty('--main-red-color', '#E4003A');
+        document.documentElement.style.setProperty('--main-text-color', '#d4d3cf');
+        document.documentElement.style.setProperty('--alt-text-color', '#ffffff');
         document.documentElement.style.setProperty('--bg-color', '#192227');
         document.documentElement.style.setProperty('--card-color', '#1b1c1e');
-        document.documentElement.style.setProperty('--main-text-color', '#d4d3cf');
-        
+        document.documentElement.style.setProperty('--border-color', '#D9D9D9');
+        document.documentElement.style.setProperty('--main-gradient', 'linear-gradient(270deg, var(--main-red-color), var(--main-blue-color))');
+        document.documentElement.style.setProperty('--activity-100', '#005AAA');
+        document.documentElement.style.setProperty('--activity-75', '#337BCC');
+        document.documentElement.style.setProperty('--activity-50', '#66A3E6');
+        document.documentElement.style.setProperty('--activity-25', '#99C8FF');
+        document.documentElement.style.setProperty('--main-green-color', '#009A49');        
       }
       localStorage.setItem('theme', isNightTheme)
   }, [isNightTheme]);

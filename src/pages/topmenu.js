@@ -38,24 +38,34 @@ const TopMenuPage = () => {
     };
   }, [isSideBarOpen]);
 
+  const onSideMenuClick = (goto)=>{
+    navigate(goto)
+    setIsSideBarOpen(false)
+  }
+
     return (
       <div className="main-container">          
-        <div className="top-menu">
+        <div className="top-menu bg-trans">
           <div className="sepline"></div>
           <div className="top-menu-content">
             <div className="flex-start">
-              <button className="topmenu-button-left" onClick={()=>setIsSideBarOpen(!isSideBarOpen)} ref={buttonRef}><img className={isSideBarOpen ? "ico-flip":""} src={MenuIMG} alt="menu"/></button>
+              <button className="topmenu-button-left bg-trans" onClick={()=>setIsSideBarOpen(!isSideBarOpen)} ref={buttonRef}><img className={isSideBarOpen ? "ico-flip":""} src={MenuIMG} alt="menu"/></button>
             </div>
             <div className="flex-center">
             <LogoIco color={isNightTheme ? "white": "black"} className="logo"/>
               
             </div>
             <div className="flex-end">
-                <button className="topmenu-button" onClick={()=>{setIsNightTheme(!isNightTheme)}}>
-                    <img src={isNightTheme ? NightIMG :SunIMG} alt="theme"/>
-                </button>
-                <button className="topmenu-button" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
-                <button className="topmenu-button"><img src={LogoutIMG} alt="logout"/></button>
+                <div className="theme-icon-container bg-trans" onClick={()=>{setIsNightTheme(!isNightTheme)}}>
+                    <div className={`theme-icon theme-icon-1 ${isNightTheme ? "theme-icon-hidden-1" : "theme-icon-active"}`}>
+                      <img src={SunIMG} alt="sun" />
+                    </div>
+                    <div className={`theme-icon theme-icon-2 ${isNightTheme ? "theme-icon-active " : "theme-icon-hidden-2"}`}>
+                      <img src={NightIMG} alt="night" />
+                    </div>
+                </div>
+                <button className="topmenu-button bg-trans" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
+                <button className="topmenu-button bg-trans"><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
           </div>
@@ -68,23 +78,23 @@ const TopMenuPage = () => {
           </div>
           <div className="sidemenu-buttons">
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>navigate(`${project}/activity/`)}>
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/activity/`)}>
               Активность
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>navigate(`${project}/messenger/`)}>
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/messendger/`)}>
               Мессенджер
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>navigate(`${project}/info/`)}>
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/info/`)}>
               Информация
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>navigate(`${project}/kanban/`)}>
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/kanban/`)}>
               Канбан
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>navigate(`${project}/settings/`)}>
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/settings/`)}>
               Настройки
             </div>
           <div className="sidebar-separator"/>

@@ -68,8 +68,8 @@ const ActivityPage = () => {
       <div className="activity-page">
         <div className="activity-page-container">
           <div className="commits-container">
-            <h2>{`Общая активность за ${year} год`}</h2>
-            <div className="commits-tile">
+            <h2 className="cl-trans">{`Общая активность за ${year} год`}</h2>
+            <div className="commits-tile bg-trans">
               <div className="commits-controls-container">
                 <div className="controls-block year">
                   <p>Год</p>
@@ -114,8 +114,8 @@ const ActivityPage = () => {
           </div>
           {lastActivityData.length !== 0 &&(
             <div className="last-activity-container">
-              <h2>{`Последняя активность`}</h2>
-              <div className="last-activity-tile">
+              <h2 className="cl-trans">{`Последняя активность`}</h2>
+              <div className="last-activity-tile bg-trans">
                   {lastActivityData.map((data,index)=>(
                     <LastActivity 
                       date={data.date}
@@ -130,8 +130,8 @@ const ActivityPage = () => {
             </div>
           )}
           <div className="sprints-container">
-            <h2>{`Спринты`}</h2>
-            <div className="sprints-tile">
+            <h2 className="cl-trans">{`Спринты`}</h2>
+            <div className="sprints-tile bg-trans" >
               <button onClick={()=>navigate("/sprints/create/")}>Начать спринт</button>
               {sprints.map((sprint, index)=>(
                 <div className="sprint" key={index}>
