@@ -22,6 +22,9 @@ body {
 .cl-trans{
   transition: color 1s ease;
 }
+.all-trans{
+  transition: all 1s ease;
+}
 
 .svg-trans{
   transition: fill 1s ease, stroke 1s ease;

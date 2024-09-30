@@ -4,6 +4,7 @@
    display: flex;
    max-width: max-content;
    overflow-x: scroll !important;
+   max-height: calc(100vh - 34px);
    min-width: 100vw;
 }
 .kanban-main-container::-webkit-scrollbar{
@@ -15,6 +16,7 @@
 }
 .kanban-row-top{
     display: flex;
+    top: 0;
     width: 18.75rem;
     background-color: var(--card-color);
     padding: 0.5rem 1rem;
@@ -23,7 +25,9 @@
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     margin: 5px;
     font-size: 1.5rem;
+    
 }
+
 .kanban-row-top p{
     flex:1;
     margin: 0;
@@ -42,6 +46,7 @@
     display: flex;
     flex-shrink: 0;
     flex-direction: column;
+    padding-bottom: 10px;
 }
 
 .card-top{
@@ -73,4 +78,84 @@
 }
 .more-butt{
     width: 2rem;
+}
+.kanban-add-text{
+    font-size: 1.2rem;
+    font-style: italic;
+    font-weight: 300;   
+}
+.pointer{
+    cursor: pointer;
+}
+.drop-menu{
+    margin: 0;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+}
+.ddmenu{
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 10rem;
+    background-color: var(--card-color);
+    z-index: 2;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    cursor: auto;
+}
+.ddmenu button{
+    width: 100%;
+    border: none;
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    padding: 0.4rem 0.8rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: start;
+}
+.ddmenu button:hover{
+    background-color: var(--bg-color);
+}
+.delete-button:hover{
+    background-color: var(--main-red-color) !important;
+    color: var(--alt-text-color)
+}
+.marginb{
+    margin-bottom: 10px !important;
+}
+.delete-modal{
+    position: fixed;
+    width: 18.75rem;
+    top: calc(50% - 9rem);
+    left: calc(50% - 9.375rem);
+    padding: 1.5rem;
+    z-index: 2;
+    border-radius: 10px;
+    background-color: var(--card-color);
+}
+.delete-modal button{
+    border: 1px solid var(--border-color);
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+.delete-modal p{
+    font-size: 1.2rem;
+    margin: 0;
+    margin-bottom: 20px;
+}
+.flex-butt{
+    display: flex;
+    justify-content: space-around;
+}
+.deletem-button{
+    background-color: var(--main-red-color) !important;
+    color: var(--alt-text-color) !important;
+    border: 1px solid transparent !important;
 }
