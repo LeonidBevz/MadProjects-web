@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MenuDotsIco from "../images/menudots";
 import "./kanbanpage.css";
 import useToken from "../hooks/useToken";
@@ -11,6 +11,20 @@ function formatDate(date) {
   return formattedDate;
 }
 const DeleteModal = ({text, onDelete, onCancel}) => {
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleEsc);
+
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+    // eslint-disable-next-line
+  }, []); 
   return (
     <div className="delete-modal bg-trans">
       <p>{text}</p>
@@ -22,6 +36,25 @@ const DeleteModal = ({text, onDelete, onCancel}) => {
   )
 }
 const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
+  const inputRef = useRef()
+  useEffect(() => {
+    if (inputRef.current){
+      inputRef.current.focus()
+    }
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleEsc);
+
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+    // eslint-disable-next-line
+  }, []); 
+
   const handleValueChange = (event)=>{
     setNewValue(event.target.value);
   }
@@ -38,6 +71,7 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
         value={newValue}
         onChange={handleValueChange}
         maxLength={32}
+        ref={inputRef}
         required
       />
       <div className="flex-butt">
@@ -78,20 +112,29 @@ const KanbanPage = () => {
   
   const addColumn = () =>{
     const newId = (rowsCount + 1).toString(); 
+    const addedName = "Новый столбец"
     setRowsCount(rowsCount + 1)
     const newColumn = {
-      rowName: `Столбец${newId}`,
+      rowName: addedName,
       id: newId,
       cards: [], 
     };
-    setCards((prevCards) => [...prevCards, newColumn]);
+    setCards((prevCards) => {
+      const updatedCards = [...prevCards, newColumn];
+
+      setRowToEdit(updatedCards.length - 1)
+      setNewName(addedName)
+      setIsDeleteWindowShown(3)
+
+      return updatedCards;
+  });
   }
   const addCard = (rowIndex) =>{
     setCardsCount(cardsCount+1)
     const newCardId = `card${cardsCount + 1}`
-    
+    const addedName = "Новая карточка"
     const newCard = {
-      name: `Карточка ${newCardId}`,
+      name: addedName,
       id: newCardId,
       author: username, 
       created: new Date().toISOString(),
@@ -101,9 +144,16 @@ const KanbanPage = () => {
     setCards((prevCards) => {
       const updatedCards = [...prevCards];
       updatedCards[rowIndex].cards.push(newCard); 
+
+      setRowToEdit(rowIndex)
+      setCardToEdit(updatedCards[rowIndex].cards.length - 1)
+      setNewName(addedName)
+      setIsDeleteWindowShown(4)
+
       return updatedCards;
     });
   }
+
   const deleteRow = (rowId) => {
     const updatedCards = [...cards];
     updatedCards.splice(rowId, 1);
@@ -286,7 +336,7 @@ const KanbanPage = () => {
                             ))}
                             {provided.placeholder}
                             <div className="kanban-row">
-                              <div className="kanban-row-top bg-trans pointer" onClick={()=>addCard(i)}>
+                              <div className="kanban-add-cont bg-trans pointer" onClick={()=>addCard(i)}>
                                 <p className="kanban-add-text">Добавить карточку</p>
                                 <PlusIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots"/>
                               </div>
@@ -300,7 +350,7 @@ const KanbanPage = () => {
               ))}
               {provided.placeholder}
               <div className="kanban-row">
-                <div className="kanban-row-top bg-trans pointer" onClick={addColumn}>
+                <div className="kanban-add-cont bg-trans pointer" onClick={addColumn}>
                   <p>Добавить столбец</p>
                   <PlusIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots"/>
                 </div>
