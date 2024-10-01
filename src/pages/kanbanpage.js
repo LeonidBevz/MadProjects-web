@@ -21,11 +21,39 @@ const DeleteModal = ({text, onDelete, onCancel}) => {
     </div>
   )
 }
+const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
+  const handleValueChange = (event)=>{
+    setNewValue(event.target.value);
+  }
+  const handleSubmit = (event)=>{
+    event.preventDefault();
+    onConfirm()
+  }
+  return (
+    <div className="delete-modal bg-trans">
+      <form onSubmit={handleSubmit}>
+      <p className="modal-edit-text">{text}</p>
+      <input 
+        className="all-trans"
+        value={newValue}
+        onChange={handleValueChange}
+        maxLength={32}
+        required
+      />
+      <div className="flex-butt">
+        <button type="submit" className="all-trans">Подтвердить</button>
+        <button type="button" className="all-trans" onClick={onCancel}>Отмана</button>
+      </div>
+      </form>
+    </div>
+  )
+}
 const KanbanPage = () => {
   const { username, isNightTheme } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
-  const [rowToDelete, setRowToDelete] = useState(null)
-  const [cardToDelete, setCardToDelete] = useState(null)
+  const [rowToEdit, setRowToEdit] = useState(null)
+  const [cardToEdit, setCardToEdit] = useState(null)
+  const [newName, setNewName] = useState("")
   const [cards, setCards] = useState([
     {
       rowName: "Пример1",
@@ -83,7 +111,7 @@ const KanbanPage = () => {
     setIsDeleteWindowShown(0)
   };
   const handleDeleteRowClick = (rowId)=>{
-    setRowToDelete(rowId)
+    setRowToEdit(rowId)
     setIsDeleteWindowShown(1)
   }
 
@@ -101,12 +129,48 @@ const KanbanPage = () => {
     setIsDeleteWindowShown(0)
   };
   const handleDeleteCardClick = (rowId, cardId)=>{
-    setRowToDelete(rowId)
-    setCardToDelete(cardId)
+    setRowToEdit(rowId)
+    setCardToEdit(cardId)
     setIsDeleteWindowShown(2)
   }
  
+  const handleEditRowClick = (rowId) =>{
+    setRowToEdit(rowId)
+    setNewName(cards[rowId].rowName)
+    setIsDeleteWindowShown(3)
+  }
+  const setRowName = (rowId, newName) => {
+    setCards((prevCards) => 
+      prevCards.map((row, i) => 
+        i === rowId ? { ...row, rowName: newName } : row
+      )
+    );
+    setIsDeleteWindowShown(0)
+  }
 
+  const handleEditCardClick = (rowId,cardId) =>{
+    setRowToEdit(rowId)
+    setCardToEdit(cardId)
+    setNewName(cards[rowId].cards[cardId].name)
+    setIsDeleteWindowShown(4)
+  }
+
+  const setCardName = (rowId, cardId, newName) =>{
+    console.log(rowId,cardId,newName)
+    setCards((prevCards) =>
+      prevCards.map((row, i) =>
+        i === rowId
+          ? {
+              ...row,
+              cards: row.cards.map((card, j) =>
+                j === cardId ? { ...card, name: newName, updated: new Date().toISOString()} : card
+              ),
+            }
+          : row
+      )
+    );
+    setIsDeleteWindowShown(0)
+  }
   const [isDragging, setIsDragging] = useState(false); // Для блокирования одновременного перетаскивания
 
   const onDragStart = () => {
@@ -184,8 +248,10 @@ const KanbanPage = () => {
   return (
     <div className="kanban-page">
       <div className={isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
-      {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToDelete)} text={`Вы уверены что хотите удалить столбец ${cards[rowToDelete].rowName} с ${cards[rowToDelete].cards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(rowToDelete,cardToDelete)} text={`Вы уверены что хотите удалить карточку ${cards[rowToDelete].cards[cardToDelete].name}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEdit)} text={cards[rowToEdit].cards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].rowName}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].rowName} с ${cards[rowToEdit].cards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(rowToEdit,cardToEdit)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].cards[cardToEdit].name}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 3 && (<EditModal onConfirm={()=>setRowName(rowToEdit, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 4 && (<EditModal onConfirm={()=>setCardName(rowToEdit, cardToEdit, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
           {(provided) => (
@@ -195,8 +261,8 @@ const KanbanPage = () => {
                   {(provided) => (
                     <div {...provided.draggableProps} ref={provided.innerRef} className="kanban-row">
                       <div className="kanban-row-top bg-trans" {...provided.dragHandleProps}>
-                        <p>{row.rowName}</p>
-                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(i)} />
+                        <p onClick={()=>{handleEditRowClick(i)}}>{row.rowName}</p>
+                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(i)} onEdit={()=>handleEditRowClick(i)}/>
                       </div>
                       <Droppable droppableId={row.id} type="card">
                         {(provided) => (
@@ -206,9 +272,9 @@ const KanbanPage = () => {
                                 {(provided) => (
                                   <div className="kanban-card bg-trans" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <div className="card-top">
-                                      <p className="card-name">{card.name}</p>
+                                      <p className="card-name" onClick={()=>{handleEditCardClick(i,j)}}>{card.name}</p>
                                       <div className="more-butt" >
-                                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteCardClick(i,j)}/>
+                                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteCardClick(i,j)} onEdit={()=>handleEditCardClick(i,j)}/>
                                       </div>
                                     </div>
                                     <p className="card-info">{`Автор: ${card.author}`}</p>
