@@ -4,7 +4,7 @@ import "./activitypage.css"
 import SearchDropDown from "../components/searchdropdown";
 import Commit from "../components/commit";
 import LastActivity from "../components/lastactivity";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import RightArrowIco from "../images/arrowrightico";
 import useToken from "../hooks/useToken";
 
@@ -16,6 +16,7 @@ function formatDate(date) {
 
 const ActivityPage = () => {
     const [year,setYear] = useState(2024)
+    const {project} = useParams()
     const [chosenMember,setChosenMember] = useState("Kaelesty") 
     const [chosenRepo,setChosenRepo] = useState("audionautica-web") 
     const navigate = useNavigate()
@@ -135,7 +136,7 @@ const ActivityPage = () => {
               <button onClick={()=>navigate("/sprints/create/")}>Начать спринт</button>
               {sprints.map((sprint, index)=>(
                 <div className="sprint" key={index}>
-                  <div className="sprints-flex">
+                  <div className="sprints-flex" onClick={()=>navigate(`/${project}/sprints/${sprint.name}`)}>
                     <p>{sprint.name}</p>
                     <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                   </div>

@@ -5,6 +5,7 @@
     justify-content: center;
     box-sizing: border-box;
     overflow: auto;
+    padding: 0rem 1rem;
 }
 .activity-page-container{
     padding-bottom: 10px;
@@ -88,6 +89,7 @@
 }
 .sprints-flex{
     display: flex;
+    cursor: pointer;
 }
 
 .sprints-flex-img{

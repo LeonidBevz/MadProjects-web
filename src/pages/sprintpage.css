@@ -1,0 +1,70 @@
+.sprint-page{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    align-items: center;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
+    padding: 0rem 1rem;
+}
+.kanban{
+    height: max-content;
+}
+.sprint-page h2{
+    font-size: 1.8rem;
+    padding-left: 2rem;
+    padding-top: 20px;
+    margin: 0;
+    margin-bottom: 10px;
+    color: var(--main-text-color)
+}
+.sprint-info-tile{
+    width: 45rem;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    margin: 0;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+.sprint-info-tile p{
+    margin: 0.7rem 0px;
+}
+.sprint-info-tile button{
+    width: 100%;
+    background-color: var(--main-blue-color);
+    color: var(--alt-text-color);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+.goals-h2{
+    margin: 0 !important;
+    margin-bottom: -10px !important;
+}
+.edit{
+    width: 2rem;
+    cursor: pointer;
+}
+.flex-title{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.flex-title h2{
+    padding-block: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: 5px;
+}
+
+@media (width < 45rem) {
+    .sprint-page{
+        display: block;
+    }
+    .sprint-info-tile{
+        width: 100%;
+    }
+}

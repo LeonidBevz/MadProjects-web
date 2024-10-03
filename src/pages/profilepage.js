@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LogoIco from "../images/logoico";
 import SunIMG from "./../images/sun.svg"
 import NightIMG from "./../images/night.svg"
@@ -39,7 +39,12 @@ const ProfilePage = () => {
         <div className="profile-page-content">
             <div className="profile-info bg-trans">
                 <div className="profile-pic-container">
-                    <img className="profile-pic" src="https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg" alt="profile"/>
+                    <div className="prifile-image">
+                        <img className="profile-pic" src="https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg" alt="profile"/>
+                        <Link to="/profile/edit/" >
+                          <button className="profile-edit-but bg-trans"/>
+                        </Link>
+                    </div>
                     <p className="profile-username">{username}</p>
                 </div>
                 <div>

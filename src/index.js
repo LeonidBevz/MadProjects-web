@@ -12,6 +12,8 @@ import ProfilePage from "./pages/profilepage";
 import ActivityPage from "./pages/activitypage";
 import { TokenProvider } from "./hooks/useToken";
 import KanbanPage from "./pages/kanbanpage";
+import SprintPage from "./pages/sprintpage";
+import SprintEditPage from "./pages/sprintedit";
 
 const App = () => { 
 
@@ -23,13 +25,15 @@ const App = () => {
           <Route path="/" element={<TopMenuPage/>}>
             <Route path=":project/activity/" element={<ActivityPage/>}/>
             <Route path=":project/kanban/" element={<KanbanPage/>}/>
+            <Route path=":project/sprints/:sprint" element={<SprintPage/>}/>
+            <Route path=":project/sprints/:sprint/edit" element={<SprintEditPage/>}/>
           </Route>
           <Route path='/profile/' element={<ProfilePage/>}/>
   
           <Route path='/welcome/' element={<WelcomePage/>}/>
           <Route path='/login/' element={<LoginPage/>}/>
           <Route path='/register/' element={<RegisterPage/>}/>
-  
+          
           <Route path='*' element={<NotFoundPage/>}/>
         </Routes>
       </Router>

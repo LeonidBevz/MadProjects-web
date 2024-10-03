@@ -2,13 +2,17 @@
    padding: 1rem;
    padding-bottom: 0;
    display: flex;
-   max-width: max-content;
    overflow-x: scroll !important;
    max-height: calc(100vh - 34px);
-   min-width: 100vw;
+   width: max-content;
+   max-width: 100vw;  
 }
 .kanban-main-container::-webkit-scrollbar{
     height: 11px;
+}
+.kanban-sprint{
+    max-height: none !important;
+    max-width: calc(100vw - 2rem) !important;
 }
 .dots{
     width: 2rem;
@@ -92,7 +96,8 @@
     padding-bottom: 10px;
     padding: 5px;
     position: relative;
-    min-height: calc(100vh - 91px - 3.5rem); 
+    max-height: calc(100vh - 85px - 3.5rem); 
+    height: max-content;
 }
 .more-butt{
     width: 2rem;
@@ -192,4 +197,7 @@
 }
 .modal-edit-text{
     margin: 0 !important;
+}
+.drag{
+    cursor:grab !important;
 }
