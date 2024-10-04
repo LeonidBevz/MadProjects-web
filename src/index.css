@@ -6,6 +6,7 @@ html, body, head {
 *,*::before,*::after {
   box-sizing: border-box;
   font: inherit;
+ /* outline: 1px solid red !important; */
 }
 
 body { 
@@ -48,6 +49,9 @@ code {
     monospace;
 }
 
+:root{
+  --main-theme-transition: 1s ease;
+}
 /*
 :root{
   --main-blue-color: #005AAA;

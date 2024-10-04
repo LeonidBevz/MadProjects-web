@@ -17,7 +17,7 @@ const LoginPage = () => {
         setErrorMessage("Бека нет")
         navigate("/profile/")
     } 
-     const handleEmailChange = (event) => {
+    const handleEmailChange = (event) => {
         setEmail(event.target.value);
     }
 

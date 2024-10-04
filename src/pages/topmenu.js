@@ -97,7 +97,7 @@ const TopMenuPage = () => {
             <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/settings/`)}>
               Настройки
             </div>
-          <div className="sidebar-separator"/>
+          <div className="sidebar-separator-end"/>
           </div>
           
         </div>

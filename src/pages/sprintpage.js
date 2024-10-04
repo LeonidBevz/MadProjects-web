@@ -15,7 +15,7 @@ function formatDate(date) {
 const SprintPage = () => {
     const {sprint} = useParams()
     const {isNightTheme} = useToken()
-    const [data,setData] = useState({startDate: "2024-09-28T12:30:00Z", endDate: "2024-12-28T12:30:00Z", description: "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь? "})
+    const [data, setData] = useState({startDate: "2024-09-28T12:30:00Z", endDate: "2024-12-28T12:30:00Z", description: "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь? "})
     const navigate = useNavigate()
     const [cards, setCards] = useState([
       {
@@ -41,7 +41,11 @@ const SprintPage = () => {
          <div className="sprint-info-container">
               <div className="flex-title">
                 <h2 className="cl-trans">{`Спринт / ${sprint}`} </h2>
-                <EditIco className="edit" color={isNightTheme ? "#d4d3cf" : "black"} onClick={()=>{navigate("edit/")}}/>
+                <EditIco 
+                  className="edit" color={isNightTheme ? "#d4d3cf" : "black"} 
+                  onClick={()=>{navigate("edit/", {
+                  state: { name: sprint, description: data.description, endDate: data.endDate}
+                })}}/>
               </div>
               
               <div className="sprint-info-tile bg-trans">

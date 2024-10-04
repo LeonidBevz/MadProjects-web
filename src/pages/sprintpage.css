@@ -59,12 +59,83 @@
     margin-bottom: 0 !important;
     margin-right: 5px;
 }
+.edit-container{
+    width: 45rem;
+}
+.edit-container label{
+    color: var(--main-text-color)
+}
 
-@media (width < 45rem) {
+.edit-container input {
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 10px 0px;
+    outline: none;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    border-radius: 10px;
+    transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
+}
+.edit-container textarea {
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 10px 0px;
+    outline: none;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    resize: none;
+    min-height: 200px;
+    border-radius: 10px;
+    transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
+}
+.flex-edit{
+    display: flex;
+    gap: 2rem;
+}
+.name-cont{
+    flex: 1;
+}
+.date-cont{
+    flex: 0.6;
+}
+.edit-container button{
+  width: 100%;
+  background-color: var(--main-blue-color);
+  color: var(--alt-text-color);
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.flex-buttons{
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+@media (width < 15rem) {
+    .flex-buttons{
+        display: block;
+    }
+}
+@media (width < 47rem) {
     .sprint-page{
         display: block;
+    }
+    .edit-container{
+        width: 100%;
     }
     .sprint-info-tile{
         width: 100%;
     }
+    .flex-edit{
+        display: block;
+    }
 }
+

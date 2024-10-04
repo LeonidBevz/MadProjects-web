@@ -106,6 +106,7 @@
     background-color: var(--card-color);
     transition: all 0.4s ease;
     z-index: 3;
+    overflow-y: auto;
  }
  .sidebar-container-shown{
     left: 0;
@@ -151,6 +152,12 @@
     height: 2px;
     width: 100%;
     background: var(--main-gradient);
+}
+.sidebar-separator-end{
+   height: 2px;
+   width: 100%;
+   background: var(--main-gradient);
+   margin-bottom: 3rem;
 }
 .sidemenu-butt{
     padding: 10px 15px;

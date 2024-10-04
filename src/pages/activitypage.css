@@ -79,13 +79,14 @@
 }
 .sprints-tile button{
     width: 100%;
+    background-color: var(--main-blue-color);
+    color: var(--alt-text-color);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 10px;
     border: none;
-    padding: 0.6rem 0px;
-    color: var(--alt-text-color);
-    background-color: var(--main-blue-color);
-    font-size: 1.2rem;
     cursor: pointer;
+
 }
 .sprints-flex{
     display: flex;
