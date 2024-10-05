@@ -133,7 +133,7 @@ const ActivityPage = () => {
           <div className="sprints-container">
             <h2 className="cl-trans">{`Спринты`}</h2>
             <div className="sprints-tile bg-trans" >
-              <button onClick={()=>navigate("/sprints/create/")}>Начать спринт</button>
+              <button onClick={()=>navigate(`/${project}/sprints/create/`)}>Начать спринт</button>
               {sprints.map((sprint, index)=>(
                 <div className="sprint" key={index}>
                   <div className="sprints-flex" onClick={()=>navigate(`/${project}/sprints/${sprint.name}`)}>

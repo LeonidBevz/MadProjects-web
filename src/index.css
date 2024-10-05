@@ -6,8 +6,8 @@ html, body, head {
 *,*::before,*::after {
   box-sizing: border-box;
   font: inherit;
- /* outline: 1px solid red !important; */
-}
+  /*outline: 1px solid red !important;*/ 
+  }
 
 body { 
   font-family: 'Roboto Flex', sans-serif;

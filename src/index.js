@@ -14,6 +14,8 @@ import { TokenProvider } from "./hooks/useToken";
 import KanbanPage from "./pages/kanbanpage";
 import SprintPage from "./pages/sprintpage";
 import SprintEditPage from "./pages/sprintedit";
+import SprintCreatePage from "./pages/sprintcreate";
+import InfoPage from "./pages/infopage";
 
 const App = () => { 
 
@@ -24,9 +26,11 @@ const App = () => {
           <Route index element={<Navigate to="/welcome" />} />
           <Route path="/" element={<TopMenuPage/>}>
             <Route path=":project/activity/" element={<ActivityPage/>}/>
+            <Route path=":project/info/" element={<InfoPage/>}/>
             <Route path=":project/kanban/" element={<KanbanPage/>}/>
             <Route path=":project/sprints/:sprint" element={<SprintPage/>}/>
             <Route path=":project/sprints/:sprint/edit" element={<SprintEditPage/>}/>
+            <Route path=":project/sprints/create" element={<SprintCreatePage/>}/>
           </Route>
           <Route path='/profile/' element={<ProfilePage/>}/>
   
