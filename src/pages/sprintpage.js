@@ -61,7 +61,7 @@ const SprintPage = () => {
                 
             </div>
           </div>)}
-          <h2 className="goals-h2">Задачи</h2>   
+          <h2 className="goals-h2 cl-trans">Задачи</h2>   
           <div className="kanban-sprint-container">
             <Kanban cards={cards} setCards={setCards} />
           </div>

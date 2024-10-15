@@ -75,7 +75,7 @@ const ActivityPage = () => {
                 <div className="controls-block year">
                   <p>Год</p>
                   <div className="flex1">
-                    <SearchDropDown values={["2024","2025","2026"]} chosenOption={year} setChosenOption={setYear} emptyMessage={"Выберите год"}/>
+                    <SearchDropDown values={["2024","2025","2026","2027","2028","2029","2030"]} chosenOption={year} setChosenOption={setYear} emptyMessage={"Выберите год"}/>
                   </div>
                 </div>
                 <div className="controls-block member">

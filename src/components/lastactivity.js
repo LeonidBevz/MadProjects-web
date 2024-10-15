@@ -9,6 +9,7 @@ const LastActivity = ({date, link, text, linkTo}) => {
         const minutes = Math.floor(seconds / 60);
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
+        const years = Math.floor(days / 365);
       
         if (seconds < 60) {
           return "только что";
@@ -24,9 +25,10 @@ const LastActivity = ({date, link, text, linkTo}) => {
         } else if (days < 365) {
           const months = Math.floor(days / 30);
           return `${months} мес. назад`;
-        } else {
-          const years = Math.floor(days / 365);
+        }else if (years < 5){
           return `${years} г. назад`;
+        }else {
+            return `${years} лет назад`;
         }
       };
   

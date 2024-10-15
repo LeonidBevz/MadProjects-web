@@ -10,7 +10,7 @@ import RightArrowIco from "../images/arrowrightico";
 
 const ProfilePage = () => {
     const {isNightTheme, setIsNightTheme} = useToken()
-    const [username,setUsername] = useState("Абобус")
+    const [username,setUsername] = useState("Kaelesty")
     const [gitLink,setGitLink] = useState("https://github.com/Kaelesty")
     const [EmailLink,setEmailLink] = useState("example@gmail.com")
 

@@ -82,7 +82,7 @@ const TopMenuPage = () => {
               Активность
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/messendger/`)}>
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/messenger/`)}>
               Мессенджер
             </div>
             <div className="sidebar-separator"/>

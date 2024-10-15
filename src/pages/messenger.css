@@ -1,0 +1,86 @@
+.messenger-page{
+    width: 100vw;
+    height: calc(100vh - 45px);
+    display: flex;
+}
+.messenger-page *{
+}
+.chats-list{
+    height: calc(100vh - 45px);
+    overflow: auto;
+    padding: 0.8rem;
+    width: 28rem;
+    border-right: 1px solid var(--main-blue-color);
+}
+.chat-list-tile{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 6.25rem;
+    padding: 10px;
+    border-radius: 1.75rem;
+    cursor: pointer;
+    background-color: var(--card-color);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 0.8rem;
+    min-width: max-content;
+}
+.chat-list-tile p{
+    margin: 5px 0px;
+}
+.chat-list-tile h2{
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 5px 0px;
+}
+.chat-list-tile-content{
+    flex: 1;
+}
+.chat-list-tile-new{
+    width: 2rem;
+    height: 2rem;
+    padding: 0.3rem;
+    border-radius: 50%;
+    border: 2px solid var(--main-blue-color);
+    text-align: center;
+    font-weight: 200;
+}
+
+.chatIco{
+    width: 5rem;
+    flex-shrink: 0;
+}
+.chat-list-tile-lastmess{
+    display: flex;
+    align-items: center;   
+}
+.chat-list-tile-lastmess-combined {
+    display: inline-block;
+    max-width: calc(28rem - 5rem - 9rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .chat-list-tile-lastmess-user {
+    font-weight: 300; 
+    margin-right: 0.5rem !important;
+  }
+  
+  .chat-list-tile-lastmess-mess {
+    font-weight: 100;
+  }
+.chat-list-tile-lastmess-date{
+    font-weight: 100;
+    margin-left: 0.5rem !important;
+    white-space: nowrap;
+}
+
+
+@media (width < 1000px) {
+    .chats-list {
+      width: 100%;
+      border: none;
+      height: max-content;
+    }
+  }
