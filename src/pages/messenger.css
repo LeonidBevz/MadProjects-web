@@ -128,7 +128,8 @@
   box-sizing: border-box;
   outline: none;
   background-color: transparent;
-  color: var(--main-text-color)
+  color: var(--main-text-color);
+  scrollbar-width: none; 
 }
 .send-arr{
     height: 2.5rem;
@@ -214,7 +215,7 @@
     .chats-list {
       width: 100%;
       border: none;
-      height: max-content;
+      
     }
     
   }

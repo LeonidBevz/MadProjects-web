@@ -3,52 +3,31 @@ import LeftArrowIco from "../images/arrowleft";
 import useToken from "../hooks/useToken";
 import RightArrowIco from "../images/arrowrightico";
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide}) => {
+const formatLinuxTime = (timestamp) =>{
+    const date = new Date(timestamp);
+
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    const formattedTime = `${hours}:${minutes}`;
+    return formattedTime
+}
+
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendMessage}) => {
     const {isNightTheme} = useToken()
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState([
-        { id: 1, text: "Привет, как дела?", senderId: "Бевз Леонид Александрович", time: "2024-10-15T10:05:00Z" },
-        { id: 2, text: "Что нового?", senderId: "Гена Сусов", time: "2024-10-15T10:15:00Z" },
-        { id: 3, text: "Как погода сегодня?", senderId: "Анна Иванова", time: "2024-10-15T10:30:00Z" },
-        { id: 4, text: "Давай встретимся позже.", senderId: "Максим Петров", time: "2024-10-15T11:00:00Z" },
-        { id: 5, text: "Не могу поверить, что это произошло!", senderId: "Елена Смирнова", time: "2024-10-15T11:30:00Z" },
-        { id: 6, text: "Что ты думаешь по этому поводу?", senderId: "Бевз Леонид Александрович", time: "2024-10-15T12:00:00Z" },
-        { id: 7, text: "Мне кажется, это отличная идея!", senderId: "Гена Сусов", time: "2024-10-15T12:15:00Z" },
-        { id: 8, text: "Как ты это сделал?", senderId: "Анна Иванова", time: "2024-10-15T12:30:00Z" },
-        { id: 9, text: "Согласен с тобой!", senderId: "Максим Петров", time: "2024-10-15T12:45:00Z" },
-        { id: 10, text: "Я на самом деле не знаю, что сказать.", senderId: "Елена Смирнова", time: "2024-10-15T13:00:00Z" },
-    
-        { id: 11, text: "Привет, как дела?", senderId: "Бевз Леонид Александрович", time: "2024-10-16T10:05:00Z" },
-        { id: 12, text: "Что нового?", senderId: "Гена Сусов", time: "2024-10-16T10:15:00Z" },
-        { id: 13, text: "Как погода сегодня?", senderId: "Анна Иванова", time: "2024-10-16T10:30:00Z" },
-        { id: 14, text: "Давай встретимся позже.", senderId: "Максим Петров", time: "2024-10-16T11:00:00Z" },
-        { id: 15, text: "Не могу поверить, что это произошло!", senderId: "Елена Смирнова", time: "2024-10-16T11:30:00Z" },
-        { id: 16, text: "Что ты думаешь по этому поводу?", senderId: "Бевз Леонид Александрович", time: "2024-10-16T12:00:00Z" },
-        { id: 17, text: "Мне кажется, это отличная идея!", senderId: "Гена Сусов", time: "2024-10-16T12:15:00Z" },
-        { id: 18, text: "Как ты это сделал?", senderId: "Анна Иванова", time: "2024-10-16T12:30:00Z" },
-        { id: 19, text: "Согласен с тобой!", senderId: "Максим Петров", time: "2024-10-16T12:45:00Z" },
-        { id: 20, text: "Я на самом деле не знаю, что сказать.", senderId: "Елена Смирнова", time: "2024-10-16T13:00:00Z" },
-    
-        { id: 21, text: "Привет, как дела?", senderId: "Бевз Леонид Александрович", time: "2024-10-17T10:05:00Z" },
-        { id: 22, text: "Что нового?", senderId: "Гена Сусов", time: "2024-10-17T10:15:00Z" },
-        { id: 23, text: "Как погода сегодня?", senderId: "Анна Иванова", time: "2024-10-17T10:30:00Z" },
-        { id: 24, text: "Давай встретимся позже.", senderId: "Максим Петров", time: "2024-10-17T11:00:00Z" },
-        { id: 25, text: "Не могу поверить, что это произошло!", senderId: "Елена Смирнова", time: "2024-10-17T11:30:00Z" },
-        { id: 26, text: "Что ты думаешь по этому поводу?", senderId: "Бевз Леонид Александрович", time: "2024-10-17T12:00:00Z" },
-        { id: 27, text: "Мне кажется, это отличная идея!", senderId: "Гена Сусов", time: "2024-10-17T12:15:00Z" },
-        { id: 28, text: "Как ты это сделал?", senderId: "Анна Иванова", time: "2024-10-17T12:30:00Z" },
-        { id: 29, text: "Согласен с тобой!", senderId: "Максим Петров", time: "2024-10-17T12:45:00Z" },
-        { id: 30, text: "Я на самом деле не знаю, что сказать.", senderId: "Елена Смирнова", time: "2024-10-17T13:00:00Z" },
-    ]);
+   
     const [groupedMessages, setGroupedMessages] = useState([])
-    const [userId, setUserId] = useState("Бевз Леонид Александрович")
+    const [userId, setUserId] = useState(1)
     const textareaRef = useRef(null);
+    const containerRef = useRef(null)
 
     useEffect(()=>{
         setMessage('')
+
     },[chat])
 
-    useEffect(()=>{
+    useEffect(()=>{//исправить обновление при каждом изменении
         const groupMessages = (messages) => {
             const groupedMessages = [];
             const dateFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -88,14 +67,49 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide}) => {
         setGroupedMessages(groupMessages(messages));
     },[messages])
 
-    const handleInputChange = (event) => {
+    useEffect(() => {
+        const container = containerRef.current;
+      
+        const isScrolledToBottom =
+          container.scrollHeight - container.scrollTop === container.clientHeight;
+      
+        if (isScrolledToBottom) {
+          setTimeout(() => {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: 'smooth' // Плавная прокрутка
+              });
+          }, 0);
+        }
+      }, [messages]);
+
+    const checkTextAreaSize = () =>{
         const textarea = textareaRef.current;
         
         textarea.style.height = 'auto';
     
         textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
-    
+    }
+    const handleInputChange = (event) => {
+        checkTextAreaSize()
         setMessage(event.target.value);
+    };
+    const handleSendClick = () =>{
+        onSendMessage(message)
+        setMessage("")
+        setTimeout(checkTextAreaSize, 0); 
+    }
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            if (e.shiftKey) {
+                e.preventDefault();
+                setMessage((prev) => prev + "\n");
+                setTimeout(checkTextAreaSize, 0);                
+            } else {
+                e.preventDefault();
+                handleSendClick();
+            }
+        }
     };
 
     return (
@@ -104,7 +118,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide}) => {
                 {isMobile && (<LeftArrowIco className="back-arr" color={isNightTheme ? "#d4d3cf" : "black"} onClick={onBackClick}/>)}
                 <h1>{chat.title}</h1>
             </div>
-            <div className="chat-center">
+            <div className="chat-center" ref={containerRef}>
             {groupedMessages.map((messagesADay,k)=>(<div key={k}>
                 <p className="date-sep">{messagesADay.date}</p>
                 {messagesADay.messages.map((messageGroup,i)=>(
@@ -118,7 +132,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide}) => {
                                 <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r bg-trans" : "message-l bg-trans"}>
                                     <span className="message-text cl-trans">{message.text}</span>
                                 </div>
-                                <span className="message-time cl-trans">{message.time ? message.time.slice(11, 16):""}</span>
+                                <span className="message-time cl-trans">{message.time ? formatLinuxTime(message.time):""}</span>
                             </div>))}
                         </div>
                     </div>
@@ -133,8 +147,9 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide}) => {
                     value={message}
                     onChange={handleInputChange}
                     rows="1"
+                    onKeyDown={handleKeyDown}
                  />
-                 <RightArrowIco className="send-arr" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                 <RightArrowIco className="send-arr" color={isNightTheme ? "#d4d3cf" : "black"} onClick={()=>handleSendClick()}/>
             </div>
         </div>   
       

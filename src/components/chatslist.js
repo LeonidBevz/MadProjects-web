@@ -44,13 +44,13 @@ const ChatsList = ({chats, onChatSelect}) => {
                 <BookmarksIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>
                 <div className="chat-list-tile-content"> 
                     <h2 className="cl-trans">{chat.title}</h2>
-                    <div className="chat-list-tile-lastmess"> 
-                        <span class="chat-list-tile-lastmess-combined">
-                          <span class="chat-list-tile-lastmess-user cl-trans">{chat.lastMessage.senderId}</span>
-                          <span class="chat-list-tile-lastmess-mess cl-trans">{chat.lastMessage.text}</span>
+                    {chat.lastMessage !== null && (<div className="chat-list-tile-lastmess"> 
+                        <span className="chat-list-tile-lastmess-combined">
+                          <span className="chat-list-tile-lastmess-user cl-trans">{chat.lastMessage.senderId}</span>
+                          <span className="chat-list-tile-lastmess-mess cl-trans">{chat.lastMessage.text}</span>
                         </span>
                         <p className="chat-list-tile-lastmess-date">{getTimeAgo(chat.lastMessage.time)}</p>
-                    </div>
+                    </div>)}
                 </div>
                 {chat.unreadMessagesCount > 0 &&(<div className="chat-list-tile-new">
                     {chat.unreadMessagesCount > 99 ? 99 : chat.unreadMessagesCount}

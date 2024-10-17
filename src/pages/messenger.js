@@ -1,22 +1,35 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "./messenger.css"
 import ChatsList from "../components/chatslist";
 import ChatWindow from "../components/chatwindow";
+import {MessengerSocket} from "../urls"
 
 
 const MessengerPage = () => {
+    const ws = useRef(null);
     const [activeChat, setActiveChat] = useState(null);
     const [isChatListVisible, setChatListVisible] = useState(true);
-    const chatsList = [
-        {id: 1, title: "Закладки", lastMessage: {id: 1, text: "В след. раз убить!", senderId: 1, time: "1989-08-29T10:00:00Z"}, unreadMessagesCount: 10},
-        {id: 1, title: "Общий чат", lastMessage: {id: 1, text: "Где коммиты?", senderId: 1, time: "2024-08-29T10:00:00Z"}, unreadMessagesCount: 3},
-        {id: 1, title: "Закладки", lastMessage: {id: 1, text: "Где коммиты?", senderId: 1, time: "2024-09-29T10:00:00Z"}, unreadMessagesCount: 0},
-        {id: 1, title: "Закладки", lastMessage: {id: 1, text: "Где коммиты?", senderId: 1, time: "2024-10-14T10:00:00Z"}, unreadMessagesCount: 33},
-        {id: 1, title: "Закладки", lastMessage: {id: 1, text: "Где коммиты?", senderId: 1, time: "2024-08-29T10:00:00Z"}, unreadMessagesCount: 1}    
-    ]
+    const [chatsList,setChatList] = useState([])
+    const [messages, setMessages] = useState([
+      { id: 1, text: "Привет, как дела?", senderId: "Бевз Леонид Александрович", time: "2024-10-15T10:05:00Z" },
+      { id: 2, text: "Что нового?", senderId: "Гена Сусов", time: "2024-10-15T10:15:00Z" },
+      { id: 3, text: "Как погода сегодня?", senderId: "Анна Иванова", time: "2024-10-15T10:30:00Z" }
+    ]);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
     const [isSuperWide, setIsSuperWide] = useState(window.innerWidth < 1900);
 
+
+    const sendAction = (actionType, params) => {
+      const action = { type: "entities.ClientAction." + actionType, ...params };
+      ws.current.send(JSON.stringify(action));
+    };
+    const sendMessage = (newMessage) =>{
+      if (newMessage.trim() === '') return;
+      sendAction("SendMessage",{
+        chatId: activeChat.id, 
+        message: newMessage
+      })
+    }
     const handleBackClick = () =>{
         setActiveChat(null)
         setChatListVisible(true)
@@ -26,12 +39,53 @@ const MessengerPage = () => {
       setIsMobile(window.innerWidth < 1000);
       setIsSuperWide(window.innerWidth > 1900)
     };
-  
+
+    useEffect(()=>{
+      if (!activeChat) return;
+      sendAction("RequestChatMessages",{
+        chatId: activeChat.id
+      })
+    },[activeChat])
+
     useEffect(() => {
       window.addEventListener('resize', handleResize);
+      
+      ws.current = new WebSocket(MessengerSocket);
+
+      ws.current.onopen = () => {
+        sendAction('Authorize', {
+          jwt: '2',
+          projectId: 1,
+        });
+        sendAction("RequestChatsList",{
+          projectId: 1
+        })
+        console.log('WebSocket connected');
+      };
+
+      ws.current.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type ==="entities.ServerAction.SendChatsList"){
+          setChatList(message.chats)
+        }
+        else if (message.type ==="entities.ServerAction.SendChatMessages"){
+          setMessages(message.messages)
+        }
+        else if(message.type === "entities.ServerAction.NewMessage") {
+          setMessages(prevMessages => [...prevMessages,message.message]);
+        }
+        console.log(message)
+      };
+
+      ws.current.onclose = () => {
+          console.log('WebSocket disconnected');
+      };
   
       return () => {
         window.removeEventListener('resize', handleResize);
+        if (ws.current) {
+          ws.current.close();
+      }
       };
     }, []);
 
@@ -42,6 +96,7 @@ const MessengerPage = () => {
         else{
             setChatListVisible(true)
         }
+        // eslint-disable-next-line
     },[isMobile])
 
     const handleChatSelect = (chat) => {
@@ -54,7 +109,7 @@ const MessengerPage = () => {
     return (
       <div className="messenger-page"> 
         {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect}/>)}
-        {activeChat ? <ChatWindow chat={activeChat} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick}/> : !isMobile ? <div>Выберите чат</div>:<></>}
+        {activeChat ? <ChatWindow chat={activeChat} messages={messages} onSendMessage={sendMessage} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick}/> : !isMobile ? <div>Выберите чат</div>:<></>}
       </div>
     );
   }

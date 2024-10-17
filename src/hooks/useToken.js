@@ -1,4 +1,4 @@
-import BackURL from "../urls";
+import {BackURL} from "../urls";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
