@@ -3,14 +3,15 @@
     height: calc(100vh - 45px);
     display: flex;
 }
-.messenger-page *{
+.a *{
+    outline: 1px solid red;
 }
 .chats-list{
     height: calc(100vh - 45px);
     overflow: auto;
     padding: 0.8rem;
-    width: 28rem;
-    border-right: 1px solid var(--main-blue-color);
+    width: 30rem;
+    border-right: 2px solid var(--main-blue-color);
 }
 .chat-list-tile{
     display: flex;
@@ -32,22 +33,26 @@
     font-size: 1.2rem;
     font-weight: 600;
     margin: 5px 0px;
+    color: var(--main-text-color);
 }
 .chat-list-tile-content{
     flex: 1;
 }
 .chat-list-tile-new{
-    width: 2rem;
-    height: 2rem;
+    width: 2.2rem;
+    height: 2.2rem;
     padding: 0.3rem;
     border-radius: 50%;
     border: 2px solid var(--main-blue-color);
-    text-align: center;
-    font-weight: 200;
+    font-weight: 600;
+    color: var(--main-blue-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .chatIco{
-    width: 5rem;
+    width: 4rem;
     flex-shrink: 0;
 }
 .chat-list-tile-lastmess{
@@ -60,6 +65,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--main-text-color);
   }
   
   .chat-list-tile-lastmess-user {
@@ -75,6 +81,133 @@
     margin-left: 0.5rem !important;
     white-space: nowrap;
 }
+.chat-window{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.chat-top{
+    height: 3rem;
+    padding: 0px 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.chat-top h1{ 
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--main-text-color);
+}
+.back-arr{
+    height: 1.2rem;
+    cursor: pointer;
+}
+.chat-center{
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0px 1rem;
+}
+.chat-end{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: var(--card-color);
+    padding: 0 0.8rem;
+}
+.chat-input {
+  width: 100%;
+  min-height: 3rem;
+  max-height: 9rem; 
+  padding: 0.92rem;
+  font-size: 1rem;
+  border: none;
+  overflow-y: auto;
+  resize: none; 
+  box-sizing: border-box;
+  outline: none;
+  background-color: transparent;
+  color: var(--main-text-color)
+}
+.send-arr{
+    height: 2.5rem;
+    cursor: pointer;
+}
+.user-pic{
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.message-group-l{
+    display: flex;
+    margin-bottom: 0.8rem;
+}
+.message-group-r{
+    display: flex;
+    margin-bottom: 0.8rem;
+    flex-direction: row-reverse;
+}
+.userpic-container{
+    width: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+.messages-container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: calc(100%);
+    max-width: 60rem;
+}
+.message-l{
+    padding: 0.7rem;
+    background-color: var(--card-color);
+    border-radius: 0px 10px 10px 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: fit-content;
+    color: var(--main-text-color);
+}
+.message-r{
+    padding: 0.7rem;
+    background-color: var(--card-color);
+    border-radius: 10px 0px 10px 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: fit-content;
+    align-self: flex-end;
+    color: var(--main-text-color);
+}
+.message-container-l{
+    display: flex;
+}
+.message-container-r{
+    display: flex;
+    flex-direction: row-reverse;
+    align-self: flex-end;
+}
+.message-author{
+    margin: 0;
+    font-weight: 500;
+    color: var(--main-blue-color);
+}
+.text-right{
+    text-align: end;
+}
+.message-time{
+    padding: 0.7rem;
+    font-weight: 100;
+    font-style: italic;
+    color: var(--main-text-color);
+}
+.date-sep{
+    width: 100%;
+    text-align: center;
+    padding: 0.3rem;
+    color: var(--main-text-color);
+}
 
 
 @media (width < 1000px) {
@@ -83,4 +216,5 @@
       border: none;
       height: max-content;
     }
+    
   }

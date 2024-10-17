@@ -15,10 +15,16 @@ const MessengerPage = () => {
         {id: 1, title: "Закладки", lastMessage: {id: 1, text: "Где коммиты?", senderId: 1, time: "2024-08-29T10:00:00Z"}, unreadMessagesCount: 1}    
     ]
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
+    const [isSuperWide, setIsSuperWide] = useState(window.innerWidth < 1900);
 
+    const handleBackClick = () =>{
+        setActiveChat(null)
+        setChatListVisible(true)
+    }
 
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
+      setIsSuperWide(window.innerWidth > 1900)
     };
   
     useEffect(() => {
@@ -48,7 +54,7 @@ const MessengerPage = () => {
     return (
       <div className="messenger-page"> 
         {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect}/>)}
-        {activeChat ? <ChatWindow chat={activeChat}/> : !isMobile ? <div>Выберите чат</div>:<></>}
+        {activeChat ? <ChatWindow chat={activeChat} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick}/> : !isMobile ? <div>Выберите чат</div>:<></>}
       </div>
     );
   }
