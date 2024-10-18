@@ -16,7 +16,7 @@ const MessengerPage = () => {
       { id: 3, text: "Как погода сегодня?", senderId: "Анна Иванова", time: "2024-10-15T10:30:00Z" }
     ]);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
-    const [isSuperWide, setIsSuperWide] = useState(window.innerWidth < 1900);
+    const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
 
 
     const sendAction = (actionType, params) => {
