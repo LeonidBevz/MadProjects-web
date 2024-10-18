@@ -17,6 +17,7 @@ import SprintEditPage from "./pages/sprintedit";
 import SprintCreatePage from "./pages/sprintcreate";
 import InfoPage from "./pages/infopage";
 import MessengerPage from "./pages/messenger";
+import SettingsPage from "./pages/settingspage";
 
 const App = () => { 
 
@@ -33,6 +34,7 @@ const App = () => {
             <Route path=":project/sprints/:sprint" element={<SprintPage/>}/>
             <Route path=":project/sprints/:sprint/edit" element={<SprintEditPage/>}/>
             <Route path=":project/sprints/create" element={<SprintCreatePage/>}/>
+            <Route path=":project/settings/" element={<SettingsPage/>}/>
           </Route>
           <Route path='/profile/' element={<ProfilePage/>}/>
   

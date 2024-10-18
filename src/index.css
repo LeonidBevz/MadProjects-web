@@ -73,6 +73,7 @@ code {
   * {
       scrollbar-width: thin;
       scrollbar-color: var(--border-color) var(--bg-color);
+      transition: scrollbar-color var(--main-theme-transition);
   }
 }
 

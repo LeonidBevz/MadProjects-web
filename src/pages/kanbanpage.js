@@ -1,87 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import MenuDotsIco from "../images/menudots";
 import "./kanbanpage.css";
 import useToken from "../hooks/useToken";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import PlusIco from "../images/plus";
+import EditModal from "../components/editmodal";
+import DeleteModal from "../components/deletemodal";
 
 function formatDate(date) {
   const dateParts = date.slice(0, 10).split('-'); 
   const formattedDate = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`; 
   return formattedDate;
 }
-const DeleteModal = ({text, onDelete, onCancel}) => {
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.key === 'Escape') {
-        onCancel();
-      }
-    };
 
-    document.addEventListener('keydown', handleEsc);
 
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-    // eslint-disable-next-line
-  }, []); 
-  return (
-    <div className="delete-modal bg-trans">
-      <p>{text}</p>
-      <div className="flex-butt">
-        <button className="deletem-button" onClick={onDelete}>Подтвердить</button>
-        <button className="all-trans" onClick={onCancel}>Отмана</button>
-      </div>
-    </div>
-  )
-}
-const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
-  const inputRef = useRef()
-  useEffect(() => {
-    if (inputRef.current){
-      inputRef.current.focus()
-    }
-    const handleEsc = (event) => {
-      if (event.key === 'Escape') {
-        onCancel();
-      }
-    };
-
-    document.addEventListener('keydown', handleEsc);
-
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-    // eslint-disable-next-line
-  }, []); 
-
-  const handleValueChange = (event)=>{
-    setNewValue(event.target.value);
-  }
-  const handleSubmit = (event)=>{
-    event.preventDefault();
-    onConfirm()
-  }
-  return (
-    <div className="delete-modal bg-trans">
-      <form onSubmit={handleSubmit}>
-      <p className="modal-edit-text">{text}</p>
-      <input 
-        className="all-trans"
-        value={newValue}
-        onChange={handleValueChange}
-        maxLength={32}
-        ref={inputRef}
-        required
-      />
-      <div className="flex-butt">
-        <button type="submit" className="all-trans">Подтвердить</button>
-        <button type="button" className="all-trans" onClick={onCancel}>Отмана</button>
-      </div>
-      </form>
-    </div>
-  )
-}
 const KanbanPage = () => {
   const { username, isNightTheme } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
@@ -90,19 +22,19 @@ const KanbanPage = () => {
   const [newName, setNewName] = useState("")
   const [cards, setCards] = useState([
     {
-      rowName: "Пример1",
+      rowName: "Надо бы сделать очень гуд энд вери велл",
       id: "row1",
       cards: [
-        { name: "Фикс поиска", id: "card1", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
-        { name: "Фикс поиска", id: "card2", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+        { name: "Фикс мессенжера, новые сообщения Фикс мессенжера, новые сообщения", id: "card1", author: "Леон", created: "2024-10-17T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+        { name: "Да", id: "card2", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
       ],
     },
     {
       rowName: "Пример2",
       id: "row2",
       cards: [
-        { name: "Фикс поиска", id: "card3", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
-        { name: "Фикс поиска", id: "card4", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+        { name: "Очень длинное название карточки, работы до**** делать нечего, бекендером быть очень прикольно", id: "card3", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+        { name: "Сделать всё", id: "card4", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
       ],
     },
   ]);

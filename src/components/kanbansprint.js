@@ -1,85 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import MenuDotsIco from "../images/menudots";
 import useToken from "../hooks/useToken";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import DeleteModal from "./deletemodal";
+import EditModal from "./editmodal";
 
 function formatDate(date) {
   const dateParts = date.slice(0, 10).split('-'); 
   const formattedDate = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`; 
   return formattedDate;
 }
-const DeleteModal = ({text, onDelete, onCancel}) => {
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.key === 'Escape') {
-        onCancel();
-      }
-    };
 
-    document.addEventListener('keydown', handleEsc);
-
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-    // eslint-disable-next-line
-  }, []); 
-  return (
-    <div className="delete-modal bg-trans">
-      <p>{text}</p>
-      <div className="flex-butt">
-        <button className="deletem-button" onClick={onDelete}>Подтвердить</button>
-        <button className="all-trans" onClick={onCancel}>Отмана</button>
-      </div>
-    </div>
-  )
-}
-const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
-  const inputRef = useRef()
-  useEffect(() => {
-    if (inputRef.current){
-      inputRef.current.focus()
-    }
-    const handleEsc = (event) => {
-      if (event.key === 'Escape') {
-        onCancel();
-      }
-    };
-
-    document.addEventListener('keydown', handleEsc);
-
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-    // eslint-disable-next-line
-  }, []); 
-
-  const handleValueChange = (event)=>{
-    setNewValue(event.target.value);
-  }
-  const handleSubmit = (event)=>{
-    event.preventDefault();
-    onConfirm()
-  }
-  return (
-    <div className="delete-modal bg-trans">
-      <form onSubmit={handleSubmit}>
-      <p className="modal-edit-text">{text}</p>
-      <input 
-        className="all-trans"
-        value={newValue}
-        onChange={handleValueChange}
-        maxLength={32}
-        ref={inputRef}
-        required
-      />
-      <div className="flex-butt">
-        <button type="submit" className="all-trans">Подтвердить</button>
-        <button type="button" className="all-trans" onClick={onCancel}>Отмана</button>
-      </div>
-      </form>
-    </div>
-  )
-}
 const Kanban = ({cards, setCards}) => {
   const { isNightTheme } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)

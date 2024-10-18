@@ -8,7 +8,7 @@ const InfoPage = () => {
     const {project} = useParams()
     const navigate = useNavigate()
     const {isNightTheme} = useToken()
-    const [data,setData] = useState({
+    const [data, setData] = useState({
         description: "Audionautica - это платформа для стриминга и прослушивания музыки. Оно позволяет пользователям создавать плейлисты, искать треки по жанрам, исполнителям или альбомам, и сохранять любимые песни для оффлайн-прослушивания. Встроенные алгоритмы подбирают персональные рекомендации на основе музыкальных предпочтений, а также доступен режим караоке и создание совместных плейлистов с друзьями. Простое управление, качественное аудио и возможность делиться любимой музыкой делают это приложение идеальным для меломанов.",
         team: [{name: "Leonid"},{name: "Kalesty"}],
         repos: [{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}],

@@ -18,7 +18,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
     const [message, setMessage] = useState('');
    
     const [groupedMessages, setGroupedMessages] = useState([])
-    const [userId, setUserId] = useState(1)
+    const [userId, setUserId] = useState(2)
     const textareaRef = useRef(null);
     const containerRef = useRef(null)
 
@@ -77,7 +77,6 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
           setTimeout(() => {
             container.scrollTo({
                 top: container.scrollHeight,
-                behavior: 'smooth' // Плавная прокрутка
               });
           }, 0);
         }

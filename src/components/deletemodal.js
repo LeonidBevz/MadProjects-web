@@ -1,0 +1,38 @@
+import React, {useRef, useEffect}  from "react";
+
+const DeleteModal = ({text, onDelete, onCancel}) => {
+    const container = useRef(null)
+  
+    useEffect(() => {
+      const handleEsc = (event) => {
+        if (event.key === 'Escape') {
+          onCancel();
+        }
+      };
+      const handleClickOutside = (event) => {
+        if (container.current  && !container.current.contains(event.target)) {
+          onCancel();
+        }
+      };
+      document.addEventListener('keydown', handleEsc);
+      document.addEventListener('mousedown', handleClickOutside);
+  
+      return () => {
+        document.removeEventListener('keydown', handleEsc);
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+      // eslint-disable-next-line
+    }, []); 
+  
+    return (
+      <div className="delete-modal bg-trans" ref={container}>
+        <p>{text}</p>
+        <div className="flex-butt">
+          <button className="deletem-button" onClick={onDelete}>Подтвердить</button>
+          <button className="all-trans" onClick={onCancel}>Отмана</button>
+        </div>
+      </div>
+    )
+}
+
+export default DeleteModal

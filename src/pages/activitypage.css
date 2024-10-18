@@ -90,6 +90,7 @@
 }
 .sprints-flex{
     display: flex;
+    align-items: center;
     cursor: pointer;
 }
 

@@ -1,0 +1,17 @@
+.settings-cross{
+    height: 1rem;
+    width: 2rem;
+    cursor: pointer;
+}
+.settings-flex{
+    display: flex;
+    align-items: center;
+}
+
+.settings-flex p{
+    flex: 1;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    font-style: italic;
+    cursor: pointer;
+}
