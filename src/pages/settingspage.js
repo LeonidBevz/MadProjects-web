@@ -19,8 +19,8 @@ const SettingsPage = () => {
     return (
         <div className="info-page">          
          {data.team.length !== 0 && (<div className="info-container">
-             <h2 className="cl-trans">Команда</h2>
-             <div className="info-tile bg-trans">
+             <h2>Команда</h2>
+             <div className="info-tile">
                {data.team.map((member, index)=>(
                  <div className="sprint" key={index}>
                    <div className="settings-flex">
@@ -40,8 +40,8 @@ const SettingsPage = () => {
            </div>
          </div>)}
          {data.repos.length !== 0 && (<div className="info-container">
-             <h2 className="cl-trans">Репозитории</h2>
-             <div className="info-tile bg-trans">
+             <h2>Репозитории</h2>
+             <div className="info-tile">
                {data.repos.map((repo, index)=>(
                  <div className="sprint" key={index}>
                    <div className="sprints-flex" onClick={()=>navigate(`repolink`)}>

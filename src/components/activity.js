@@ -114,8 +114,7 @@ const Activity = () => {
     const [sum,setSum]=useState(0)
     const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     const months = [ 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн','Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
-    
-
+   
     useEffect(()=>{
       const activityValues = Object.values(activities);
 

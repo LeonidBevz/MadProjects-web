@@ -10,11 +10,7 @@ const MessengerPage = () => {
     const [activeChat, setActiveChat] = useState(null);
     const [isChatListVisible, setChatListVisible] = useState(true);
     const [chatsList,setChatList] = useState([])
-    const [messages, setMessages] = useState([
-      { id: 1, text: "Привет, как дела?", senderId: "Бевз Леонид Александрович", time: "2024-10-15T10:05:00Z" },
-      { id: 2, text: "Что нового?", senderId: "Гена Сусов", time: "2024-10-15T10:15:00Z" },
-      { id: 3, text: "Как погода сегодня?", senderId: "Анна Иванова", time: "2024-10-15T10:30:00Z" }
-    ]);
+    const [messages, setMessages] = useState([]);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
     const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
 
@@ -54,7 +50,7 @@ const MessengerPage = () => {
 
       ws.current.onopen = () => {
         sendAction('Authorize', {
-          jwt: '2',
+          jwt: '1',
           projectId: 1,
         });
         sendAction("RequestChatsList",{

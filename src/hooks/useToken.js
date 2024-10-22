@@ -1,5 +1,5 @@
 import {BackURL} from "../urls";
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 const TokenContext = createContext();
@@ -13,17 +13,10 @@ export function TokenProvider({children}){
     const [isNightTheme, setIsNightTheme] = useState(localStorage.getItem('theme') === 'true' || false)
 
     useEffect(()=>{
-      document.body.classList.add('no-trans');
-
       const lastUsername = localStorage.getItem('username')
       if (lastUsername){
         setUsername(lastUsername)
       }
-      
-      const timeoutId = setTimeout(() => {
-        document.body.classList.remove('no-trans');
-      }, 0);
-      return () => clearTimeout(timeoutId);
     },[])
 
     useEffect(() => {
@@ -58,6 +51,28 @@ export function TokenProvider({children}){
       }
       localStorage.setItem('theme', isNightTheme)
   }, [isNightTheme]);
+
+  const timeoutId = useRef(null);
+
+  const onThemeChange = () => {
+    const allElements = document.querySelectorAll('*');
+    if (timeoutId.current) {
+            clearTimeout(timeoutId.current);
+        } else {
+            allElements.forEach((element) => {
+                element.classList.add('all-trans');
+            });
+        }
+
+        setIsNightTheme(!isNightTheme);
+
+        timeoutId.current = setTimeout(() => {
+            allElements.forEach((element) => {
+                element.classList.remove('all-trans');
+            });
+            timeoutId.current = null;
+        }, 1000);
+  };
 
     const saveAccessToken = (token) => {
       localStorage.setItem('access', token);
@@ -144,6 +159,7 @@ export function TokenProvider({children}){
       api,
       isNightTheme,
       setIsNightTheme,
+      onThemeChange,
     }
     return (
         <TokenContext.Provider value={contextValue}>

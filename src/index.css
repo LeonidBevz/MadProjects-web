@@ -6,7 +6,7 @@ html, body, head {
 *,*::before,*::after {
   box-sizing: border-box;
   font: inherit;
-  /*outline: 1px solid red !important;*/ 
+  /*outline: 1px solid red !important;*/
   }
 
 body { 
@@ -14,35 +14,28 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-color);
-  transition: background-color 1s ease;
+  /*transition: background-color 1s ease;*/
 }
 /*Для переключения темы*/
-.bg-trans{
-  transition: background-color 1s ease;
-}
-.cl-trans{
-  transition: color 1s ease;
-}
-.all-trans{
-  transition: all 1s ease;
-}
 
+.all-trans{
+  transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
+}
 .svg-trans{
-  transition: fill 1s ease, stroke 1s ease;
- 
+  transition: fill var(--main-theme-transition), stroke var(--main-theme-transition);
 }
 .no-trans{
-  transition: none;
+  transition: none !important;
 }
 
 body p{
   color: var(--main-text-color);
-  transition: color 1s ease;
+  /*transition: color 1s ease;*/
 } 
-.no-trans * {
-  transition: none !important; 
-}
 
+body h2{
+  font-weight: 600;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -99,6 +92,9 @@ code {
     width: 3px;
     height: 3px;
   }
+  html, body, head {
+    overflow: auto;
+  }
 }
 @media (width >= 25rem) and (width < 37.5rem) {
   html {
@@ -107,5 +103,8 @@ code {
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
+  }
+  html, body, head {
+    overflow: auto;
   }
 }

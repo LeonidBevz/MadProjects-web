@@ -40,7 +40,7 @@ const SprintPage = () => {
       <div className="sprint-page">  
          <div className="sprint-info-container">
               <div className="flex-title">
-                <h2 className="cl-trans">{`Спринт / ${sprint}`} </h2>
+                <h2>{`Спринт / ${sprint}`} </h2>
                 <EditIco 
                   className="edit" color={isNightTheme ? "#d4d3cf" : "black"} 
                   onClick={()=>{navigate("edit/", {
@@ -48,20 +48,20 @@ const SprintPage = () => {
                 })}}/>
               </div>
               
-              <div className="sprint-info-tile bg-trans">
+              <div className="sprint-info-tile">
                 <p>{`Дата начала: ${formatDate(data.startDate)}`}</p>
                 <p>{`Планируемая дата завершения: ${formatDate(data.endDate)}`}</p>
                 <button>Завершить</button>
             </div>
           </div>
           {data.description && (<div className="sprint-info-container">
-              <h2 className="cl-trans">{`Описание`}</h2>
-              <div className="sprint-info-tile bg-trans">
+              <h2>{`Описание`}</h2>
+              <div className="sprint-info-tile">
                 <p>{data.description}</p>
                 
             </div>
           </div>)}
-          <h2 className="goals-h2 cl-trans">Задачи</h2>   
+          <h2 className="goals-h2">Задачи</h2>   
           <div className="kanban-sprint-container">
             <Kanban cards={cards} setCards={setCards} />
           </div>

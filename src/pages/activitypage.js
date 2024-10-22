@@ -69,8 +69,8 @@ const ActivityPage = () => {
       <div className="activity-page">
         <div className="activity-page-container">
           <div className="commits-container">
-            <h2 className="cl-trans">{`Общая активность за ${year} год`}</h2>
-            <div className="commits-tile bg-trans">
+            <h2>{`Общая активность за ${year} год`}</h2>
+            <div className="commits-tile">
               <div className="commits-controls-container">
                 <div className="controls-block year">
                   <p>Год</p>
@@ -113,36 +113,38 @@ const ActivityPage = () => {
               </div>
             </div>
           </div>
-          {lastActivityData.length !== 0 &&(
-            <div className="last-activity-container">
-              <h2 className="cl-trans">{`Последняя активность`}</h2>
-              <div className="last-activity-tile bg-trans">
-                  {lastActivityData.map((data,index)=>(
-                    <LastActivity 
-                      date={data.date}
-                      link={data.link} 
-                      linkTo={data.linkTo}
-                      text={data.text}
-                      key={index}
-                      />
-                  ))}
-                  
-              </div>
-            </div>
-          )}
-          <div className="sprints-container">
-            <h2 className="cl-trans">{`Спринты`}</h2>
-            <div className="sprints-tile bg-trans" >
-              <button onClick={()=>navigate(`/${project}/sprints/create/`)}>Начать спринт</button>
-              {sprints.map((sprint, index)=>(
-                <div className="sprint" key={index}>
-                  <div className="sprints-flex" onClick={()=>navigate(`/${project}/sprints/${sprint.name}`)}>
-                    <p>{sprint.name}</p>
-                    <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
-                  </div>
-                  <div className="grad-separator"></div>
+          <div className="activity-right-container">
+            {lastActivityData.length !== 0 &&(
+              <div className="last-activity-container">
+                <h2>{`Последняя активность`}</h2>
+                <div className="last-activity-tile">
+                    {lastActivityData.map((data,index)=>(
+                      <LastActivity 
+                        date={data.date}
+                        link={data.link} 
+                        linkTo={data.linkTo}
+                        text={data.text}
+                        key={index}
+                        />
+                    ))}
+
                 </div>
-              ))}
+              </div>
+            )}
+            <div className="sprints-container">
+              <h2>{`Спринты`}</h2>
+              <div className="sprints-tile" >
+                <button onClick={()=>navigate(`/${project}/sprints/create/`)}>Начать спринт</button>
+                {sprints.map((sprint, index)=>(
+                  <div className="sprint" key={index}>
+                    <div className="sprints-flex" onClick={()=>navigate(`/${project}/sprints/${sprint.name}`)}>
+                      <p>{sprint.name}</p>
+                      <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                    </div>
+                    <div className="grad-separator"></div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>    

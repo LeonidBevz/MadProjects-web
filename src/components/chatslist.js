@@ -40,14 +40,14 @@ const ChatsList = ({chats, onChatSelect}) => {
   
     return (     
         <div className="chats-list">
-            {chats.map((chat,index)=>( <div className="chat-list-tile bg-trans" key={index} onClick={()=>onChatSelect(chat)}>
+            {chats.map((chat,index)=>( <div className="chat-list-tile" key={index} onClick={()=>onChatSelect(chat)}>
                 <BookmarksIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>
                 <div className="chat-list-tile-content"> 
-                    <h2 className="cl-trans">{chat.title}</h2>
+                    <h2>{chat.title}</h2>
                     {chat.lastMessage !== null && (<div className="chat-list-tile-lastmess"> 
                         <span className="chat-list-tile-lastmess-combined">
-                          <span className="chat-list-tile-lastmess-user cl-trans">{chat.lastMessage.senderId}</span>
-                          <span className="chat-list-tile-lastmess-mess cl-trans">{chat.lastMessage.text}</span>
+                          <span className="chat-list-tile-lastmess-user">{chat.lastMessage.senderId}</span>
+                          <span className="chat-list-tile-lastmess-mess">{chat.lastMessage.text}</span>
                         </span>
                         <p className="chat-list-tile-lastmess-date">{getTimeAgo(chat.lastMessage.time)}</p>
                     </div>)}

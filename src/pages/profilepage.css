@@ -100,13 +100,14 @@
     background: var(--main-gradient)
 }
 .profile-page-content h2{
+    width: 100%;
+    max-width: 50rem;
     font-size: 1.8rem;
     padding-left: 2rem;
     padding-top: 20px;
     margin: 0;
     margin-bottom: 10px;
-    width: 50rem;
-    color: var(--main-text-color)
+    color: var(--main-text-color);
 }
 .profile-projects{
     width: 50rem;
@@ -179,7 +180,7 @@
         align-items: start;
     }
  }
- @media (width >= 25rem) and (width < 50rem) {
+ @media (width >= 25rem) and (width < 52rem) {
     .profile-info{
         display: block;
         width: 100%;

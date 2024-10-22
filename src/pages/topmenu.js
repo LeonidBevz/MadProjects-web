@@ -11,7 +11,7 @@ import "./topmenu.css"
 import LogoIco from "../images/logoico";
 
 const TopMenuPage = () => {
-  const {isNightTheme, setIsNightTheme} = useToken()
+  const {isNightTheme, onThemeChange} = useToken()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
   const username = "Бевз Леонид Александрович"
@@ -43,20 +43,21 @@ const TopMenuPage = () => {
     setIsSideBarOpen(false)
   }
 
+ 
     return (
       <div className="main-container">          
-        <div className="top-menu bg-trans">
+        <div className="top-menu">
           <div className="sepline"></div>
           <div className="top-menu-content">
             <div className="flex-start">
-              <button className="topmenu-button-left bg-trans" onClick={()=>setIsSideBarOpen(!isSideBarOpen)} ref={buttonRef}><img className={isSideBarOpen ? "ico-flip":""} src={MenuIMG} alt="menu"/></button>
+              <button className="topmenu-button-left" onClick={()=>setIsSideBarOpen(!isSideBarOpen)} ref={buttonRef}><img className={isSideBarOpen ? "ico-flip":""} src={MenuIMG} alt="menu"/></button>
             </div>
             <div className="flex-center">
             <LogoIco color={isNightTheme ? "white": "black"} className="logo"/>
               
             </div>
             <div className="flex-end">
-                <div className="theme-icon-container bg-trans" onClick={()=>{setIsNightTheme(!isNightTheme)}}>
+                <div className="theme-icon-container" onClick={()=>onThemeChange()}>
                     <div className={`theme-icon theme-icon-1 ${isNightTheme ? "theme-icon-hidden-1" : "theme-icon-active"}`}>
                       <img src={SunIMG} alt="sun" />
                     </div>
@@ -64,8 +65,8 @@ const TopMenuPage = () => {
                       <img src={NightIMG} alt="night" />
                     </div>
                 </div>
-                <button className="topmenu-button bg-trans" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
-                <button className="topmenu-button bg-trans"><img src={LogoutIMG} alt="logout"/></button>
+                <button className="topmenu-button" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
+                <button className="topmenu-button"><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
           </div>

@@ -242,7 +242,7 @@ const KanbanPage = () => {
                 <Draggable draggableId={row.id} index={i} key={row.id} isDragDisabled={isDragging}>
                   {(provided) => (
                     <div {...provided.draggableProps} ref={provided.innerRef} className="kanban-row">
-                      <div className="kanban-row-top bg-trans" {...provided.dragHandleProps}>
+                      <div className="kanban-row-top" {...provided.dragHandleProps}>
                         <p onClick={()=>{handleEditRowClick(i)}}>{row.rowName}</p>
                         <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(i)} onEdit={()=>handleEditRowClick(i)}/>
                       </div>
@@ -252,7 +252,7 @@ const KanbanPage = () => {
                             {row.cards.map((card, j) => (
                               <Draggable draggableId={card.id} index={j} key={card.id} isDragDisabled={isDragging}>
                                 {(provided) => (
-                                  <div className="kanban-card bg-trans" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                  <div className="kanban-card" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                     <div className="card-top">
                                       <p className="card-name" onClick={()=>{handleEditCardClick(i,j)}}>{card.name}</p>
                                       <div className="more-butt" >
@@ -268,7 +268,7 @@ const KanbanPage = () => {
                             ))}
                             {provided.placeholder}
                             <div className="kanban-row">
-                              <div className="kanban-add-cont bg-trans pointer" onClick={()=>addCard(i)}>
+                              <div className="kanban-add-cont pointer" onClick={()=>addCard(i)}>
                                 <p className="kanban-add-text">Добавить карточку</p>
                                 <PlusIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots"/>
                               </div>
@@ -282,7 +282,7 @@ const KanbanPage = () => {
               ))}
               {provided.placeholder}
               <div className="kanban-row">
-                <div className="kanban-add-cont bg-trans pointer" onClick={addColumn}>
+                <div className="kanban-add-cont pointer" onClick={addColumn}>
                   <p>Добавить столбец</p>
                   <PlusIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots"/>
                 </div>

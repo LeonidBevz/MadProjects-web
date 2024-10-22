@@ -58,12 +58,12 @@ const SprintEditPage = () => {
     }
     return (
       <div className="sprint-page">          
-        <h2  className="cl-trans">Редактировать спринт</h2>
+        <h2>Редактировать спринт</h2>
         <div className="edit-container">
           <form onSubmit={handleSubmit}>
             <div className="flex-edit">
               <div className="name-cont">
-                  <label className="cl-trans">Название</label>
+                  <label>Название</label>
                   <input
                     placeholder="Укажите название"
                     value={newName}
@@ -73,7 +73,7 @@ const SprintEditPage = () => {
                   />
               </div>
               <div className="date-cont"> 
-                  <label className="cl-trans">Дата завершения</label>
+                  <label>Дата завершения</label>
                   <input
                     placeholder="Укажите дату"
                     type="date"
@@ -86,9 +86,8 @@ const SprintEditPage = () => {
               </div>
             </div>
             <div>
-                <label className="cl-trans">Описание</label>
+                <label>Описание</label>
                 <textarea
-                  className="all-trans"
                   placeholder="Укажите описание"
                   value={newDescription}
                   onChange={handleDescriptionChange}
@@ -96,7 +95,7 @@ const SprintEditPage = () => {
                 />
             </div>
             <div>
-              <label className="cl-trans">Задачи</label>
+              <label>Задачи</label>
               <ChoseManyDropDown values={formattedCards} selectedValues={chosenCards} setSelectedValues={setChosenCards} emptyMessage={"Выберите задачи"}/>
             </div>
             {errorMessage && (<p className="error-message">{errorMessage}</p>)}

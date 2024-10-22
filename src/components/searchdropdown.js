@@ -11,7 +11,6 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
     const [filteredValues, setFilteredValues] = useState(values)
     const {isNightTheme} = useToken();
 
-    
     const container = useRef()
 
     const handleLiClicked = (item)=>{
@@ -61,14 +60,14 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
 
     return (
       <div className="search-dd-container" ref={container}>
-        <div className={isDropdownOpen ? "search-dd-button isddactive bg-trans" : "search-dd-button bg-trans"} onClick={()=>setIsDropdownOpen(!isDropdownOpen)}>
-            <div className="input-text cl-trans">{chosenOption}</div>
+        <div className={isDropdownOpen ? "search-dd-button isddactive" : "search-dd-button"} onClick={()=>setIsDropdownOpen(!isDropdownOpen)}>
+            <div className="input-text no-trans">{chosenOption}</div>
             {isDropdownOpen ? 
               <DownArrowIco color={isNightTheme ? "#d4d3cf" : "#D9D9D9"} className="search-dd-button-img"/>
               :<UpArrowIco color={isNightTheme ? "#d4d3cf" : "#D9D9D9"} className="search-dd-button-img"/>}
           </div>
         {isDropdownOpen && (
-          <div className="search-dropdown bg-trans">
+          <div className="search-dropdown">
             <input 
               placeholder={emptyMessage}
               value={searchValue}
@@ -77,7 +76,7 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
             />
             <ul>
               {filteredValues.map((item, index) => (
-                <li className={item===chosenOption ? "liactive cl-trans":"cl-trans"} key={index} onClick={()=>handleLiClicked(item)}>{item}</li>
+                <li className={item===chosenOption ? "liactive":""} key={index} onClick={()=>handleLiClicked(item)}>{item}</li>
               ))}
             </ul>
           </div>

@@ -36,11 +36,10 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
       onConfirm()
     }
     return (
-      <div className="delete-modal bg-trans" ref={container}>
+      <div className="delete-modal" ref={container}>
         <form onSubmit={handleSubmit}>
         <p className="modal-edit-text">{text}</p>
         <textarea 
-          className="all-trans"
           value={newValue}
           onChange={handleValueChange}
           maxLength={64}
@@ -48,8 +47,8 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
           required
         />
         <div className="flex-butt">
-          <button type="submit" className="all-trans">Подтвердить</button>
-          <button type="button" className="all-trans" onClick={onCancel}>Отмана</button>
+          <button type="submit">Подтвердить</button>
+          <button type="button" onClick={onCancel}>Отмана</button>
         </div>
         </form>
       </div>

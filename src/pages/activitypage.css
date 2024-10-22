@@ -1,6 +1,7 @@
 .activity-page{
     width: 100vw;
     height: calc(100vh - 45px);
+    height: calc(100dvh - 45px);
     display: flex;
     justify-content: center;
     box-sizing: border-box;
@@ -126,8 +127,14 @@
     .activity-page-container{
         columns: 2;
         max-width: 1460px;
-      
     }
+    .commits-container, .activity-right-container{
+        height: calc(100vh - 45px);
+        height: calc(100dvh - 45px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    
     .activity-page-container div {
         break-inside: avoid;
     }

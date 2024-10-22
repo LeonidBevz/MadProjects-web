@@ -25,11 +25,11 @@ const DeleteModal = ({text, onDelete, onCancel}) => {
     }, []); 
   
     return (
-      <div className="delete-modal bg-trans" ref={container}>
+      <div className="delete-modal" ref={container}>
         <p>{text}</p>
         <div className="flex-butt">
           <button className="deletem-button" onClick={onDelete}>Подтвердить</button>
-          <button className="all-trans" onClick={onCancel}>Отмана</button>
+          <button onClick={onCancel}>Отмана</button>
         </div>
       </div>
     )

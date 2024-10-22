@@ -18,7 +18,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
     const [message, setMessage] = useState('');
    
     const [groupedMessages, setGroupedMessages] = useState([])
-    const [userId, setUserId] = useState(2)
+    const [userId, setUserId] = useState(1)
     const textareaRef = useRef(null);
     const containerRef = useRef(null)
 
@@ -26,6 +26,20 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
         setMessage('')
 
     },[chat])
+
+    useEffect(() => {
+      const container = containerRef.current;
+     
+      const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+
+      if (isScrolledToBottom) {
+        setTimeout(() => {
+          container.scrollTo({
+              top: container.scrollHeight,
+            });
+        }, 1);
+      }
+    }, [messages]);
 
     useEffect(()=>{//исправить обновление при каждом изменении
         const groupMessages = (messages) => {
@@ -67,20 +81,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
         setGroupedMessages(groupMessages(messages));
     },[messages])
 
-    useEffect(() => {
-        const container = containerRef.current;
-      
-        const isScrolledToBottom =
-          container.scrollHeight - container.scrollTop === container.clientHeight;
-      
-        if (isScrolledToBottom) {
-          setTimeout(() => {
-            container.scrollTo({
-                top: container.scrollHeight,
-              });
-          }, 0);
-        }
-      }, [messages]);
+  
 
     const checkTextAreaSize = () =>{
         const textarea = textareaRef.current;
@@ -128,20 +129,20 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                         <div className="messages-container">
                             <p className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>{messageGroup.senderId}</p>
                             {messageGroup.messages.map((message,j)=>(<div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-container-r" : "message-container-l"} key={j}>
-                                <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r bg-trans" : "message-l bg-trans"}>
-                                    <span className="message-text cl-trans">{message.text}</span>
+                                <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message" : "message-l message"}>
+                                    <pre className="message-text">{message.text}</pre>
                                 </div>
-                                <span className="message-time cl-trans">{message.time ? formatLinuxTime(message.time):""}</span>
+                                <span className="message-time">{message.time ? formatLinuxTime(message.time):""}</span>
                             </div>))}
                         </div>
                     </div>
                 ))}
             </div>))}
             </div>
-            <div className="chat-end bg-trans">     
+            <div className="chat-end">     
                 <textarea
                     ref={textareaRef}
-                    className="chat-input cl-trans"
+                    className="chat-input"
                     placeholder="Введите сообщение..."
                     value={message}
                     onChange={handleInputChange}

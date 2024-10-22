@@ -76,7 +76,7 @@
     background-color: var(--card-color);
     color: var(--main-text-color);
     border-radius: 10px;
-    transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
+    /*transition: color var(--main-theme-transition), background-color var(--main-theme-transition);*/
 }
 .edit-container textarea {
     width: 100%;
@@ -90,7 +90,7 @@
     resize: none;
     min-height: 200px;
     border-radius: 10px;
-    transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
+    /*transition: color var(--main-theme-transition), background-color var(--main-theme-transition);*/
 }
 .flex-edit{
     display: flex;
