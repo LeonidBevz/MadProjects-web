@@ -4,6 +4,8 @@ import CrossIco from "../images/cross";
 import { useParams, useNavigate } from "react-router-dom";
 import useToken from "../hooks/useToken";
 import "./settingspage.css"
+import DownArrowIco from "../images/arrowdown";
+import UpArrowIco from "../images/arrowupico";
 
 const SettingsPage = () => {
     const {project} = useParams()
@@ -15,7 +17,41 @@ const SettingsPage = () => {
         repos: [{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}],
         readmeurl: "a",
     })
-  
+    const moveUp = (index) =>{
+      if (index > 0) {
+        const newRepos = [...data.repos];
+        [newRepos[index], newRepos[index - 1]] = [newRepos[index - 1], newRepos[index]];
+        setData((prevData) => ({
+            ...prevData,
+            repos: newRepos,
+        }));
+    }
+    }
+
+    const moveDown = (index) =>{
+      if (index < data.repos.length - 1) {
+        const newRepos = [...data.repos];
+        [newRepos[index], newRepos[index + 1]] = [newRepos[index + 1], newRepos[index]];
+        setData((prevData) => ({
+            ...prevData,
+            repos: newRepos,
+        }));
+     }
+    }
+    const deleteRepo = (index) =>{
+      const newRepos = data.repos.filter((_, i) => i !== index);
+      setData((prevData) => ({
+          ...prevData,
+          repos: newRepos,
+      }));
+    }
+    const deleteMember = (index) =>{
+      const newMembers = data.team.filter((_, i) => i !== index);
+      setData((prevData) => ({
+          ...prevData,
+          team: newMembers,
+      }));
+    }
     return (
         <div className="info-page">          
          {data.team.length !== 0 && (<div className="info-container">
@@ -25,7 +61,7 @@ const SettingsPage = () => {
                  <div className="sprint" key={index}>
                    <div className="settings-flex">
                      <p onClick={()=>navigate(`/profile/${member.name}`)}>{member.name}</p>
-                     <CrossIco className="settings-cross" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                     <CrossIco className="settings-cross" onClick={()=>deleteMember(index)} color={isNightTheme ? "#d4d3cf" : "black"}/>
                    </div>
                    <div className="grad-separator"></div>
                  </div>
@@ -36,7 +72,7 @@ const SettingsPage = () => {
                      <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                    </div>
                    <div className="grad-separator"></div>
-                 </div>
+                </div>
            </div>
          </div>)}
          {data.repos.length !== 0 && (<div className="info-container">
@@ -44,15 +80,33 @@ const SettingsPage = () => {
              <div className="info-tile">
                {data.repos.map((repo, index)=>(
                  <div className="sprint" key={index}>
-                   <div className="sprints-flex" onClick={()=>navigate(`repolink`)}>
-                     <p>{repo.name}</p>
-                     <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                   <div className="settings-flex">
+                     <p onClick={()=>navigate(`repolink`)}>{repo.name}</p>
+                     <div className="icons-container">
+                      <UpArrowIco className="settings-arrow" onClick={()=>moveUp(index)} color={isNightTheme ? "#d4d3cf" : "black"}/>
+                      <DownArrowIco className="settings-arrow" onClick={()=>moveDown(index)} color={isNightTheme ? "#d4d3cf" : "black"}/>
+                      <CrossIco className="settings-cross" onClick={()=>deleteRepo(index)} color={isNightTheme ? "#d4d3cf" : "black"}/>
+                     </div>
                    </div>
                    <div className="grad-separator"></div>
                  </div>
                ))}
+                <div className="sprint">
+                   <div className="settings-flex">
+                     <p>Добавить...</p>
+                     <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                   </div>
+                   <div className="grad-separator"></div>
+                </div>
            </div>
          </div>)}
+         <div className="info-container">
+             <h2>Общее</h2>
+             <div className="buttons-tile">
+               <button className="edit-butt">Изменить название/описание</button>
+               <button className="delete-butt">Удалить проект</button>
+            </div>
+         </div>
      </div>      
     );
   }

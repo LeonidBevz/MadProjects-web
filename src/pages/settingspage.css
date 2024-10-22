@@ -1,6 +1,9 @@
 .settings-cross{
-    height: 1rem;
-    width: 2rem;
+    width: 1rem;
+    cursor: pointer;
+}
+.settings-arrow{
+    width: 1rem;
     cursor: pointer;
 }
 .settings-flex{
@@ -14,4 +17,39 @@
     margin-bottom: 8px;
     font-style: italic;
     cursor: pointer;
+}
+.icons-container{
+    display: flex;
+    gap: 0.5rem;
+}
+.edit-butt{
+    width: 100%;
+    border: none;
+    background-color: var(--main-blue-color);
+    color: var(--alt-text-color);
+    padding: 0.5rem 1rem;
+}
+.delete-butt{
+    width: 100%;
+    border: none;
+    background-color: var(--main-red-color);
+    color: var(--alt-text-color);
+    padding: 0.5rem 1rem;
+}
+.buttons-tile{
+    width: 45rem;
+    padding: 1.2rem;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    margin: 0;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem
+}
+
+@media (width < 47rem) {
+    .buttons-tile{
+        width: 100%;
+    }
 }

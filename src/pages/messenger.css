@@ -70,16 +70,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--main-text-color);
-  }
+}
   
-  .chat-list-tile-lastmess-user {
+.chat-list-tile-lastmess-user {
     font-weight: 300; 
     margin-right: 0.5rem !important;
-  }
+}
   
-  .chat-list-tile-lastmess-mess {
+.chat-list-tile-lastmess-mess {
     font-weight: 100;
-  }
+}
 .chat-list-tile-lastmess-date{
     font-weight: 100;
     margin-left: 0.5rem !important;
@@ -190,7 +190,7 @@
     align-self: flex-end;
     color: var(--main-text-color);
     word-break: break-word;
-    text-wrap: balance;
+    text-wrap: wrap;
     hyphens: auto;
     -webkit-hyphens: auto;
     margin: 0;

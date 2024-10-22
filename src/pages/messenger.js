@@ -10,7 +10,7 @@ const MessengerPage = () => {
     const [activeChat, setActiveChat] = useState(null);
     const [isChatListVisible, setChatListVisible] = useState(true);
     const [chatsList,setChatList] = useState([])
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState({readMessages: [], unreadMessages: []});
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
     const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
 
@@ -65,10 +65,17 @@ const MessengerPage = () => {
           setChatList(message.chats)
         }
         else if (message.type ==="entities.ServerAction.SendChatMessages"){
-          setMessages(message.messages)
+          setMessages(message)
         }
         else if(message.type === "entities.ServerAction.NewMessage") {
-          setMessages(prevMessages => [...prevMessages,message.message]);
+          console.log(message.chatId,messages.chatId)
+          if (message.chatId===messages.chatId){
+            console.log(message)
+            setMessages((prevState) => ({
+              ...prevState,
+              unreadMessages: [...prevState.unreadMessages, message.message] 
+            }));
+          }
         }
         console.log(message)
       };

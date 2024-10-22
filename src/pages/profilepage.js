@@ -9,7 +9,7 @@ import "./profilepage.css"
 import RightArrowIco from "../images/arrowrightico";
 
 const ProfilePage = () => {
-    const {isNightTheme, setIsNightTheme} = useToken()
+    const {isNightTheme, onThemeChange} = useToken()
     const [username,setUsername] = useState("Kaelesty")
     const [gitLink,setGitLink] = useState("https://github.com/Kaelesty")
     const [EmailLink,setEmailLink] = useState("example@gmail.com")
@@ -24,7 +24,7 @@ const ProfilePage = () => {
             <div className="flex-start"></div>
             <div className="flex-center"><LogoIco color={isNightTheme ? "white": "black"} className="logo"/></div>
             <div className="flex-end">
-                <div className="theme-icon-container" onClick={()=>{setIsNightTheme(!isNightTheme)}}>
+                <div className="theme-icon-container" onClick={onThemeChange}>
                     <div className={`theme-icon theme-icon-1 ${isNightTheme ? "theme-icon-hidden-1" : "theme-icon-active"}`}>
                       <img src={SunIMG} alt="sun" />
                     </div>
