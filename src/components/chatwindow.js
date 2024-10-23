@@ -13,13 +13,16 @@ const formatLinuxTime = (timestamp) =>{
     return formattedTime
 }
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendMessage}) => {
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendMessage, readMessagesUntil}) => {
     const {isNightTheme} = useToken()
     const [message, setMessage] = useState('');
     const [groupedMessages, setGroupedMessages] = useState({read:[],unread:[]})
-    const [userId, setUserId] = useState(1)
+    const [userId, setUserId] = useState(3)
+    const [lastVisibleItem, setLastVisibleItem] = useState(null);
+    const lastVisibleRef = useRef(null);
     const textareaRef = useRef(null);
-    const containerRef = useRef(null)
+    const containerRef = useRef(null);
+    const readTimout = useRef(null)
 
     useEffect(()=>{
         setMessage('')
@@ -30,14 +33,25 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
       const container = containerRef.current;
      
       const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
-
-      if (isScrolledToBottom) {
+      if (!lastVisibleRef.current){//монтирование плавная прокрутка до непрочитанных
+        const unreadSep = container.querySelector('.unread-sep');
+    
+        if (unreadSep) {
+          const topPosition = unreadSep.offsetTop;
+          container.scrollTo({
+            top: topPosition - 600,
+            behavior: 'smooth' // Плавная прокрутка
+          });
+        }
+      }
+      if (isScrolledToBottom && lastVisibleRef.current) {
         setTimeout(() => {
           container.scrollTo({
               top: container.scrollHeight,
             });
         }, 1);
       }
+      
     }, [messages]);
 
     useEffect(() => {
@@ -82,6 +96,66 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
         console.log(grouped)
         setGroupedMessages(grouped)
     },[messages])
+
+    useEffect(() => {
+        const container = containerRef.current;
+
+        const handleScroll = () => {
+          findLastVisibleElement();
+        };
+        
+        container.addEventListener('scroll', handleScroll);
+    
+        if (readTimout){
+            clearTimeout(readTimout)
+            console.log("read mess cancelled")
+        }
+        return () => {
+          container.removeEventListener('scroll', handleScroll);
+        };
+    }, [messages.chatId]);
+    
+    useEffect(()=>{
+        if (lastVisibleItem){
+            lastVisibleRef.current = lastVisibleItem;
+            console.log(lastVisibleRef.current.getAttribute("index"))
+
+            if (readTimout.current) {
+              clearTimeout(readTimout.current);
+            };
+                 
+            readTimout.current = setTimeout(() => {
+              console.log("sendReaded")
+              readMessagesUntil(parseInt(lastVisibleItem.getAttribute("index")))
+              setLastVisibleItem(null)
+              readTimout.current = null;
+            }, 5000);
+        }
+    },[lastVisibleItem])
+
+    const findLastVisibleElement = () => {
+        const container = containerRef.current;
+        const elements = container.querySelectorAll('.unread'); 
+    
+        let lastVisible = null;
+        const containerRect = container.getBoundingClientRect();
+    
+        elements.forEach((element) => {
+          const elementRect = element.getBoundingClientRect();
+  
+          if (
+            elementRect.top >= containerRect.top &&
+            elementRect.bottom <= containerRect.bottom
+          ) {
+            lastVisible = element;
+          }
+        });
+       
+        if (lastVisible && (lastVisibleRef.current===null || parseInt(lastVisibleRef.current.getAttribute("index")) < parseInt(lastVisible.getAttribute("index")))){
+            setLastVisibleItem(lastVisible);
+        }
+       
+    };   
 
     const checkTextAreaSize = () =>{
         const textarea = textareaRef.current;
@@ -132,7 +206,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                         <div className="messages-container">
                             <p className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>{messageGroup.senderId}</p>
                             {messageGroup.messages.map((message,j)=>(<div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-container-r" : "message-container-l"} key={j}>
-                                <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message" : "message-l message"}>
+                                <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message" : "message-l message"} index={message.id}>
                                     <pre className="message-text">{message.text}</pre>
                                 </div>
                                 <span className="message-time">{message.time ? formatLinuxTime(message.time):""}</span>
@@ -141,7 +215,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                     </div>
                 ))}
             </div>))}
-            {groupedMessages.unread.length !== 0 && <div className="date-sep"> Непрочитанные сообщения</div>}
+            {groupedMessages.unread.length !== 0 && <div className="unread-sep">Непрочитанные сообщения</div>}
             {groupedMessages.unread.map((messagesADay,k)=>(<div key={k}>
                 {messages.readMessages.length !==0 && messagesADay.date!==groupedMessages.read[groupedMessages.read.length-1].date && <p className="date-sep">{messagesADay.date}</p>}
                 {messagesADay.messages.map((messageGroup,i)=>(
@@ -152,10 +226,11 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                         <div className="messages-container">
                             <p className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>{messageGroup.senderId}</p>
                             {messageGroup.messages.map((message,j)=>(<div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-container-r" : "message-container-l"} key={j}>
-                                <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message" : "message-l message"}>
+                                <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message unread" : "message-l message unread"} index={message.id}>
                                     <pre className="message-text">{message.text}</pre>
                                 </div>
                                 <span className="message-time">{message.time ? formatLinuxTime(message.time):""}</span>
+                                <div className="unread-ico"></div>
                             </div>))}
                         </div>
                     </div>

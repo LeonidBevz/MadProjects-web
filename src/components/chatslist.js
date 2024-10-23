@@ -45,7 +45,7 @@ const ChatsList = ({chats, onChatSelect}) => {
                 <div className="chat-list-tile-content"> 
                     <h2>{chat.title}</h2>
                     {chat.lastMessage !== null && (<div className="chat-list-tile-lastmess"> 
-                        <span className="chat-list-tile-lastmess-combined">
+                        <span className="chat-list-tile-lastmess-combined no-trans">
                           <span className="chat-list-tile-lastmess-user">{chat.lastMessage.senderId}</span>
                           <span className="chat-list-tile-lastmess-mess">{chat.lastMessage.text}</span>
                         </span>

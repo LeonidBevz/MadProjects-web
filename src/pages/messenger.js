@@ -11,14 +11,15 @@ const MessengerPage = () => {
     const [isChatListVisible, setChatListVisible] = useState(true);
     const [chatsList,setChatList] = useState([])
     const [messages, setMessages] = useState({readMessages: [], unreadMessages: []});
+    const messagesRef = useRef(messages)
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
     const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
-
 
     const sendAction = (actionType, params) => {
       const action = { type: "entities.ClientAction." + actionType, ...params };
       ws.current.send(JSON.stringify(action));
     };
+    
     const sendMessage = (newMessage) =>{
       if (newMessage.trim() === '') return;
       sendAction("SendMessage",{
@@ -50,7 +51,7 @@ const MessengerPage = () => {
 
       ws.current.onopen = () => {
         sendAction('Authorize', {
-          jwt: '1',
+          jwt: '3',
           projectId: 1,
         });
         sendAction("RequestChatsList",{
@@ -69,7 +70,7 @@ const MessengerPage = () => {
         }
         else if(message.type === "entities.ServerAction.NewMessage") {
           console.log(message.chatId,messages.chatId)
-          if (message.chatId===messages.chatId){
+          if (messagesRef && message.chatId===messagesRef.current.chatId){
             console.log(message)
             setMessages((prevState) => ({
               ...prevState,
@@ -101,6 +102,11 @@ const MessengerPage = () => {
         }
         // eslint-disable-next-line
     },[isMobile])
+    
+    useEffect(()=>{
+      messagesRef.current = messages
+      // eslint-disable-next-line
+    },[messages])
 
     const handleChatSelect = (chat) => {
         setActiveChat(chat);
@@ -109,10 +115,28 @@ const MessengerPage = () => {
         }
     };
 
+    const readMessagesUntil = (messageId) => {
+      const messageIndex =  messages.unreadMessages.findIndex(message => message.id === messageId);
+      
+      if (messageIndex === -1) {
+          console.error(`Сообщение с ID ${messageId} не найдено в непрочитанных.`);
+          return;
+      }
+      
+      const messagesToMove = messages.unreadMessages.slice(0, messageIndex + 1);
+      
+      setMessages((prevState) => ({
+        ...prevState,
+        unreadMessages: messages.unreadMessages.slice(messageIndex + 1),
+        readMessages: [...prevState.readMessages, ...messagesToMove]
+    }));
+      // Отправка действия, если необходимо
+    };
+
     return (
       <div className="messenger-page"> 
         {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect}/>)}
-        {activeChat ? <ChatWindow chat={activeChat} messages={messages} onSendMessage={sendMessage} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick}/> : !isMobile ? <div>Выберите чат</div>:<></>}
+        {activeChat ? <ChatWindow chat={activeChat} messages={messages} onSendMessage={sendMessage} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick} readMessagesUntil={readMessagesUntil}/> : !isMobile ? <div>Выберите чат</div>:<></>}
       </div>
     );
   }
