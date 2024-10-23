@@ -13,11 +13,11 @@ const formatLinuxTime = (timestamp) =>{
     return formattedTime
 }
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendMessage, readMessagesUntil}) => {
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendMessage, onReadUntil}) => {
     const {isNightTheme} = useToken()
     const [message, setMessage] = useState('');
     const [groupedMessages, setGroupedMessages] = useState({read:[],unread:[]})
-    const [userId, setUserId] = useState(3)
+    const [userId, setUserId] = useState(1)
     const [lastVisibleItem, setLastVisibleItem] = useState(null);
     const lastVisibleRef = useRef(null);
     const textareaRef = useRef(null);
@@ -28,28 +28,36 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
         setMessage('')
 
     },[chat])
+    useEffect(() => {
+        setTimeout(() => {      
+        const container = containerRef.current;
+        //монтирование плавная прокрутка до непрочитанных
+        const unreadSep = container.querySelector('.unread-sep');
+        if (unreadSep) {    
+            const topPosition = unreadSep.offsetTop;
+            container.scrollTo({
+              top: topPosition - 600
+            });
+
+        }
+        else{
+            container.scrollTo({
+                top: container.scrollHeight
+            });
+        }
+        }, 100);
+    },[chat])
 
     useEffect(() => {
       const container = containerRef.current;
      
       const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
-      if (!lastVisibleRef.current){//монтирование плавная прокрутка до непрочитанных
-        const unreadSep = container.querySelector('.unread-sep');
-    
-        if (unreadSep) {
-          const topPosition = unreadSep.offsetTop;
-          container.scrollTo({
-            top: topPosition - 600,
-            behavior: 'smooth' // Плавная прокрутка
-          });
-        }
-      }
       if (isScrolledToBottom && lastVisibleRef.current) {
         setTimeout(() => {
           container.scrollTo({
               top: container.scrollHeight,
             });
-        }, 1);
+        }, 5);
       }
       
     }, [messages]);
@@ -89,11 +97,16 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
             });
             return groupedMessages;
         };
+        const start = performance.now();
+
         const grouped = {
             read: groupMessages(messages.readMessages),
             unread: groupMessages(messages.unreadMessages)
         }        
-        console.log(grouped)
+
+        const end = performance.now();  
+
+        console.log(`Время группировки: ${end - start} миллисекунд`);
         setGroupedMessages(grouped)
     },[messages])
 
@@ -108,7 +121,6 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
     
         if (readTimout){
             clearTimeout(readTimout)
-            console.log("read mess cancelled")
         }
         return () => {
           container.removeEventListener('scroll', handleScroll);
@@ -118,7 +130,6 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
     useEffect(()=>{
         if (lastVisibleItem){
             lastVisibleRef.current = lastVisibleItem;
-            console.log(lastVisibleRef.current.getAttribute("index"))
 
             if (readTimout.current) {
               clearTimeout(readTimout.current);
@@ -126,7 +137,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                  
             readTimout.current = setTimeout(() => {
               console.log("sendReaded")
-              readMessagesUntil(parseInt(lastVisibleItem.getAttribute("index")))
+              onReadUntil(parseInt(lastVisibleItem.getAttribute("index")))              
               setLastVisibleItem(null)
               readTimout.current = null;
             }, 5000);
@@ -215,7 +226,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                     </div>
                 ))}
             </div>))}
-            {groupedMessages.unread.length !== 0 && <div className="unread-sep">Непрочитанные сообщения</div>}
+            {groupedMessages.unread.length !== 0 && <div className="unread-sep">Новые сообщения</div>}
             {groupedMessages.unread.map((messagesADay,k)=>(<div key={k}>
                 {messages.readMessages.length !==0 && messagesADay.date!==groupedMessages.read[groupedMessages.read.length-1].date && <p className="date-sep">{messagesADay.date}</p>}
                 {messagesADay.messages.map((messageGroup,i)=>(
@@ -230,7 +241,6 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
                                     <pre className="message-text">{message.text}</pre>
                                 </div>
                                 <span className="message-time">{message.time ? formatLinuxTime(message.time):""}</span>
-                                <div className="unread-ico"></div>
                             </div>))}
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, act} from "react";
 import "./messenger.css"
 import ChatsList from "../components/chatslist";
 import ChatWindow from "../components/chatwindow";
@@ -30,7 +30,7 @@ const MessengerPage = () => {
     const handleBackClick = () =>{
         setActiveChat(null)
         setChatListVisible(true)
-    }
+    } 
 
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
@@ -51,7 +51,7 @@ const MessengerPage = () => {
 
       ws.current.onopen = () => {
         sendAction('Authorize', {
-          jwt: '3',
+          jwt: '1',
           projectId: 1,
         });
         sendAction("RequestChatsList",{
@@ -115,28 +115,17 @@ const MessengerPage = () => {
         }
     };
 
-    const readMessagesUntil = (messageId) => {
-      const messageIndex =  messages.unreadMessages.findIndex(message => message.id === messageId);
-      
-      if (messageIndex === -1) {
-          console.error(`Сообщение с ID ${messageId} не найдено в непрочитанных.`);
-          return;
-      }
-      
-      const messagesToMove = messages.unreadMessages.slice(0, messageIndex + 1);
-      
-      setMessages((prevState) => ({
-        ...prevState,
-        unreadMessages: messages.unreadMessages.slice(messageIndex + 1),
-        readMessages: [...prevState.readMessages, ...messagesToMove]
-    }));
-      // Отправка действия, если необходимо
-    };
+    const onReadUntil = (messageId) =>{
+      sendAction("ReadMessagesBefore",{
+        messageId: messageId,
+        chatId: activeChat.id
+      })
+    }
 
     return (
       <div className="messenger-page"> 
         {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect}/>)}
-        {activeChat ? <ChatWindow chat={activeChat} messages={messages} onSendMessage={sendMessage} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick} readMessagesUntil={readMessagesUntil}/> : !isMobile ? <div>Выберите чат</div>:<></>}
+        {activeChat ? <ChatWindow chat={activeChat} messages={messages} onSendMessage={sendMessage} isMobile={isMobile} isSuperWide={isSuperWide} onBackClick={handleBackClick} onReadUntil={onReadUntil}/> : !isMobile ? <div>Выберите чат</div>:<></>}
       </div>
     );
   }

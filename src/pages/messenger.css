@@ -226,18 +226,10 @@
     color: var(--main-text-color);
 }
 .unread-sep{
-    height: 0px;
     width: 100%;
     text-align: center;
     padding: 0.3rem;
     color: var(--main-text-color);
-}
-.unread-ico{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--main-blue-color);
-    transition: all 1s ease;
 }
 
 @media (width < 1000px) {
