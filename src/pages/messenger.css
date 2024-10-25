@@ -179,6 +179,7 @@
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     width: fit-content;
     color: var(--main-text-color); 
+    overflow: hidden;
 }
 .message-l{
     border-radius: 0px 10px 10px 10px;
@@ -190,18 +191,14 @@
     align-self: flex-end;
     color: var(--main-text-color);
     word-break: break-word;
-    text-wrap: wrap;
-    hyphens: auto;
-    -webkit-hyphens: auto;
+    white-space: pre-wrap;
     margin: 0;
 }
 .message-container-l{
     display: flex;
-    align-items: center;
 }
 .message-container-r{
     display: flex;
-    align-items: center;
     flex-direction: row-reverse;
     align-self: flex-end;
 }

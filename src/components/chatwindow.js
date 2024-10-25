@@ -13,102 +13,56 @@ const formatLinuxTime = (timestamp) =>{
     return formattedTime
 }
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendMessage, onReadUntil}) => {
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef}) => {
     const {isNightTheme} = useToken()
     const [message, setMessage] = useState('');
-    const [groupedMessages, setGroupedMessages] = useState({read:[],unread:[]})
     const [userId, setUserId] = useState(1)
     const [lastVisibleItem, setLastVisibleItem] = useState(null);
     const lastVisibleRef = useRef(null);
     const textareaRef = useRef(null);
-    const containerRef = useRef(null);
     const readTimout = useRef(null)
 
     useEffect(()=>{
         setMessage('')
-
+        setLastVisibleItem(null)
+        // eslint-disable-next-line
     },[chat])
+    
     useEffect(() => {
-        setTimeout(() => {      
-        const container = containerRef.current;
-        //монтирование плавная прокрутка до непрочитанных
-        const unreadSep = container.querySelector('.unread-sep');
-        if (unreadSep) {    
-            const topPosition = unreadSep.offsetTop;
+      const container = containerRef.current;
+      //плавная прокрутка до непрочитанных
+      const unreadSep = container.querySelector('.unread-sep');
+      console.log(unreadSep)
+      if (unreadSep) {    
+          const topPosition = unreadSep.offsetTop;
+          setTimeout(() => {
             container.scrollTo({
-              top: topPosition - 600
+              top: topPosition - 600,
+              behavior: "smooth"  
             });
-
+          },300)
         }
-        else{
-            container.scrollTo({
-                top: container.scrollHeight
-            });
-        }
-        }, 100);
+      else{
+        setTimeout(() => {
+          container.scrollTo({
+            top: container.scrollHeight,
+            behavior: "smooth"   
+          });
+        },300)
+      }
+      // eslint-disable-next-line
     },[chat])
 
     useEffect(() => {
+        console.log("what?", groupedMessages)
       const container = containerRef.current;
      
       const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
-      if (isScrolledToBottom && lastVisibleRef.current) {
-        setTimeout(() => {
-          container.scrollTo({
-              top: container.scrollHeight,
-            });
-        }, 5);
-      }
+      console.log(isScrolledToBottom)
+
       
-    }, [messages]);
-
-    useEffect(() => {
-        const groupMessages = (messages) => {
-            const groupedMessages = [];
-            const dateFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-            const fiveMinutes = 5 * 60 * 1000; // 5 минут в миллисекундах
-    
-            let previousDate = '';
-            let lastMessageGroup = null;
-    
-            messages.forEach((message) => {
-                const messageDate = new Date(message.time);
-                const messageDateString = messageDate.toLocaleDateString(undefined, dateFormatOptions);
-    
-                if (messageDateString !== previousDate) {
-                    previousDate = messageDateString;
-    
-                    lastMessageGroup = {
-                        date: messageDateString,
-                        messages: []
-                    };
-                    groupedMessages.push(lastMessageGroup);
-                }
-    
-                const lastMessage = lastMessageGroup.messages[lastMessageGroup.messages.length - 1];
-                if (lastMessage && message.senderId === lastMessage.senderId && (messageDate - new Date(lastMessage.messages[0].time)) <= fiveMinutes) {
-                    lastMessage.messages.push(message);
-                } else {
-                    lastMessageGroup.messages.push({
-                        senderId: message.senderId,
-                        messages: [message]
-                    });
-                }
-            });
-            return groupedMessages;
-        };
-        const start = performance.now();
-
-        const grouped = {
-            read: groupMessages(messages.readMessages),
-            unread: groupMessages(messages.unreadMessages)
-        }        
-
-        const end = performance.now();  
-
-        console.log(`Время группировки: ${end - start} миллисекунд`);
-        setGroupedMessages(grouped)
-    },[messages])
+      // eslint-disable-next-line
+    }, [groupedMessages]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -125,7 +79,8 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
         return () => {
           container.removeEventListener('scroll', handleScroll);
         };
-    }, [messages.chatId]);
+        // eslint-disable-next-line
+    }, [groupedMessages.chatId]);
     
     useEffect(()=>{
         if (lastVisibleItem){
@@ -142,6 +97,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
               readTimout.current = null;
             }, 5000);
         }
+        // eslint-disable-next-line
     },[lastVisibleItem])
 
     const findLastVisibleElement = () => {
@@ -228,7 +184,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, messages, onSendM
             </div>))}
             {groupedMessages.unread.length !== 0 && <div className="unread-sep">Новые сообщения</div>}
             {groupedMessages.unread.map((messagesADay,k)=>(<div key={k}>
-                {messages.readMessages.length !==0 && messagesADay.date!==groupedMessages.read[groupedMessages.read.length-1].date && <p className="date-sep">{messagesADay.date}</p>}
+                {groupedMessages.read.length !==0 && messagesADay.date!==groupedMessages.read[groupedMessages.read.length-1].date && <p className="date-sep">{messagesADay.date}</p>}
                 {messagesADay.messages.map((messageGroup,i)=>(
                     <div className={(messageGroup.senderId === userId && !isSuperWide)? "message-group-r" :"message-group-l"} key={i}>
                         {(messageGroup.senderId !== userId || isSuperWide) && (<div className="userpic-container">
