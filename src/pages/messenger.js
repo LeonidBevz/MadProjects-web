@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, act} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "./messenger.css"
 import ChatsList from "../components/chatslist";
 import ChatWindow from "../components/chatwindow";
@@ -48,7 +48,7 @@ const MessengerPage = () => {
 
       ws.current.onopen = () => {
         sendAction('Authorize', {
-          jwt: '1',
+          jwt: '3',
           projectId: 1,
         });
         sendAction("RequestChatsList",{
@@ -63,23 +63,16 @@ const MessengerPage = () => {
           setChatList(message.chats)
         }
         else if (message.type ==="entities.ServerAction.SendChatMessages"){
-          if (initialMessages.some(messages => messages.chatId === message.chatId)){
-            setInitialMessages(prevChatMessages => 
-              prevChatMessages.map(chat =>
-                  chat.chatId === message.chatId ? message : chat
-              )
-            );
-          }
-          else{
-            setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
-          }
-          
+          setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
         }
         else if(message.type === "entities.ServerAction.NewMessage") {
           if (groupedMessagesRef.current && groupedMessagesRef.current.some(chat => chat.chatId === message.chatId)){
             addToGroupedMessages(message)
           }
           addLastMessage(message)          
+        }
+        else if(message.type ==="entities.ServerAction.UpdateChatUnreadCount"){
+          updateUnreadCount(message.chatId, message.count)
         }
         console.log(message)
       };
@@ -107,7 +100,8 @@ const MessengerPage = () => {
     },[isMobile])
 
     useEffect(()=>{
-      groupedMessagesRef.current = groupedMessages
+      groupedMessagesRef.current = groupedMessages 
+      console.log(groupedMessages,"new grouped messages")
       // eslint-disable-next-line
     },[groupedMessages])
 
@@ -171,19 +165,7 @@ const MessengerPage = () => {
 
       console.log(`Время группировки: ${end - start} миллисекунд`);
       
-      setGroupedMessages(prevMessages => {
-        const existingChatIndex = prevMessages.findIndex(message => message.chatId === grouped.chatId);
-        
-        if (existingChatIndex !== -1) {
-            // Если элемент с таким chatId уже существует, обновим его
-            return prevMessages.map((message, index) =>
-                index === existingChatIndex ? grouped : message
-            );
-        } else {
-            // Если элемент с таким chatId не существует, добавим его
-            return [...prevMessages, grouped];
-        }
-    });
+      setGroupedMessages(prevMessages => [...prevMessages, grouped])
       scrollChatToNewMess()
       
       // eslint-disable-next-line
@@ -213,16 +195,15 @@ const MessengerPage = () => {
     },1)
   }
   const handleChatSelect = (chat) => {
-      
+      setActiveChat(chat);
       if (isMobile) {
           setChatListVisible(false)
       }
-      if (!activeChat || chat.id !== activeChat.id){
+      if (!initialMessages.some(message => message.chatId === chat.id)){
         sendAction("RequestChatMessages",{
           chatId: chat.id
         })
       }
-      setActiveChat(chat);  
   };
   
   const addToGroupedMessages = (message) =>{
@@ -257,7 +238,7 @@ const MessengerPage = () => {
         });
       }
       groupedMessagesRef.current = groupedMessagesRef.current.map(chat => 
-      chat.chatId === newGroupedMessages.chatId ? newGroupedMessages : chat
+        chat.chatId === newGroupedMessages.chatId ? newGroupedMessages : chat
       );
       setGroupedMessages(groupedMessagesRef.current)
 
@@ -280,7 +261,7 @@ const MessengerPage = () => {
     const newChat = chatsListRef.current.find(chat => chat.id === message.chatId)
     if (newChat) {
         if (!activeChatRef.current || newChat.id !== activeChatRef.current.id) {
-          newChat.unreadMessagesCount = (newChat.unreadMessagesCount || 0) + 1;
+            newChat.unreadMessagesCount = (newChat.unreadMessagesCount || 0) + 1;
         }
 
         newChat.lastMessage = {
@@ -298,22 +279,16 @@ const MessengerPage = () => {
     }
   }
 
-  const reduceUnreadCount = (chatId) =>{
-    if (!chatsListRef.current) return
+  const updateUnreadCount = (chatId, count) =>{
+    let updatedChat = chatsListRef.current.find(chat => chat.id === chatId)
 
-    const updatedChat = chatsListRef.current.find(chat => chat.id === chatId)
-    if (updatedChat){
-      if (updatedChat.unreadMessagesCount >0){
-        updatedChat.unreadMessagesCount -= 1;
-      }
-      
+    updatedChat.unreadMessagesCount = count
 
-      chatsListRef.current = chatsListRef.current.map(chat => 
-        chat.id === chatId ? updatedChat : chat
-      );
-      console.log(updatedChat)
-      setChatList(chatsListRef.current)
-    }
+    chatsListRef.current = chatsListRef.current.map(chat => 
+      chat.id === chatId ? updatedChat : chat
+    );
+    
+    setChatList(chatsListRef.current)  
   }
   
   const onReadUntil = (messageId) =>{
@@ -335,7 +310,6 @@ const MessengerPage = () => {
         onBackClick={handleBackClick}
         onReadUntil={onReadUntil}
         containerRef={chatContainer}
-        reduceUnreadCount={reduceUnreadCount}
       /> : !isMobile ? <div>Выберите чат</div>:<></>}
     </div>
   );

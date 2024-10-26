@@ -13,10 +13,10 @@ const formatLinuxTime = (timestamp) =>{
     return formattedTime
 }
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef, reduceUnreadCount}) => {
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef}) => {
     const {isNightTheme} = useToken()
     const [message, setMessage] = useState('');
-    const [userId, setUserId] = useState(1)
+    const [userId, setUserId] = useState(3)
     const [lastVisibleItem, setLastVisibleItem] = useState(null);
     const lastVisibleRef = useRef(null);
     const textareaRef = useRef(null);
@@ -59,9 +59,9 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
               clearTimeout(readTimout.current);
             };
             //уменьшить число непрочитанных
-            reduceUnreadCount(chat.id)
             readTimout.current = setTimeout(() => {
-              console.log("sendReaded", parseInt(lastVisibleItem.getAttribute("index")))
+              console.log("sendReaded", parseInt(lastVisibleItem.getAttribute("index")), chat.id)
+              
               onReadUntil(parseInt(lastVisibleItem.getAttribute("index")))              
               readTimout.current = null;
             }, 5000);
