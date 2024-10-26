@@ -10,7 +10,9 @@ function getTimeAgo(date) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     const years = Math.floor(days / 365);
-  
+    if (minutes < 1){
+      return `т. ч.`;
+    }
     if (minutes < 60) {
       return `${minutes} м.`;
     }

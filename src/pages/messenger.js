@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, act} from "react";
 import "./messenger.css"
 import ChatsList from "../components/chatslist";
 import ChatWindow from "../components/chatwindow";
@@ -63,10 +63,20 @@ const MessengerPage = () => {
           setChatList(message.chats)
         }
         else if (message.type ==="entities.ServerAction.SendChatMessages"){
-          setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
+          if (initialMessages.some(messages => messages.chatId === message.chatId)){
+            setInitialMessages(prevChatMessages => 
+              prevChatMessages.map(chat =>
+                  chat.chatId === message.chatId ? message : chat
+              )
+            );
+          }
+          else{
+            setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
+          }
+          
         }
         else if(message.type === "entities.ServerAction.NewMessage") {
-          if (activeChatRef.current && message.chatId===activeChatRef.current.id){
+          if (groupedMessagesRef.current && groupedMessagesRef.current.some(chat => chat.chatId === message.chatId)){
             addToGroupedMessages(message)
           }
           addLastMessage(message)          
@@ -97,8 +107,7 @@ const MessengerPage = () => {
     },[isMobile])
 
     useEffect(()=>{
-      groupedMessagesRef.current = groupedMessages 
-      console.log(groupedMessages,"new grouped messages")
+      groupedMessagesRef.current = groupedMessages
       // eslint-disable-next-line
     },[groupedMessages])
 
@@ -109,6 +118,7 @@ const MessengerPage = () => {
 
     useEffect(()=>{
       activeChatRef.current = activeChat
+      scrollChatToNewMess()
       // eslint-disable-next-line
     },[activeChat])
 
@@ -161,20 +171,58 @@ const MessengerPage = () => {
 
       console.log(`Время группировки: ${end - start} миллисекунд`);
       
-      setGroupedMessages(prevMessages => [...prevMessages, grouped])
+      setGroupedMessages(prevMessages => {
+        const existingChatIndex = prevMessages.findIndex(message => message.chatId === grouped.chatId);
+        
+        if (existingChatIndex !== -1) {
+            // Если элемент с таким chatId уже существует, обновим его
+            return prevMessages.map((message, index) =>
+                index === existingChatIndex ? grouped : message
+            );
+        } else {
+            // Если элемент с таким chatId не существует, добавим его
+            return [...prevMessages, grouped];
+        }
+    });
+      scrollChatToNewMess()
+      
       // eslint-disable-next-line
   },[initialMessages])
 
+  const scrollChatToNewMess = () =>{
+    const container = chatContainer.current;
+    if (!container){return}
+    //плавная прокрутка до непрочитанных
+    setTimeout(() => {
+      const unreadSep = container.querySelector('.unread-sep');
+      if (unreadSep) {    
+          const topPosition = unreadSep.offsetTop;
+
+            container.scrollTo({
+              top: topPosition - 600,
+              behavior: "smooth"  
+            });
+          
+        }
+      else{
+          container.scrollTo({
+            top: container.scrollHeight,
+            behavior: "smooth"   
+          });
+      }
+    },1)
+  }
   const handleChatSelect = (chat) => {
-      setActiveChat(chat);
+      
       if (isMobile) {
           setChatListVisible(false)
       }
-      if (!initialMessages.some(message => message.chatId === chat.id)){
+      if (!activeChat || chat.id !== activeChat.id){
         sendAction("RequestChatMessages",{
           chatId: chat.id
         })
       }
+      setActiveChat(chat);  
   };
   
   const addToGroupedMessages = (message) =>{
@@ -212,6 +260,18 @@ const MessengerPage = () => {
       chat.chatId === newGroupedMessages.chatId ? newGroupedMessages : chat
       );
       setGroupedMessages(groupedMessagesRef.current)
+
+      const container = chatContainer.current;
+     
+      const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+
+      if (isScrolledToBottom) {
+        setTimeout(() => {
+          container.scrollTo({
+              top: container.scrollHeight,
+            });
+        }, 1);
+      }
     }
   }
 
@@ -220,7 +280,7 @@ const MessengerPage = () => {
     const newChat = chatsListRef.current.find(chat => chat.id === message.chatId)
     if (newChat) {
         if (!activeChatRef.current || newChat.id !== activeChatRef.current.id) {
-            newChat.unreadMessagesCount = (newChat.unreadMessagesCount || 0) + 1;
+          newChat.unreadMessagesCount = (newChat.unreadMessagesCount || 0) + 1;
         }
 
         newChat.lastMessage = {
@@ -238,6 +298,24 @@ const MessengerPage = () => {
     }
   }
 
+  const reduceUnreadCount = (chatId) =>{
+    if (!chatsListRef.current) return
+
+    const updatedChat = chatsListRef.current.find(chat => chat.id === chatId)
+    if (updatedChat){
+      if (updatedChat.unreadMessagesCount >0){
+        updatedChat.unreadMessagesCount -= 1;
+      }
+      
+
+      chatsListRef.current = chatsListRef.current.map(chat => 
+        chat.id === chatId ? updatedChat : chat
+      );
+      console.log(updatedChat)
+      setChatList(chatsListRef.current)
+    }
+  }
+  
   const onReadUntil = (messageId) =>{
     sendAction("ReadMessagesBefore",{
       messageId: messageId,
@@ -257,6 +335,7 @@ const MessengerPage = () => {
         onBackClick={handleBackClick}
         onReadUntil={onReadUntil}
         containerRef={chatContainer}
+        reduceUnreadCount={reduceUnreadCount}
       /> : !isMobile ? <div>Выберите чат</div>:<></>}
     </div>
   );

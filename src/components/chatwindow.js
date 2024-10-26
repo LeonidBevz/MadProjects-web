@@ -13,7 +13,7 @@ const formatLinuxTime = (timestamp) =>{
     return formattedTime
 }
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef}) => {
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef, reduceUnreadCount}) => {
     const {isNightTheme} = useToken()
     const [message, setMessage] = useState('');
     const [userId, setUserId] = useState(1)
@@ -25,48 +25,17 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
     useEffect(()=>{
         setMessage('')
         setLastVisibleItem(null)
+        lastVisibleRef.current = null
         // eslint-disable-next-line
     },[chat])
     
     useEffect(() => {
-      const container = containerRef.current;
-      //плавная прокрутка до непрочитанных
-      const unreadSep = container.querySelector('.unread-sep');
-      console.log(unreadSep)
-      if (unreadSep) {    
-          const topPosition = unreadSep.offsetTop;
-          setTimeout(() => {
-            container.scrollTo({
-              top: topPosition - 600,
-              behavior: "smooth"  
-            });
-          },300)
-        }
-      else{
-        setTimeout(() => {
-          container.scrollTo({
-            top: container.scrollHeight,
-            behavior: "smooth"   
-          });
-        },300)
-      }
+     
       // eslint-disable-next-line
     },[chat])
 
     useEffect(() => {
-        console.log("what?", groupedMessages)
-      const container = containerRef.current;
-     
-      const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
-      console.log(isScrolledToBottom)
-
-      
-      // eslint-disable-next-line
-    }, [groupedMessages]);
-
-    useEffect(() => {
         const container = containerRef.current;
-
         const handleScroll = () => {
           findLastVisibleElement();
         };
@@ -89,11 +58,11 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
             if (readTimout.current) {
               clearTimeout(readTimout.current);
             };
-                 
+            //уменьшить число непрочитанных
+            reduceUnreadCount(chat.id)
             readTimout.current = setTimeout(() => {
-              console.log("sendReaded")
+              console.log("sendReaded", parseInt(lastVisibleItem.getAttribute("index")))
               onReadUntil(parseInt(lastVisibleItem.getAttribute("index")))              
-              setLastVisibleItem(null)
               readTimout.current = null;
             }, 5000);
         }
