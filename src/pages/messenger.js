@@ -2,11 +2,11 @@ import React, {useState, useEffect, useRef} from "react";
 import "./messenger.css"
 import ChatsList from "../components/chatslist";
 import ChatWindow from "../components/chatwindow";
-import {MessengerSocket} from "../urls"
+import useToken from "../hooks/useToken";
 
 
 const MessengerPage = () => {
-    const ws = useRef(null);
+    const {ws, sendAction, iswsConnected} = useToken();
     const [activeChat, setActiveChat] = useState(null);
     const [isChatListVisible, setChatListVisible] = useState(true);
     const [chatsList,setChatList] = useState([])
@@ -19,14 +19,9 @@ const MessengerPage = () => {
     const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
     const chatContainer = useRef(null)
 
-    const sendAction = (actionType, params) => {
-      const action = { type: "entities.ClientAction." + actionType, ...params };
-      ws.current.send(JSON.stringify(action));
-    };
-    
     const sendMessage = (newMessage) =>{
       if (newMessage.trim() === '') return;
-      sendAction("SendMessage",{
+      sendAction("Messenger.SendMessage",{
         chatId: activeChat.id, 
         message: newMessage
       })
@@ -44,51 +39,47 @@ const MessengerPage = () => {
     useEffect(() => {
       window.addEventListener('resize', handleResize);
       
-      ws.current = new WebSocket(MessengerSocket);
+    }, []);
 
-      ws.current.onopen = () => {
-        sendAction('Authorize', {
-          jwt: '3',
-          projectId: 1,
-        });
-        sendAction("RequestChatsList",{
+    useEffect(()=>{
+      if (ws.current && iswsConnected){
+        sendAction('Messenger.Start');
+        sendAction("Messenger.RequestChatsList",{
           projectId: 1
         })
-        console.log('WebSocket connected');
-      };
-
-      ws.current.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.type ==="entities.ServerAction.SendChatsList"){
-          setChatList(message.chats)
-        }
-        else if (message.type ==="entities.ServerAction.SendChatMessages"){
-          setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
-        }
-        else if(message.type === "entities.ServerAction.NewMessage") {
-          if (groupedMessagesRef.current && groupedMessagesRef.current.some(chat => chat.chatId === message.chatId)){
-            addToGroupedMessages(message)
+        console.log('Messages ws subscribed');
+      
+        ws.current.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          if (message.type ==="entities.Action.Messenger.SendChatsList"){
+            setChatList(message.chats)
           }
-          addLastMessage(message)          
-        }
-        else if(message.type ==="entities.ServerAction.UpdateChatUnreadCount"){
-          updateUnreadCount(message.chatId, message.count)
-        }
-        console.log(message)
-      };
+          else if (message.type ==="entities.Action.Messenger.SendChatMessages"){
+            setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
+          }
+          else if(message.type === "entities.Action.Messenger.NewMessage") {
+            if (groupedMessagesRef.current && groupedMessagesRef.current.some(chat => chat.chatId === message.chatId)){
+              addToGroupedMessages(message)
+            }
+            addLastMessage(message)          
+          }
+          else if(message.type ==="entities.Action.Messenger.UpdateChatUnreadCount"){
+            updateUnreadCount(message.chatId, message.count)
+          }
+          console.log(message)
+        };
+      };  
 
-      ws.current.onclose = () => {
-          console.log('WebSocket disconnected');
-      };
   
       return () => {
         window.removeEventListener('resize', handleResize);
         if (ws.current) {
-          ws.current.close();
-      }
+          sendAction('Messenger.Stop');
+          console.log("Messages ws unsubscribed")
+        }
       };
-    }, []);
-
+    },[iswsConnected])
+    
     useEffect(()=>{
         if (isMobile && activeChat) {
             setChatListVisible(false)
@@ -200,7 +191,7 @@ const MessengerPage = () => {
           setChatListVisible(false)
       }
       if (!initialMessages.some(message => message.chatId === chat.id)){
-        sendAction("RequestChatMessages",{
+        sendAction("Messenger.RequestChatMessages",{
           chatId: chat.id
         })
       }
@@ -292,7 +283,7 @@ const MessengerPage = () => {
   }
   
   const onReadUntil = (messageId) =>{
-    sendAction("ReadMessagesBefore",{
+    sendAction("Messenger.ReadMessagesBefore",{
       messageId: messageId,
       chatId: activeChat.id
     })

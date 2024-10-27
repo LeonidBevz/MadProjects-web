@@ -35,7 +35,6 @@
     cursor: pointer;
     width: 15px;
   }
-  
   .search-dropdown{
     border: 1px solid var(--main-green-color); 
     border-radius: 0px 0px 10px 10px;
@@ -59,6 +58,7 @@
     border: 1px solid var(--main-green-color);
     margin: 5px;
     box-sizing: border-box;
+    color: var(--main-text-color);
   }
   .search-dropdown  ul {
     list-style: none;

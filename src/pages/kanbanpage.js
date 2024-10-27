@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MenuDotsIco from "../images/menudots";
 import "./kanbanpage.css";
 import useToken from "../hooks/useToken";
@@ -13,9 +13,8 @@ function formatDate(date) {
   return formattedDate;
 }
 
-
 const KanbanPage = () => {
-  const { username, isNightTheme } = useToken();
+  const { username, isNightTheme, ws, sendAction, iswsConnected } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
   const [cardToEdit, setCardToEdit] = useState(null)
@@ -42,6 +41,28 @@ const KanbanPage = () => {
   const [rowsCount,setRowsCount] = useState(cards.length)
   const [cardsCount,setCardsCount] = useState(cards.reduce((total, row) => total + row.cards.length, 0))
   
+  useEffect(()=>{
+    if (ws.current && iswsConnected){
+      sendAction('Kanban.Start');
+      sendAction("Kanban.GetKanban")
+      console.log('Kanban ws subscribed');
+    
+      ws.current.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        
+        console.log(message)
+      };
+    };  
+
+
+    return () => {
+      if (ws.current) {
+        sendAction('Kanban.Stop');
+        console.log("Kanban ws unsubscribed")
+      }
+    };
+  },[iswsConnected])
+
   const addColumn = () =>{
     const newId = (rowsCount + 1).toString(); 
     const addedName = "Новый столбец"

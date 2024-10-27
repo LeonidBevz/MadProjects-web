@@ -11,6 +11,13 @@ export function useToken() {
 export function TokenProvider({children}){
     const [username, setUsername] = useState("")
     const [isNightTheme, setIsNightTheme] = useState(localStorage.getItem('theme') === 'true' || false)
+    const ws = useRef(null)
+    const [iswsConnected, setIswsConnected] = useState(false)
+
+    const sendAction = (actionType, params) => {
+      const action = { type: "entities.Intent." + actionType, ...params };
+      ws.current.send(JSON.stringify(action));
+    };
 
     useEffect(()=>{
       const lastUsername = localStorage.getItem('username')
@@ -157,9 +164,10 @@ export function TokenProvider({children}){
       saveUsername,
       updateUsername,
       api,
-      isNightTheme,
-      setIsNightTheme,
+      isNightTheme, setIsNightTheme,
       onThemeChange,
+      ws, sendAction,
+      iswsConnected, setIswsConnected
     }
     return (
         <TokenContext.Provider value={contextValue}>

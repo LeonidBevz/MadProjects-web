@@ -28,6 +28,7 @@
     background-color: var(--main-blue-color);
     color: var(--alt-text-color);
     padding: 0.5rem 1rem;
+    cursor: pointer;
 }
 .delete-butt{
     width: 100%;
@@ -35,6 +36,7 @@
     background-color: var(--main-red-color);
     color: var(--alt-text-color);
     padding: 0.5rem 1rem;
+    cursor: pointer;
 }
 .buttons-tile{
     width: 45rem;
