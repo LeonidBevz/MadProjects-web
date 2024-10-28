@@ -18,6 +18,8 @@ import SprintCreatePage from "./pages/sprintcreate";
 import InfoPage from "./pages/infopage";
 import MessengerPage from "./pages/messenger";
 import SettingsPage from "./pages/settingspage";
+import CreateProjectPage from "./pages/createProject";
+import StudentTopMenuPage from "./pages/studenttopmenu";
 
 const App = () => { 
 
@@ -26,6 +28,7 @@ const App = () => {
       <Router> 
         <Routes> 
           <Route index element={<Navigate to="/welcome" />} />
+          {/*Навигация внутри проекта*/}
           <Route path="/" element={<TopMenuPage/>}>
             <Route path=":project/activity/" element={<ActivityPage/>}/>
             <Route path=":project/info/" element={<InfoPage/>}/>
@@ -36,8 +39,12 @@ const App = () => {
             <Route path=":project/sprints/create" element={<SprintCreatePage/>}/>
             <Route path=":project/settings/" element={<SettingsPage/>}/>
           </Route>
-          <Route path='/profile/' element={<ProfilePage/>}/>
-  
+           {/*Навигация вне проекта для студента*/}
+          <Route path="/" element={<StudentTopMenuPage/>}>
+            <Route path='/profile/' element={<ProfilePage/>}/>
+            <Route path='/createProject/' element={<CreateProjectPage/>}/>
+          </Route>
+           {/*Навигация авторизации*/}
           <Route path='/welcome/' element={<WelcomePage/>}/>
           <Route path='/login/' element={<LoginPage/>}/>
           <Route path='/register/' element={<RegisterPage/>}/>

@@ -69,6 +69,7 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
         {isDropdownOpen && (
           <div className="search-dropdown">
             <input 
+              className="search-dropdown-input"
               placeholder={emptyMessage}
               value={searchValue}
               onChange={handleSValueChange}

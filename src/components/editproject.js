@@ -1,12 +1,9 @@
 import React, {useRef, useEffect}  from "react";
 
-const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
-    const inputRef = useRef()
+const EditProjectModal = ({onConfirm, onCancel, newTitle, newDescription, setNewTitle, setNewDescription}) => {
     const container = useRef(null)
+
     useEffect(() => {
-      if (inputRef.current){
-        inputRef.current.focus()
-      }
       const handleEsc = (event) => {
         if (event.key === 'Escape') {
           onCancel();
@@ -28,31 +25,41 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
       // eslint-disable-next-line
     }, []); 
   
-    const handleValueChange = (event)=>{
-      setNewValue(event.target.value);
+    const handleTitleChange = (event)=>{
+      setNewTitle(event.target.value);
+    }
+    const handleDescriptionChange = (event)=>{
+      setNewDescription(event.target.value);
     }
     const handleSubmit = (event)=>{
       event.preventDefault();
       onConfirm()
     }
     return (
-      <div className="delete-modal" ref={container}>
+      <div className="settings-modal" ref={container}>
         <form onSubmit={handleSubmit}>
-        <p className="modal-edit-text">{text}</p>
-        <textarea 
-          value={newValue}
-          onChange={handleValueChange}
-          maxLength={64}
-          ref={inputRef}
+        <h2 className="modal-edit-text">Название</h2>
+        <input
+          value={newTitle}
+          onChange={handleTitleChange}
+          maxLength={32}
           required
         />
-        <div className="flex-butt">
-          <button type="submit">Подтвердить</button>
-          <button type="button" onClick={onCancel}>Отмена</button>
+        <h2>Описание</h2>
+        <textarea
+          value={newDescription}
+          onChange={handleDescriptionChange}
+          maxLength={1000}
+          required
+        />
+
+        <div className="settings-flex-butt">
+          <button type="submit">Сохранить</button>
+          <button type="button" onClick={onCancel}>Отмана</button>
         </div>
         </form>
       </div>
     )
   }
 
-export default EditModal
+export default EditProjectModal

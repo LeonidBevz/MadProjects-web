@@ -65,6 +65,7 @@ const SprintEditPage = () => {
               <div className="name-cont">
                   <label>Название</label>
                   <input
+                    className="edit-container-input"
                     placeholder="Укажите название"
                     value={newName}
                     onChange={handleNameChange}
@@ -75,6 +76,7 @@ const SprintEditPage = () => {
               <div className="date-cont"> 
                   <label>Дата завершения</label>
                   <input
+                    className="edit-container-input"
                     placeholder="Укажите дату"
                     type="date"
                     value={newEndDate}

@@ -49,9 +49,76 @@
     flex-direction: column;
     gap: 0.7rem
 }
-
+.settings-modal{
+    position: fixed;
+    width: 45rem;
+    top: calc(50% - 12rem);
+    left: calc(50% - 22.5rem);
+    padding: 1.5rem;
+    z-index: 9;
+    border-radius: 10px;
+    background-color: var(--card-color);
+}
+.settings-modal h2{
+    padding: 0;
+}
+.settings-modal input{
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 10px 0px;
+    outline: none;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    border-radius: 10px;
+}
+.settings-modal textarea{
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 10px 0px;
+    outline: none;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-color);
+    color: var(--main-text-color);
+    border-radius: 10px;
+    resize: none;
+    height: 10rem;
+}
+.settings-modal button{
+    border: none;
+    border-radius: 10px;
+    background-color: var(--main-blue-color);
+    color: var(--alt-text-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    flex: 1;
+}
+.settings-flex-butt{
+    display: flex;
+    gap: 1rem;
+}
+.blocked-del-butt{
+    background-color: var(--border-color) !important;
+    cursor: no-drop !important;
+}
+.active-del-butt{
+    background-color: var(--main-red-color) !important;
+}
+@media (width < 18.75rem){
+    .settings-flex-butt{
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
 @media (width < 47rem) {
     .buttons-tile{
         width: 100%;
+    }
+    .settings-modal{
+        width: calc(100vw - 2rem);
+        left: calc(50% - 50vw + 1rem);
     }
 }

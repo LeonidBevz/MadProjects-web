@@ -1,203 +1,204 @@
 .search-dd-container{
-    position: relative;
-  }
+  position: relative;
+}
   
-  .search-dd-button{
-    width: 100%;
-    font-size: 0.9rem;
-    background-color: var(--card-color);
-    color: var(--main-text-color);
-    outline: none;
-    border-radius: 10px;
-    box-sizing: border-box;
-    border: 1px solid var(--border-color);
-    padding: 0px 10px;
-    cursor: pointer;
-    display: flex;
-    user-select: none;    
-  }
-  .input-text{
-    display: block;
-    width: calc(100% - 20px);
-    padding: 10px 0px;
-    border-radius: 10px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-size: 0.9rem;
-    margin: 0;
-    text-wrap: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }  
- 
-  .search-dd-button-img{
-    cursor: pointer;
-    width: 15px;
-  }
-  .search-dropdown{
-    border: 1px solid var(--main-green-color); 
-    border-radius: 0px 0px 10px 10px;
-    position: absolute;
-    width: 100%;
-    z-index: 5; 
-    background-color: var(--card-color); 
-    box-sizing: border-box;
-    max-height: 217px;
-    overflow: auto;
-    margin-top: -1px;
-  }
-  .search-dropdown input{
-    padding: 8px;
-    border-radius: 10px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    width: calc(100% - 10px);
-    font-size: 0.9rem;
-    border: 1px solid var(--main-green-color);
-    margin: 5px;
-    box-sizing: border-box;
-    color: var(--main-text-color);
-  }
-  .search-dropdown  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .search-dropdown ul li {
-    padding: 8px 12px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    text-wrap: nowrap;
-    text-overflow: ellipsis;
-    font-size: 1rem;
-    color: var(--main-text-color);
-  }
-  
-  .search-dropdown ul li:hover {
-    background-color: var(--bg-color);
-    cursor: pointer;
-  }
-  
-  
-  .liactive:hover{
-    background-color: var(--main-blue-color) !important;
-    color: var(--alt-text-color)!important;
-  }
+.search-dd-button{
+  width: 100%;
+  font-size: 0.9rem;
+  background-color: var(--card-color);
+  color: var(--main-text-color);
+  outline: none;
+  border-radius: 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  padding: 0px 10px;
+  cursor: pointer;
+  display: flex;
+  user-select: none;    
+}
+.input-text{
+  display: block;
+  width: calc(100% - 20px);
+  padding: 10px 0px;
+  border-radius: 10px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  margin: 0;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 1rem;
+  box-sizing: content-box;
+}  
 
+.search-dd-button-img{
+  cursor: pointer;
+  width: 15px;
+}
+.search-dropdown{
+  border: 1px solid var(--main-green-color); 
+  border-radius: 0px 0px 10px 10px;
+  position: absolute;
+  width: 100%;
+  z-index: 5; 
+  background-color: var(--card-color); 
+  box-sizing: border-box;
+  max-height: 217px;
+  overflow: auto;
+  margin-top: -1px;
+}
+.search-dropdown-input{
+  padding: 8px;
+  border-radius: 10px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: calc(100% - 10px);
+  font-size: 0.9rem;
+  border: 1px solid var(--main-green-color);
+  margin: 5px;
+  box-sizing: border-box;
+  color: var(--main-text-color);
+}
+.search-dropdown  ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.search-dropdown ul li {
+  padding: 8px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  color: var(--main-text-color);
+}
+
+.search-dropdown ul li:hover {
+  background-color: var(--bg-color);
+  cursor: pointer;
+}
+
+
+.liactive:hover{
+  background-color: var(--main-blue-color) !important;
+  color: var(--alt-text-color)!important;
+}
+.chose-many-dd-container {
+  display: inline-block; 
+  white-space: nowrap; 
+  color: var(--main-text-color);
+  outline: none;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 45rem;
+}
+.chose-many-dd-button{
+  width: 100%;
+  font-size: 16px;
+  display: flex;
+  font-size: 1rem;
+}
+.chose-many-dd-button input{
+  padding: 0.8rem;
+  background-color: var(--card-color);
+  border-radius: 10px;
+  outline: none;
+  width: calc(100% - 50px);
+  font-size: 1rem;
+  margin: 0 !important;
+  border: 1px solid var(--border-color);
+}
+.chose-many-dd{
+  border: 1px solid var(--main-green-color); 
+  border-radius: 0px 0px 10px 10px;
+  position: absolute;
+  width: 45rem;
+  z-index: 5; 
+  background-color: var(--card-color); 
+  padding: 0px;
+  box-sizing: border-box;
+  max-height: 10rem;
+  overflow-y: auto;
+  margin-top: -5px;
+}
+.chose-many-dd ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.chose-many-dd ul li{
+  padding: 8px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  color: var(--main-text-color);
+}
+.chose-many-dd ul li:hover{
+  background-color: var(--bg-color);
+  cursor: pointer;
+}
+.values-container{
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-block: 5px;
+}
+.item{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--card-color);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  color: var(--main-text-color);
+  transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
+}
+.item img{
+  height: 10px;
+  cursor: pointer;
+  padding: 0;
+  color: var(--main-text-color);
+}
+.isddactive{
+  border: 1px solid var(--main-green-color);
+  border-radius: 10px 10px 0px 0px;
+}
+.liactive{
+  background-color: var(--main-blue-color);
+  color: var(--alt-text-color) !important;
+}
+.input-active{
+  border: none !important;
+  border-radius: 10px 10px 0px 0px !important;
+}
+.ddsearch-note{
+  padding: 8px 12px;
+  margin: 0;
+}
+
+@media (width < 45rem) {
   .chose-many-dd-container {
-    display: inline-block; 
-    white-space: nowrap; 
-    color: var(--main-text-color);
-    outline: none;
-    border-radius: 10px;
     width: 100%;
-    max-width: 45rem;
-  }
-  .chose-many-dd-button{
-    width: 100%;
-    font-size: 16px;
-    display: flex;
-    font-size: 1rem;
-  }
-  .chose-many-dd-button input{
-    padding: 0.8rem;
-    background-color: transparent;
-    border-radius: 10px;
-    outline: none;
-    width: calc(100% - 50px);
-    font-size: 1rem;
-    margin: 0 !important;
   }
   .chose-many-dd{
-    border: 1px solid var(--main-green-color); 
-    border-radius: 0px 0px 10px 10px;
-    position: absolute;
-    width: 45rem;
-    z-index: 5; 
-    background-color: var(--card-color); 
-    padding: 0px;
-    box-sizing: border-box;
-    max-height: 10rem;
-    overflow-y: auto;
-    margin-top: -5px;
+    width: calc(100% - 2rem);
   }
-  .chose-many-dd ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .chose-many-dd ul li{
-    padding: 8px 12px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    text-wrap: nowrap;
-    text-overflow: ellipsis;
-    font-size: 1rem;
-    color: var(--main-text-color);
-  }
-  .chose-many-dd ul li:hover{
-    background-color: var(--bg-color);
-    cursor: pointer;
-  }
-  .values-container{
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-block: 5px;
-  }
-  .item{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: var(--card-color);
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    color: var(--main-text-color);
-    transition: color var(--main-theme-transition), background-color var(--main-theme-transition);
-  }
-  .item img{
-    height: 10px;
-    cursor: pointer;
-    padding: 0;
-    color: var(--main-text-color);
-  }
-  .isddactive{
-    border: 1px solid var(--main-green-color);
-    border-radius: 10px 10px 0px 0px;
-  }
-  .liactive{
-    background-color: var(--main-blue-color);
-    color: var(--alt-text-color) !important;
-  }
-  .input-active{
-    border: none !important;
-    border-radius: 10px 10px 0px 0px !important;
-  }
-  .ddsearch-note{
-    padding: 8px 12px;
-    margin: 0;
-  }
-  
-
-  @media (width < 45rem) {
-    .chose-many-dd-container {
-      width: 100%;
-    }
-    .chose-many-dd{
-      width: calc(100% - 2rem);
-    }
-  }
+}
 

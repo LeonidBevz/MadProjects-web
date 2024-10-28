@@ -87,9 +87,8 @@ const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMes
         <div className="wrapper" ref={scrollContainer}>
           <div className={isDropdownOpen ? `chose-many-dd-container isddactive` : "chose-many-dd-container"} ref={container}>
             <div className={"chose-many-dd-button"}>
-                
                 <input 
-                  className={isDropdownOpen ? "input-active":""}
+                  className={isDropdownOpen ? "input-active": ""}
                   placeholder={emptyMessage}
                   value={searchValue}
                   onChange={handleSValueChange}

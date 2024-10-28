@@ -50,7 +50,7 @@ function formatDate(milliseconds) {
 }
 
 const KanbanPage = () => {
-  const { username, isNightTheme, ws, sendAction, iswsConnected } = useToken();
+  const {isNightTheme, ws, sendAction, iswsConnected } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
   const [cardToEdit, setCardToEdit] = useState(null)//убрать когда будет удаление по id
@@ -132,28 +132,22 @@ const KanbanPage = () => {
     setIsDeleteWindowShown(0)
   }
 
-  const deleteRow = (rowIndex) => {
-    const updatedCards = [...cards];
-    updatedCards.splice(rowIndex, 1);
-    setCards(updatedCards);
+  const deleteRow = (rowId) => {
+    sendAction("Kanban.DeleteColumn", {
+      id: rowId
+    })
     setIsDeleteWindowShown(0)
   };
-  const handleDeleteRowClick = (rowIndex)=>{
+  const handleDeleteRowClick = (rowId, rowIndex)=>{
+    setRowToEditId(rowId)
     setRowToEdit(rowIndex)
     setIsDeleteWindowShown(1)
   }
 
-  const deleteCard = (rowIndex, cardIndex) => {
-    setCards((prevCards) =>
-      prevCards.map((row, i) => {
-        if (i === rowIndex) {
-          const newCards = row.kards.filter((_, j) => j !== cardIndex);
-          
-          return { ...row, kards: newCards };
-        }
-        return row;
-      })
-    );
+  const deleteCard = (cardId) => {
+    sendAction("Kanban.DeleteKard", {
+      id: cardId
+    })
     setIsDeleteWindowShown(0)
   };
   const handleDeleteCardClick = (rowIndex, cardIndex, cardId)=>{
@@ -288,8 +282,8 @@ const KanbanPage = () => {
   return (
     <div className="kanban-page">
       <div className={isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
-      {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEdit)} text={cards[rowToEdit].cards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].cards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(rowToEdit,cardToEdit)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 3 && (<EditModal onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 4 && (<EditModal onConfirm={()=>setCardName(cardToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 5 && (<EditModal onConfirm={()=>addCard(rowToEditId)} newValue={newName} setNewValue={setNewName} text={`Введите название новой карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
@@ -304,7 +298,7 @@ const KanbanPage = () => {
                     <div {...provided.draggableProps} ref={provided.innerRef} className="kanban-row">
                       <div className="kanban-row-top" {...provided.dragHandleProps}>
                         <p onClick={()=>{handleEditRowClick(i,row.id)}}>{row.name}</p>
-                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(i)} onEdit={()=>handleEditRowClick(i,row.id)}/>
+                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(row.id, i)} onEdit={()=>handleEditRowClick(i,row.id)}/>
                       </div>
                       <Droppable droppableId={row.frontId} type="card">
                         {(provided) => (

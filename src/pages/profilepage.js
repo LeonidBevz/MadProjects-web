@@ -1,15 +1,11 @@
 import React, {useState} from "react";
 import { useNavigate, Link } from "react-router-dom";
-import LogoIco from "../images/logoico";
-import SunIMG from "./../images/sun.svg"
-import NightIMG from "./../images/night.svg"
-import LogoutIMG from "./../images/logout.svg"
 import useToken from "../hooks/useToken";
 import "./profilepage.css"
 import RightArrowIco from "../images/arrowrightico";
 
 const ProfilePage = () => {
-    const {isNightTheme, onThemeChange} = useToken()
+    const {isNightTheme} = useToken()
     const [username,setUsername] = useState("Kaelesty")
     const [gitLink,setGitLink] = useState("https://github.com/Kaelesty")
     const [EmailLink,setEmailLink] = useState("example@gmail.com")
@@ -18,24 +14,6 @@ const ProfilePage = () => {
   
     return (
       <div className="profile-page">          
-        <div className="profile-top-menu">
-          <div className="profile-sepline"></div>
-          <div className="profile-top-content">
-            <div className="flex-start"></div>
-            <div className="flex-center"><LogoIco color={isNightTheme ? "white": "black"} className="logo"/></div>
-            <div className="flex-end">
-                <div className="theme-icon-container" onClick={onThemeChange}>
-                    <div className={`theme-icon theme-icon-1 ${isNightTheme ? "theme-icon-hidden-1" : "theme-icon-active"}`}>
-                      <img src={SunIMG} alt="sun" />
-                    </div>
-                    <div className={`theme-icon theme-icon-2 ${isNightTheme ? "theme-icon-active " : "theme-icon-hidden-2"}`}>
-                      <img src={NightIMG} alt="night" />
-                    </div>
-                </div>
-                <button className="topmenu-button"><img src={LogoutIMG} alt="theme"/></button>
-            </div>
-          </div>
-        </div>
         <div className="profile-page-content">
             <div className="profile-info">
                 <div className="profile-pic-container">
@@ -74,7 +52,7 @@ const ProfilePage = () => {
                     <div className="profile-projects-separator"></div>
                 </div>
                 <div className="profile-projects-item">
-                    <div className="profile-projects-content">
+                    <div className="profile-projects-content" onClick={()=>navigate("/createProject/")}>
                         <p>Создать проект...</p>
                         <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
