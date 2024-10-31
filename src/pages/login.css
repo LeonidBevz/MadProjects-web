@@ -5,7 +5,7 @@
 
 .welcome-right {
     position: relative;
-    min-height: 25rem;
+    /*min-height: 25rem;*/
     background-color: var(--card-color);
 }
 .welcome-right label{
@@ -20,11 +20,11 @@
 .welcome-content {
     padding: 30px;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     box-sizing: border-box;
+    max-height: 100vh;
+    overflow-y: auto;
 }
+
 
 .welcome-content p {
     font-size: 1rem;
@@ -44,6 +44,11 @@
 
 .welcome-but-container {
     margin-top: 15px;
+}
+.welcome-image{
+    display: flex;
+    flex-direction: column;
+    
 }
 
 .welcome-logo {
@@ -80,7 +85,11 @@
     font-size: 1rem !important; 
     color: var(--main-red-color)
 }
-
+.linkspan{
+    color: var(--main-blue-color);
+    text-decoration: underline;
+    cursor: pointer;
+}
 
  
 @media (width < 25rem) {
@@ -160,12 +169,36 @@
     }
 
     .welcome-image {
+        display: flex;
+        flex-direction: column;
         background: linear-gradient(-45deg, var(--main-red-color), var(--main-blue-color));
         width: 25rem;
-        min-height: 25rem;
+        /*min-height: 25rem;*/
+    }
+    .welcome-selector{
+        height: 3rem;
+        display: flex;
+    }
+    .welcome-selector button{
+        flex: 1;
+        color: var(--alt-text-color);
+        font-size: 1.3rem;
+        border: none;
+        background-color: transparent;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .studentb{
+        background-color: var(--main-blue-color) !important;
+        border-radius: 0 1.5rem 0 0;
+    }
+    .professorb{
+        background-color: var(--main-red-color) !important;
+        border-radius: 1.5rem 0  0 0;
     }
 
     .welcome-image p {
+        flex: 1;
         color: var(--alt-text-color);
         padding: 45px;
         margin: 0;
@@ -189,5 +222,8 @@
 
     .welcome-logo {
         width: 25rem;
+    }
+    .switch-reg-mode{
+        display: none;
     }
 }

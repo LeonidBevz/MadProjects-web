@@ -182,6 +182,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
                     onChange={handleInputChange}
                     rows="1"
                     onKeyDown={handleKeyDown}
+                    maxLength={256}
                  />
                  <RightArrowIco className="send-arr" color={isNightTheme ? "#d4d3cf" : "black"} onClick={()=>handleSendClick()}/>
             </div>

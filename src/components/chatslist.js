@@ -1,6 +1,8 @@
 import React from "react";
 import BookmarksIco from "../images/bookmarks";
 import useToken from "../hooks/useToken";
+import MembersPrivateIco from "../images/memprivate";
+import KardIco from "../images/kard";
 
 function getTimeAgo(date) {
     const now = new Date();
@@ -43,20 +45,23 @@ const ChatsList = ({chats, onChatSelect}) => {
     return (     
         <div className="chats-list">
             {chats.map((chat,index)=>( <div className="chat-list-tile" key={index} onClick={()=>onChatSelect(chat)}>
-                <BookmarksIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>
-                <div className="chat-list-tile-content"> 
-                    <h2>{chat.title}</h2>
-                    {chat.lastMessage !== null && (<div className="chat-list-tile-lastmess"> 
-                        <span className="chat-list-tile-lastmess-combined no-trans">
-                          <span className="chat-list-tile-lastmess-user">{chat.lastMessage.senderId}</span>
-                          <span className="chat-list-tile-lastmess-mess">{chat.lastMessage.text}</span>
-                        </span>
-                        <p className="chat-list-tile-lastmess-date">{getTimeAgo(chat.lastMessage.time)}</p>
-                    </div>)}
-                </div>
-                {chat.unreadMessagesCount > 0 &&(<div className="chat-list-tile-new">
-                    {chat.unreadMessagesCount > 99 ? 99 : chat.unreadMessagesCount}
-                </div>)}
+              {chat.chatType === "Public" && <BookmarksIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
+              {chat.chatType === "MembersPrivate" && <MembersPrivateIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
+              {chat.chatType === "CuratorPrivate" && <MembersPrivateIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
+              {chat.chatType === "Kard" && <KardIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
+              <div className="chat-list-tile-content"> 
+                  <h2>{chat.title}</h2>
+                  {chat.lastMessage !== null && (<div className="chat-list-tile-lastmess"> 
+                      <span className="chat-list-tile-lastmess-combined no-trans">
+                        <span className="chat-list-tile-lastmess-user">{chat.lastMessage.senderId}</span>
+                        <span className="chat-list-tile-lastmess-mess">{chat.lastMessage.text}</span>
+                      </span>
+                      <p className="chat-list-tile-lastmess-date">{getTimeAgo(chat.lastMessage.time)}</p>
+                  </div>)}
+              </div>
+              {chat.unreadMessagesCount > 0 &&(<div className="chat-list-tile-new">
+                  {chat.unreadMessagesCount > 99 ? 99 : chat.unreadMessagesCount}
+              </div>)}
             </div>))}
         </div>
         

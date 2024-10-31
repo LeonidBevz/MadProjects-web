@@ -49,7 +49,9 @@ const MessengerPage = () => {
         })
         console.log('Messages ws subscribed');
       
-        ws.current.onmessage = (event) => {
+        const currentWs = ws.current;
+
+        currentWs.onmessage = (event) => {
           const message = JSON.parse(event.data);
           if (message.type ==="entities.Action.Messenger.SendChatsList"){
             setChatList(message.chats)
@@ -66,18 +68,19 @@ const MessengerPage = () => {
           else if(message.type ==="entities.Action.Messenger.UpdateChatUnreadCount"){
             updateUnreadCount(message.chatId, message.count)
           }
-          console.log(message)
+        };
+
+        return () => {
+          window.removeEventListener('resize', handleResize);
+          if (currentWs) {
+            sendAction('Messenger.Stop');
+            console.log("Messages ws unsubscribed")
+          }
         };
       };  
 
   
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        if (ws.current) {
-          sendAction('Messenger.Stop');
-          console.log("Messages ws unsubscribed")
-        }
-      };
+      
     },[iswsConnected])
     
     useEffect(()=>{
@@ -92,7 +95,6 @@ const MessengerPage = () => {
 
     useEffect(()=>{
       groupedMessagesRef.current = groupedMessages 
-      console.log(groupedMessages,"new grouped messages")
       // eslint-disable-next-line
     },[groupedMessages])
 
@@ -235,7 +237,7 @@ const MessengerPage = () => {
 
       const container = chatContainer.current;
      
-      const isScrolledToBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+      const isScrolledToBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10;
 
       if (isScrolledToBottom) {
         setTimeout(() => {
@@ -301,7 +303,7 @@ const MessengerPage = () => {
         onBackClick={handleBackClick}
         onReadUntil={onReadUntil}
         containerRef={chatContainer}
-      /> : !isMobile ? <div>Выберите чат</div>:<></>}
+      /> : !isMobile ? <div className="no-chat-text">Выберите чат</div>:<></>}
     </div>
   );
 }

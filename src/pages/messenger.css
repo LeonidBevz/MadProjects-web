@@ -231,6 +231,15 @@
     padding: 0.3rem;
     color: var(--main-text-color);
 }
+.no-chat-text{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--main-text-color)
+}
 
 @media (width < 1000px) {
     .chats-list {

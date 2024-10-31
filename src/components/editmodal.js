@@ -1,6 +1,6 @@
 import React, {useRef, useEffect}  from "react";
 
-const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
+const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue, isRowEdit}) => {
     const inputRef = useRef()
     const container = useRef(null)
     useEffect(() => {
@@ -42,7 +42,7 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue}) => {
         <textarea 
           value={newValue}
           onChange={handleValueChange}
-          maxLength={64}
+          maxLength={isRowEdit ? 25 : 50}
           ref={inputRef}
           required
         />

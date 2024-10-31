@@ -36,7 +36,7 @@ function formatDate(milliseconds) {
     } else if (hours < 24) {
       return `${hours} час${getWordEnding(hours, '', 'а', 'ов')} назад`;
     } else if (days < 7) {
-      return `${days} день${getWordEnding(days, '', 'я', 'ей')} назад`;
+      return `${days} д${getWordEnding(days, 'ень', 'ня', 'ней')} назад`;
     } else if (days < 30) {
       const weeks = Math.floor(days / 7);
       return `${weeks} недел${getWordEnding(weeks, 'ю', 'и', 'ь')} назад`;
@@ -45,7 +45,7 @@ function formatDate(milliseconds) {
       return `${months} месяц${getWordEnding(months, '', 'а', 'ев')} назад`;
     } else {
       const years = Math.floor(days / 365);
-      return `${years} год${getWordEnding(years, '', 'а', 'лет')} назад`;
+      return `${years} ${getWordEnding(years, 'год', 'года', 'лет')} назад`;
     }
 }
 
@@ -87,7 +87,6 @@ const KanbanPage = () => {
           if (message.type === "entities.Action.Kanban.SetState") {
               refactorKanbanData(message);
           }
-          console.log(message);
       };
 
       return () => {
@@ -275,7 +274,6 @@ const KanbanPage = () => {
       newColumnId: finishColumn.id,
       newPosition: destination.index
     })
-    console.log(cards)
 
   };
 
@@ -284,7 +282,7 @@ const KanbanPage = () => {
       <div className={isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
       {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 3 && (<EditModal onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 3 && (<EditModal onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} isRowEdit={true} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 4 && (<EditModal onConfirm={()=>setCardName(cardToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 5 && (<EditModal onConfirm={()=>addCard(rowToEditId)} newValue={newName} setNewValue={setNewName} text={`Введите название новой карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 6 && (<EditModal onConfirm={()=>addColumn()} newValue={newName} setNewValue={setNewName} text={`Введите название новой колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
