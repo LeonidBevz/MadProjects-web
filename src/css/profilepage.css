@@ -152,7 +152,7 @@
     width: 45px;
     border-radius: 50%;
     background-color: var(--accent-color);
-    background-image: url("../images/edit.svg");
+    background-image: url("./../images/edit.svg");
     background-size: 60% 60%;
     background-repeat: no-repeat;
     background-position: center;

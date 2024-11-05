@@ -1,13 +1,12 @@
 import React from "react";
-import SunIMG from "./../images/sun.svg"
-import NightIMG from "./../images/night.svg"
-import LogoutIMG from "./../images/logout.svg"
-import ProfileIMG from "./../images/profile.svg"
+import SunIMG from "./../../../images/sun.svg"
+import NightIMG from "./../../../images/night.svg"
+import LogoutIMG from "./../../../images/logout.svg"
+import ProfileIMG from "./../../../images/profile.svg"
+import LogoIco from "./../../../images/logoico";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import useToken from "../hooks/useToken";
-import "./topmenu.css"
-import LogoIco from "../images/logoico";
+import useToken from "../../../hooks/useToken";
 
 const StudentTopMenuPage = () => {
   const {isNightTheme, onThemeChange} = useToken()

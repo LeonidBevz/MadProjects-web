@@ -1,5 +1,5 @@
 import React from "react";
-import "./commit.css"
+import "../css/commit.css"
 import useToken from "../hooks/useToken";
 import { Link } from "react-router-dom";
 import RightArrowIco from "../images/arrowrightico";

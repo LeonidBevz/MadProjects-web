@@ -1,5 +1,5 @@
 import React from "react";
-import "./lastactivity.css"
+import "../css/lastactivity.css"
 
 const LastActivity = ({date, link, text, linkTo}) => {
     const getTimeAgo = (date) => {

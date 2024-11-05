@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Activity from "../components/activity";
-import "./activitypage.css"
-import SearchDropDown from "../components/searchdropdown";
-import Commit from "../components/commit";
-import LastActivity from "../components/lastactivity";
+import Activity from "../../components/activity";
+import SearchDropDown from "../../components/searchdropdown";
+import Commit from "../../components/commit";
+import LastActivity from "../../components/lastactivity";
 import { useNavigate, useParams} from "react-router-dom";
-import RightArrowIco from "../images/arrowrightico";
-import useToken from "../hooks/useToken";
+import RightArrowIco from "../../images/arrowrightico";
+import useToken from "../../hooks/useToken";
+import "../../css/activitypage.css"
 
 function formatDate(date) {
   const dateParts = date.slice(0, 10).split('-'); 

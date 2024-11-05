@@ -7,16 +7,14 @@ import MenuIMG from "./../images/menu.svg"
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useToken from "../hooks/useToken";
-import "./topmenu.css"
 import LogoIco from "../images/logoico";
 import {MessengerSocket} from "../urls"
 
-const TopMenuPage = () => {
+const TeacherTopMenuPage = () => {
   const {isNightTheme, onThemeChange, ws, sendAction, setIswsConnected} = useToken()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
   const username = "Бевз Леонид Александрович"
-  const project = "audionautica"
   const navigate = useNavigate()
 
   const sideMenuRef = useRef()
@@ -100,31 +98,23 @@ const TopMenuPage = () => {
         <div className={isSideBarOpen ? "bg-blur-shown" :"bg-blur-hidden"}/>
         <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown":"sidebar-container-hidden"}`} ref={sideMenuRef}>
           <div className="sidebar-user-info">
-            <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/profile")}}/>
+            <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/teacher/profile")}}/>
             <p>{username}</p>
           </div>
           <div className="sidemenu-buttons">
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/activity/`)}>
-              Активность
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/current/`)}>
+              Текущие проекты
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/messenger/`)}>
-              Мессенджер
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/rate/`)}>
+              Выставление оценок
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/info/`)}>
-              Информация
+            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/approve/`)}>
+              Одобрение проектов
             </div>
             <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/kanban/`)}>
-              Канбан
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/settings/`)}>
-              Настройки
-            </div>
-          <div className="sidebar-separator-end"/>
           </div>
           
         </div>
@@ -135,4 +125,4 @@ const TopMenuPage = () => {
     );
   }
   
-  export default TopMenuPage ;
+  export default TeacherTopMenuPage;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import MenuDotsIco from "../images/menudots";
-import "./kanbanpage.css";
-import useToken from "../hooks/useToken";
+import MenuDotsIco from "../../images/menudots";
+import useToken from "../../hooks/useToken";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import PlusIco from "../images/plus";
-import EditModal from "../components/editmodal";
-import DeleteModal from "../components/deletemodal";
+import PlusIco from "../../images/plus";
+import EditModal from "../../components/editmodal";
+import DeleteModal from "../../components/deletemodal";
+import "../../css/kanbanpage.css";
 
 function formatDate(milliseconds) {
     const getWordEnding = (number, one, two, five) => {

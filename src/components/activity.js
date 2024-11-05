@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import "./activity.css"
+import "../css/activity.css"
 
 function getDayOfWeek(date) {
   const day = date.getDay();

@@ -3,23 +3,24 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navigate} from 'react-router-dom'
 import NotFoundPage from "./pages/notfound"
-import TopMenuPage from "./pages/topmenu";
-import WelcomePage from "./pages/welcome";
-import "./index.css"
-import LoginPage from "./pages/login";
-import RegisterPage from "./pages/register";
-import ProfilePage from "./pages/profilepage";
-import ActivityPage from "./pages/activitypage";
+import TopMenuPage from "./pages/inner/topmenu";
+import WelcomePage from "./pages/auth/welcome";
+import LoginPage from "./pages/auth/login";
+import RegisterPage from "./pages/auth/register";
+import ProfilePage from "./pages/outer/student/profilepage";
+import ActivityPage from "./pages/inner/activitypage";
 import { TokenProvider } from "./hooks/useToken";
-import KanbanPage from "./pages/kanbanpage";
-import SprintPage from "./pages/sprintpage";
-import SprintEditPage from "./pages/sprintedit";
-import SprintCreatePage from "./pages/sprintcreate";
-import InfoPage from "./pages/infopage";
-import MessengerPage from "./pages/messenger";
-import SettingsPage from "./pages/settingspage";
-import CreateProjectPage from "./pages/createProject";
-import StudentTopMenuPage from "./pages/studenttopmenu";
+import KanbanPage from "./pages/inner/kanbanpage";
+import SprintPage from "./pages/inner/sprintpage";
+import SprintEditPage from "./pages/inner/sprintedit";
+import SprintCreatePage from "./pages/inner/sprintcreate";
+import InfoPage from "./pages/inner/infopage";
+import MessengerPage from "./pages/inner/messenger";
+import SettingsPage from "./pages/inner/settingspage";
+import CreateProjectPage from "./pages/outer/student/createProject";
+import StudentTopMenuPage from "./pages/outer/student/studenttopmenu";
+import TeacherTopMenuPage from "./components/teachertopmenu";
+import "./css/index.css"
 
 const App = () => { 
 
@@ -39,10 +40,14 @@ const App = () => {
             <Route path=":project/sprints/create" element={<SprintCreatePage/>}/>
             <Route path=":project/settings/" element={<SettingsPage/>}/>
           </Route>
-           {/*Навигация вне проекта для студента*/}
+          {/*Навигация вне проекта для студента*/}
           <Route path="/" element={<StudentTopMenuPage/>}>
-            <Route path='/profile/' element={<ProfilePage/>}/>
-            <Route path='/createProject/' element={<CreateProjectPage/>}/>
+            <Route path='profile/' element={<ProfilePage/>}/>
+            <Route path='createProject/' element={<CreateProjectPage/>}/>
+          </Route>
+          {/*Навигация вне проекта для преподавателя*/}
+          <Route path="/teacher/" element={<TeacherTopMenuPage/>}>
+            <Route path='profile/' element={<ProfilePage/>}/>
           </Route>
            {/*Навигация авторизации*/}
           <Route path='/welcome/' element={<WelcomePage/>}/>

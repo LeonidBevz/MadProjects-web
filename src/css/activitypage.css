@@ -41,7 +41,6 @@
     margin: 0;
     margin-bottom: 5px;
 }
-
 .year{
     flex: 0 0 20%;
 }
@@ -62,7 +61,6 @@
     border: 1px solid var(--border-color);
     border-radius: 10px;
 }
-
 
 .last-activity-tile{
     padding: 0px 15px;
@@ -125,17 +123,7 @@
 
 @media (width >= 1460px){
     .activity-page-container{
-        columns: 2;
-        max-width: 1460px;
-    }
-    .commits-container, .activity-right-container{
-        height: calc(100vh - 45px);
-        height: calc(100dvh - 45px);
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-    
-    .activity-page-container div {
-        break-inside: avoid;
+       display: flex;
+       gap: 1rem
     }
 }

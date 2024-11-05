@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ChoseManyDropDown from "../components/chosemanudd";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import ChoseManyDropDown from "../../components/chosemanudd";
 
-const SprintCreatePage = () => {
-    const [newName,setNewName] = useState("")
-    const [newDescription,setNewDescription] = useState("")
+const SprintEditPage = () => {
+    const location = useLocation();
+    const {name, description, endDate} = location.state || {}
+    const [newName,setNewName] = useState(name)
+    const [newDescription,setNewDescription] = useState(description)
     const [newEndDate, setNewEndDate] = useState("")
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage,setErrorMessage] = useState("")
     const today = new Date().toISOString().split('T')[0];
-    const [chosenCards, setChosenCards] = useState([])
+    const [chosenCards,setChosenCards] = useState([])
     const navigate = useNavigate()
-    const [cards, setCards] = useState([
+    const [cards,setCards] = useState([
       {
         rowName: "В работе",
         id: "row1",
@@ -32,6 +34,16 @@ const SprintCreatePage = () => {
       row.cards.map(card => (`${card.name} (${row.rowName})`))
     );
 
+    useEffect(()=>{
+      if (!description){
+        console.log("fetch-server-for-data")
+      }
+      if (endDate){
+        setNewEndDate(endDate.slice(0,10))
+      }
+      // eslint-disable-next-line
+    },[])
+
     const handleSubmit = (event)=>{
       event.preventDefault()
     }
@@ -46,7 +58,7 @@ const SprintCreatePage = () => {
     }
     return (
       <div className="sprint-page">          
-        <h2>Создать спринт</h2>
+        <h2>Редактировать спринт</h2>
         <div className="edit-container">
           <form onSubmit={handleSubmit}>
             <div className="flex-edit">
@@ -90,7 +102,7 @@ const SprintCreatePage = () => {
             </div>
             {errorMessage && (<p className="error-message">{errorMessage}</p>)}
             <div className="flex-buttons">
-              <button className= "login-but" type="submit">Создать</button>
+              <button className= "login-but" type="submit">Сохранить</button>
               <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
             </div>
           </form>
@@ -100,4 +112,4 @@ const SprintCreatePage = () => {
     );
   }
   
-  export default SprintCreatePage;
+  export default SprintEditPage;

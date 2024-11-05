@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./infopage.css"
-import useToken from "../hooks/useToken";
-import RightArrowIco from "../images/arrowrightico";
+import useToken from "../../hooks/useToken";
+import RightArrowIco from "../../images/arrowrightico";
+import "../../css/infopage.css"
 
 const InfoPage = () => {
     const {project} = useParams()

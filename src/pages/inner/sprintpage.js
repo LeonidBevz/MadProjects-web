@@ -1,10 +1,9 @@
 import React,{useState} from "react";
-import Kanban from "../components/kanbansprint";
+import Kanban from "../../components/kanbansprint";
 import { useParams, useNavigate } from "react-router-dom";
-import "./sprintpage.css"
-import EditIco from "../images/edit";
-import useToken from "../hooks/useToken";
-
+import EditIco from "../../images/edit";
+import useToken from "../../hooks/useToken";
+import "../../css/sprintpage.css"
 
 function formatDate(date) {
   const dateParts = date.slice(0, 10).split('-'); 

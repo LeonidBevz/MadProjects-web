@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useRef} from "react";
-import "./messenger.css"
-import ChatsList from "../components/chatslist";
-import ChatWindow from "../components/chatwindow";
-import useToken from "../hooks/useToken";
-
+import ChatsList from "../../components/chatslist";
+import ChatWindow from "../../components/chatwindow";
+import useToken from "../../hooks/useToken";
+import "../../css/messenger.css"
 
 const MessengerPage = () => {
     const {ws, sendAction, iswsConnected} = useToken();

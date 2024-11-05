@@ -1,46 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SearchDropDown from "../components/searchdropdown";
-import ReposTile from "../components/repostile";
-import NewRepoModal from "../components/newRepo";
+import ChoseManyDropDown from "../../components/chosemanudd";
 
-const CreateProjectPage = () => {
+const SprintCreatePage = () => {
     const [newName,setNewName] = useState("")
     const [newDescription,setNewDescription] = useState("")
-    const [memberCount, setMemberCount] = useState("")
+    const [newEndDate, setNewEndDate] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-    const [chosenProfessor, setChosenProfessor] = useState("")
-    const [repos, setRepos] = useState([{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}])
-    const [newRepo, setNewRepo] = useState([])
-    const [modalWindow, setModalWindow] = useState(0)
+    const today = new Date().toISOString().split('T')[0];
+    const [chosenCards, setChosenCards] = useState([])
     const navigate = useNavigate()
-    
+    const [cards, setCards] = useState([
+      {
+        rowName: "В работе",
+        id: "row1",
+        cards: [
+          { name: "Фикс поиска", id: "card1", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+          { name: "Фикс поиска2", id: "card2", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+        ],
+      },
+      {
+        rowName: "Завершено",
+        id: "row2",
+        cards: [
+          
+          { name: "Фикс поиска4", id: "card4", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
+        ],
+      },
+    ])
+    const formattedCards = cards.flatMap(row =>
+      row.cards.map(card => (`${card.name} (${row.rowName})`))
+    );
+
     const handleSubmit = (event)=>{
       event.preventDefault()
     }
     const handleNameChange = (event) => {
       setNewName(event.target.value);
     }
-    const handleMemberCountChange = (event) => {
-      setMemberCount(event.target.value);
+    const handleDateChange = (event) => {
+      setNewEndDate(event.target.value);
     }
     const handleDescriptionChange = (event) => {
       setNewDescription(event.target.value);
     }
-    const handleAddRepo = () =>{
-        setNewRepo("")
-        setModalWindow(1)
-    }
-    const addRepo = () =>{
-        console.log("onAddRepo")
-        setModalWindow(0)
-    }
-
     return (
-      <div className="sprint-page">   
-        <div className={modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
-        {modalWindow === 1 && (<NewRepoModal onConfirm={addRepo} onCancel={()=>setModalWindow(0)} newRepo={newRepo} setNewRepo={setNewRepo}/>)}         
-        <h2>Создать проект</h2>
+      <div className="sprint-page">          
+        <h2>Создать спринт</h2>
         <div className="edit-container">
           <form onSubmit={handleSubmit}>
             <div className="flex-edit">
@@ -56,15 +62,15 @@ const CreateProjectPage = () => {
                   />
               </div>
               <div className="date-cont"> 
-                  <label>Число участников</label>
+                  <label>Дата завершения</label>
                   <input
                     className="edit-container-input"
-                    placeholder="Укажите число"
-                    type="number"
-                    value={memberCount}
-                    onChange={handleMemberCountChange}
-                    min={1}
-                    max={20} 
+                    placeholder="Укажите дату"
+                    type="date"
+                    value={newEndDate}
+                    onChange={handleDateChange}
+                    min={today}
+                    max="2100-01-01" 
                     required
                   />
               </div>
@@ -78,15 +84,9 @@ const CreateProjectPage = () => {
                   required
                 />
             </div>
-            <div className="">
-                <p>Преподаватель</p>
-                <div className="flex1">
-                  <SearchDropDown values={["Смэрть"]} chosenOption={chosenProfessor} setChosenOption={setChosenProfessor} emptyMessage={"Выберите преподавателя"}/>
-                </div>
-            </div>
-            <div className="info-container">
-               <p>Укажите репозитории</p>
-               <ReposTile repos={repos} setRepos={setRepos} handleAddRepo={handleAddRepo} noBS={true}/>
+            <div>
+              <label>Задачи</label>
+              <ChoseManyDropDown values={formattedCards} selectedValues={chosenCards} setSelectedValues={setChosenCards} emptyMessage={"Выберите задачи"}/>
             </div>
             {errorMessage && (<p className="error-message">{errorMessage}</p>)}
             <div className="flex-buttons">
@@ -98,6 +98,6 @@ const CreateProjectPage = () => {
       </div>
       
     );
-}
+  }
   
-export default CreateProjectPage;
+  export default SprintCreatePage;

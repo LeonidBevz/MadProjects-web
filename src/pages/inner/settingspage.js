@@ -1,13 +1,13 @@
 import React, {useState} from "react";
-import RightArrowIco from "../images/arrowrightico";
-import CrossIco from "../images/cross";
+import RightArrowIco from "../../images/arrowrightico";
+import CrossIco from "../../images/cross";
 import { useParams, useNavigate } from "react-router-dom";
-import useToken from "../hooks/useToken";
-import "./settingspage.css"
-import EditProjectModal from "../components/editproject";
-import DeleteProjectModal from "../components/deleteproject";
-import NewRepoModal from "../components/newRepo";
-import ReposTile from "../components/repostile";
+import useToken from "../../hooks/useToken";
+import EditProjectModal from "../../components/editproject";
+import DeleteProjectModal from "../../components/deleteproject";
+import NewRepoModal from "../../components/newRepo";
+import ReposTile from "../../components/repostile";
+import "../../css/settingspage.css"
 
 const SettingsPage = () => {
     const {project} = useParams()

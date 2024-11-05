@@ -1,14 +1,12 @@
 import React, {useState} from "react";
 import { useNavigate, Link } from "react-router-dom";
-import useToken from "../hooks/useToken";
-import "./profilepage.css"
-import RightArrowIco from "../images/arrowrightico";
+import useToken from "../../../hooks/useToken";
+import RightArrowIco from "../../../images/arrowrightico";
+import "../../../css/profilepage.css"
 
 const ProfilePage = () => {
     const {isNightTheme} = useToken()
-    const [username,setUsername] = useState("Kaelesty")
-    const [gitLink,setGitLink] = useState("https://github.com/Kaelesty")
-    const [EmailLink,setEmailLink] = useState("example@gmail.com")
+    const [data, setData] = useState({username: "Kaelesty", gitlink: "https://github.com/Kaelesty", EmailLink: "example@gmail.com"})
 
     const navigate = useNavigate()
   
@@ -23,20 +21,20 @@ const ProfilePage = () => {
                           <button className="profile-edit-but"/>
                         </Link>
                     </div>
-                    <p className="profile-username">{username}</p>
+                    <p className="profile-username">{data.username}</p>
                 </div>
                 <div>
                     <div className="link-container">
                         <p>GitHub: </p>
                         <div className="profile-link">
-                            <a href={gitLink}>{gitLink}</a>
+                            <a href={data.gitlink}>{data.gitlink}</a>
                             <div className="profile-sep"> </div>
                         </div>
                     </div>
                     <div className="link-container">
                         <p>Email: </p>
                         <div className="profile-link">
-                            <a href={`mailto:${EmailLink}`}>{EmailLink}</a>
+                            <a href={`mailto:${data.EmailLink}`}>{data.EmailLink}</a>
                             <div className="profile-sep"> </div>
                         </div>
                     </div>

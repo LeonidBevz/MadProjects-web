@@ -127,10 +127,10 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
 
     return (
         <div className="chat-window">
-            <div className="chat-top">
+            <header className="chat-top">
                 {isMobile && (<LeftArrowIco className="back-arr" color={isNightTheme ? "#d4d3cf" : "black"} onClick={onBackClick}/>)}
                 <h1>{chat.title}</h1>
-            </div>
+            </header>
             <div className="chat-center" ref={containerRef}>
             {groupedMessages.read.map((messagesADay,k)=>(<div key={k}>
                 <p className="date-sep">{messagesADay.date}</p>

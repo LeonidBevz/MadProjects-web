@@ -1,9 +1,9 @@
 import React, { useState} from 'react';
-import "./login.css"
-import LogoIco from '../images/logoico';
-import useToken from '../hooks/useToken';
-import StudentForm from '../components/studentform';
-import ProfessorForm from '../components/professorform';
+import LogoIco from '../../images/logoico';
+import useToken from '../../hooks/useToken';
+import StudentForm from '../../components/studentform';
+import ProfessorForm from '../../components/professorform';
+import "../../css/login.css"
 
 const RegisterPage = () => {
     const [email, setEmail] = useState('');

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate} from 'react-router-dom';
-import useToken from '../hooks/useToken';
-import "./login.css"
-import LogoIco from '../images/logoico';
+import useToken from '../../hooks/useToken';
+import LogoIco from '../../images/logoico';
+import "../../css/login.css"
 
 const WelcomePage = () => {
     const navigate = useNavigate()
