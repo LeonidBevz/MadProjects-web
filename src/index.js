@@ -19,8 +19,13 @@ import MessengerPage from "./pages/inner/messenger";
 import SettingsPage from "./pages/inner/settingspage";
 import CreateProjectPage from "./pages/outer/student/createProject";
 import StudentTopMenuPage from "./pages/outer/student/studenttopmenu";
-import TeacherTopMenuPage from "./components/teachertopmenu";
+import TeacherTopMenuPage from "./pages/outer/teacher/teachertopmenu";
 import "./css/index.css"
+import TeacherProfilePage from "./pages/outer/teacher/teacherprofile";
+import CurrentProjectsPage from "./pages/outer/teacher/currentprojects";
+import ProjectsGroupPage from "./pages/outer/teacher/projectsgroup";
+import ProjectsApprovePage from "./pages/outer/teacher/projectsapprove";
+import ProjectsRatePage from "./pages/outer/teacher/projectsrate";
 
 const App = () => { 
 
@@ -47,7 +52,13 @@ const App = () => {
           </Route>
           {/*Навигация вне проекта для преподавателя*/}
           <Route path="/teacher/" element={<TeacherTopMenuPage/>}>
-            <Route path='profile/' element={<ProfilePage/>}/>
+            <Route index element={<Navigate to="/teacher/profile" />}/>
+            <Route path='profile/' element={<TeacherProfilePage/>}/>
+            <Route path="current/" element={<CurrentProjectsPage/>}/>
+            <Route path="approve/" element={<ProjectsApprovePage/>}/>
+            <Route path="rate/" element={<ProjectsRatePage/>}/>
+            <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
+            
           </Route>
            {/*Навигация авторизации*/}
           <Route path='/welcome/' element={<WelcomePage/>}/>

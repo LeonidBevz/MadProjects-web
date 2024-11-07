@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useRef} from "react";
-import SunIMG from "./../images/sun.svg"
-import NightIMG from "./../images/night.svg"
-import LogoutIMG from "./../images/logout.svg"
-import ProfileIMG from "./../images/profile.svg"
-import MenuIMG from "./../images/menu.svg"
+import SunIMG from "../../../images/sun.svg"
+import NightIMG from "../../../images/night.svg"
+import LogoutIMG from "../../../images/logout.svg"
+import ProfileIMG from "../../../images/profile.svg"
+import MenuIMG from "../../../images/menu.svg"
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import useToken from "../hooks/useToken";
-import LogoIco from "../images/logoico";
-import {MessengerSocket} from "../urls"
+import useToken from "../../../hooks/useToken";
+import LogoIco from "../../../images/logoico";
+import {MessengerSocket} from "../../../urls"
 
 const TeacherTopMenuPage = () => {
   const {isNightTheme, onThemeChange, ws, sendAction, setIswsConnected} = useToken()
@@ -67,6 +67,10 @@ const TeacherTopMenuPage = () => {
     setIsSideBarOpen(false)
   }
 
+  const onProfileClick = () =>{
+    setIsSideBarOpen(false)
+    navigate("/teacher/profile")
+  }
  
     return (
       <div className="main-container">          
@@ -89,7 +93,7 @@ const TeacherTopMenuPage = () => {
                       <img src={NightIMG} alt="night" />
                     </div>
                 </div>
-                <button className="topmenu-button" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
+                <button className="topmenu-button" onClick={onProfileClick}><img src={ProfileIMG} alt="profile"/></button>
                 <button className="topmenu-button"><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
@@ -98,7 +102,7 @@ const TeacherTopMenuPage = () => {
         <div className={isSideBarOpen ? "bg-blur-shown" :"bg-blur-hidden"}/>
         <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown":"sidebar-container-hidden"}`} ref={sideMenuRef}>
           <div className="sidebar-user-info">
-            <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/teacher/profile")}}/>
+            <img src={profilepic} alt="profilepic" onClick={onProfileClick}/>
             <p>{username}</p>
           </div>
           <div className="sidemenu-buttons">

@@ -1,6 +1,7 @@
 .welcome-container {
     display: flex;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    min-height: 325px;
 }
 
 .welcome-right {

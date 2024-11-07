@@ -1,0 +1,78 @@
+.table-tile{
+    background-color: var(--card-color);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 180px;
+}
+.table-tile table {
+    width: 100%;
+    border-collapse: collapse; 
+    table-layout: auto;
+    min-width: 43rem;
+}
+  
+.table-tile th, td {
+    padding: 0.8rem 1rem; 
+    border: 1px solid var(--border-color);
+    text-align: left;
+    word-break: break-word;
+    white-space: pre-wrap;
+    max-width: 30rem;
+}
+  
+.table-tile th {
+    background-color: var(--card-color);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bg1{
+    background-color: var(--bg-color);
+}
+.bg2{
+    background-color: var(--card-color);
+}
+.table-butt-flex{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    overflow: visible !important;
+}
+.table-butt-flex button{
+    color: var(--alt-text-color);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+.approve-butt{
+    background-color: var(--main-green-color);
+}
+.deny-butt{
+    background-color: var(--main-red-color);
+}
+.table-rate-flex{
+    min-width: 150px;
+    display: flex;
+    gap: 5px;
+}
+.conf-butt{
+    width: 36px;
+    height: 36px;
+    padding: 9px;
+    border: none;
+    background-color: var(--main-green-color);
+    border-radius: 10px;
+    cursor: pointer;
+}
+@media (width < 47rem) {
+    .table-tile{
+        overflow: auto;
+    }
+    .table-tile table {
+        margin-bottom: 160px;
+    }
+}

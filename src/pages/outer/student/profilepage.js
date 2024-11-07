@@ -6,7 +6,7 @@ import "../../../css/profilepage.css"
 
 const ProfilePage = () => {
     const {isNightTheme} = useToken()
-    const [data, setData] = useState({username: "Kaelesty", gitlink: "https://github.com/Kaelesty", EmailLink: "example@gmail.com"})
+    const [data, setData] = useState({username: "Бунделев Илья Иииигоревич", gitlink: "https://github.com/Kaelesty", EmailLink: "example@gmail.com", group: "4215"})
 
     const navigate = useNavigate()
   
@@ -22,6 +22,7 @@ const ProfilePage = () => {
                         </Link>
                     </div>
                     <p className="profile-username">{data.username}</p>
+                    <p>Группа {data.group}</p>
                 </div>
                 <div>
                     <div className="link-container">
