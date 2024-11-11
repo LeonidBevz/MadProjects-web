@@ -31,6 +31,11 @@ const TopMenuPage = () => {
         projectId: 1,
       });
       setIswsConnected(true)
+      console.log('WebSocket connected');
+    }
+
+    ws.current.onerror = (error) =>{
+      console.error("WebSocket error:", error);
     }
 
     ws.current.onclose = () => {

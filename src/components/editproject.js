@@ -38,25 +38,25 @@ const EditProjectModal = ({onConfirm, onCancel, newTitle, newDescription, setNew
     return (
       <div className="settings-modal" ref={container}>
         <form onSubmit={handleSubmit}>
-        <h2 className="modal-edit-text">Название</h2>
-        <input
-          value={newTitle}
-          onChange={handleTitleChange}
-          maxLength={32}
-          required
-        />
-        <h2>Описание</h2>
-        <textarea
-          value={newDescription}
-          onChange={handleDescriptionChange}
-          maxLength={1000}
-          required
-        />
-
-        <div className="settings-flex-butt">
-          <button type="submit">Сохранить</button>
-          <button type="button" onClick={onCancel}>Отмана</button>
-        </div>
+          <h2 className="modal-edit-text">Название</h2>
+          <input
+            value={newTitle}
+            onChange={handleTitleChange}
+            maxLength={32}
+            required
+          />
+          <h2>Описание</h2>
+          <textarea
+            value={newDescription}
+            onChange={handleDescriptionChange}
+            maxLength={1000}
+            required
+          />
+  
+          <div className="settings-flex-butt">
+            <button type="submit">Сохранить</button>
+            <button type="button" onClick={onCancel}>Отмана</button>
+          </div>
         </form>
       </div>
     )

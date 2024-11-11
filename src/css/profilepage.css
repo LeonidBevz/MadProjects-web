@@ -1,3 +1,14 @@
+.profile-page{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 50px);
+    padding: 0rem 1rem;
+    padding-bottom: 20px;
+}
 .profile-top-menu{
     width: 100%;
     height: 45px;

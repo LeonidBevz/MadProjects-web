@@ -1,5 +1,6 @@
 import React from "react";
 import Table from "../../../components/table";
+import EmptyTable from "../../../components/emptytable";
 
 const ProjectsRatePage = () => {
     const titles = [
@@ -35,7 +36,8 @@ const ProjectsRatePage = () => {
       <div className="info-page">  
         <div className="info-container">
             <h2>Оценивание проектов</h2>       
-            <Table titles={titles} data={table} onRate={onRate}/>
+            {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, одобрите их "} linktext={"тут"} linkto={"/teacher/approve"}/> : <Table titles={titles} data={table} onRate={onRate}/>}  
+            
         </div>
       </div>
     );

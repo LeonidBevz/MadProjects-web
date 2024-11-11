@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "../../../components/table";
 import { useParams } from "react-router-dom";
+import EmptyTable from "../../../components/emptytable";
 
 const ProjectsGroupPage = () => {
     const { group } = useParams();
@@ -31,8 +32,9 @@ const ProjectsGroupPage = () => {
     return (
       <div className="info-page">  
         <div className="info-container">
-            <h2>{group}</h2>       
-            <Table titles={titles} data={table}/>
+            <h2>{group}</h2>
+            {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, одобрите их "} linktext={"тут"} linkto={"/teacher/approve"}/> : <Table titles={titles} data={table}/>}       
+            
         </div>
       </div>
     );

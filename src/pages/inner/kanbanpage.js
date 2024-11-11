@@ -53,7 +53,7 @@ const KanbanPage = () => {
   const {isNightTheme, ws, sendAction, iswsConnected } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
-  const [cardToEdit, setCardToEdit] = useState(null)//убрать когда будет удаление по id
+  const [cardToEdit, setCardToEdit] = useState(null)
   const [cardToEditId, setCardToEditId] = useState(null)
   const [rowToEditId, setRowToEditId] = useState(null)
   const [newName, setNewName] = useState("")

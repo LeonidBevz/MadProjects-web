@@ -1,5 +1,6 @@
 import React from "react";
 import Table from "../../../components/table";
+import EmptyTable from "../../../components/emptytable";
 
 const ProjectsApprovePage = () => {
     const titles = [
@@ -38,7 +39,8 @@ const ProjectsApprovePage = () => {
       <div className="info-page">  
         <div className="info-container">
             <h2>Одобрение тем проектов</h2>       
-            <Table titles={titles} data={table} onApprove={onApprove} onDeny={onDeny}/>
+            {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, создайте группу проектов в профиле, и ожидайте заявок от студентов."}/> : <Table titles={titles} data={table} onApprove={onApprove} onDeny={onDeny}/>}       
+            
         </div>
       </div>
     );

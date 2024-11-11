@@ -11,14 +11,7 @@
 .activity-page-container{
     padding-bottom: 10px;
 }
-.activity-page h2{
-    font-size: 1.8rem;
-    padding-left: 2rem;
-    padding-top: 20px;
-    margin: 0;
-    margin-bottom: 10px;
-    color: var(--main-text-color)
-}
+
 .commits-tile{
     width: 720px;
     display: flex;

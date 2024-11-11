@@ -20,11 +20,15 @@
     white-space: pre-wrap;
     max-width: 30rem;
 }
+.table-tile td span {
+    color: var(--main-text-color);
+}
   
 .table-tile th {
     background-color: var(--card-color);
     font-weight: bold;
     cursor: pointer;
+    color: var(--main-text-color)
 }
 
 .bg1{
@@ -74,5 +78,10 @@
     }
     .table-tile table {
         margin-bottom: 160px;
+    }
+}
+@media (width >= 47rem) {
+    .table-tile{
+        min-width: 45rem;
     }
 }

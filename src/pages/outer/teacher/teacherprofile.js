@@ -1,17 +1,28 @@
-import React, {useState} from "react";
+import React, {useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useToken from "../../../hooks/useToken";
 import RightArrowIco from "../../../images/arrowrightico";
+import CreateGroupModal from "../../../components/creategroupmodal";
 import "../../../css/profilepage.css"
 
 const TeacherProfilePage = () => {
     const {isNightTheme} = useToken()
     const [data, setData] = useState({username: "Чернышев Станислав Андреевич", EmailLink: "example@gmail.com", rank: "Доцент, канд. тех. наук."})
-
+    const [groups, setGroups] = useState(["Технологии программирования 2024"])
+    const [modalWindow, setModalWindow] = useState(0)
     const navigate = useNavigate()
+    
+    const onGroupCreate = (name) =>{
+        console.log("create group request", name)
+        //if (response.status!==200)return 
+        setGroups([name, ...groups]);
+        setModalWindow(0)
+    }
   
     return (
-      <div className="profile-page">          
+      <div className="profile-page">
+        <div className={modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
+        {modalWindow === 1 && (<CreateGroupModal onCancel={()=>{setModalWindow(0)}} onConfirm={onGroupCreate}/>)}          
         <div className="profile-page-content">
             <div className="profile-info">
                 <div className="profile-pic-container">
@@ -37,19 +48,19 @@ const TeacherProfilePage = () => {
             <h2>Группы проектов</h2>
             <div className="profile-projects">
             <div className="profile-projects-item">
-                    <div className="profile-projects-content" onClick={()=>{}}>
+                    <div className="profile-projects-content" onClick={()=>{setModalWindow(1)}}>
                         <p>Создать группу...</p>
                         <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="profile-projects-separator"></div>
                 </div>
-                <div className="profile-projects-item">
-                    <div className="profile-projects-content" onClick={()=>navigate("/teacher/group/Технологии программирования 2024/")}>
-                        <p>Технологии программирования 2024</p>
+                {groups.map((group, index)=>(<div className="profile-projects-item" key={index}>
+                    <div className="profile-projects-content" onClick={()=>navigate(`/teacher/group/${group}/`)}>
+                        <p>{group}</p>
                         <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="profile-projects-separator"></div>
-                </div>
+                </div>))}
             </div>
         </div>
       </div>

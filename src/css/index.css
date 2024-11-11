@@ -35,6 +35,9 @@ body p{
 
 body h2{
   font-weight: 600;
+  font-size: 1.8rem;
+  margin: 20px 0 10px 2rem;
+  color: var(--main-text-color)
 }
 
 code {

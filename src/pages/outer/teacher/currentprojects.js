@@ -1,5 +1,6 @@
 import React from "react";
 import Table from "../../../components/table";
+import EmptyTable from "../../../components/emptytable";
 
 const CurrentProjectsPage = () => {
     const titles = [
@@ -8,7 +9,6 @@ const CurrentProjectsPage = () => {
         {name: "Команда", key: "formatedteam",type: "text"}, 
         {name: "Дата создания", key: "formateddate",type: "text"}
     ]
-
     const table = [
         {
             name: "Audionautica", 
@@ -28,12 +28,13 @@ const CurrentProjectsPage = () => {
             formateddate: "29.03.2024"
         }
     ]
+   
 
     return (
       <div className="info-page">  
         <div className="info-container">
-            <h2>Текущие проекты</h2>       
-            <Table titles={titles} data={table}/>
+            <h2>Текущие проекты</h2>     
+            {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, одобрите их "} linktext={"тут"} linkto={"/teacher/approve"}/> : <Table titles={titles} data={table}/>}    
         </div>
       </div>
     );
