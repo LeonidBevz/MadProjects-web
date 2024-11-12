@@ -43,8 +43,8 @@ const SprintPage = () => {
                 <EditIco 
                   className="edit" color={isNightTheme ? "#d4d3cf" : "black"} 
                   onClick={()=>{navigate("edit/", {
-                  state: { name: sprint, description: data.description, endDate: data.endDate}
-                })}}/>
+                    state: { name: sprint, description: data.description, endDate: data.endDate}
+                  })}}/>
               </div>
               
               <div className="sprint-info-tile">

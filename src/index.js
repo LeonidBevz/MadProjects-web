@@ -26,6 +26,8 @@ import CurrentProjectsPage from "./pages/outer/teacher/currentprojects";
 import ProjectsGroupPage from "./pages/outer/teacher/projectsgroup";
 import ProjectsApprovePage from "./pages/outer/teacher/projectsapprove";
 import ProjectsRatePage from "./pages/outer/teacher/projectsrate";
+import StudentProfileEditPage from "./pages/outer/student/editprofile";
+import ProfessorProfileEditPage from "./pages/outer/teacher/editprofile";
 
 const App = () => { 
 
@@ -49,6 +51,7 @@ const App = () => {
           <Route path="/" element={<StudentTopMenuPage/>}>
             <Route path='profile/' element={<ProfilePage/>}/>
             <Route path='createProject/' element={<CreateProjectPage/>}/>
+            <Route path="profile/edit" element={<StudentProfileEditPage/>}/>
           </Route>
           {/*Навигация вне проекта для преподавателя*/}
           <Route path="/teacher/" element={<TeacherTopMenuPage/>}>
@@ -58,7 +61,7 @@ const App = () => {
             <Route path="approve/" element={<ProjectsApprovePage/>}/>
             <Route path="rate/" element={<ProjectsRatePage/>}/>
             <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
-            
+            <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
           </Route>
            {/*Навигация авторизации*/}
           <Route path='/welcome/' element={<WelcomePage/>}/>

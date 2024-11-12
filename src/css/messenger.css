@@ -101,7 +101,7 @@
     max-width: 100vw;
     overflow: hidden;
     z-index: 1;
-    transition: box-shadow 1s ease;
+    transition: box-shadow 1s ease !important;
 }
 .chat-top h1{ 
     font-size: 2rem;

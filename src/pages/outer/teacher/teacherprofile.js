@@ -28,7 +28,7 @@ const TeacherProfilePage = () => {
                 <div className="profile-pic-container">
                     <div className="prifile-image">
                         <img className="profile-pic" src="https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg" alt="profile"/>
-                        <Link to="/profile/edit/" >
+                        <Link to="edit/" >
                           <button className="profile-edit-but"/>
                         </Link>
                     </div>
