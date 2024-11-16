@@ -101,6 +101,7 @@
     height: 2px;
     background: var(--main-gradient);
 }
+
 @media (width < 730px) {
     .commits-controls-container{
         display: block;
@@ -114,9 +115,11 @@
     }
 }
 
-@media (width >= 1460px){
+@media (width >= 1665px){
     .activity-page-container{
        display: flex;
        gap: 1rem
     }
+
 }
+

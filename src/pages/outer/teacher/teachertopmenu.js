@@ -17,10 +17,21 @@ const TeacherTopMenuPage = () => {
   const navigate = useNavigate()
   const sideMenuRef = useRef()
   const buttonRef = useRef()
+  const isWide = useRef(window.innerWidth>1100)
+
+  const handleResize = () => {
+    isWide.current = window.innerWidth > 1100;
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    
+    return ()=>{window.removeEventListener('resize', handleResize)}
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sideMenuRef.current  && buttonRef.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
+      if (sideMenuRef.current  && buttonRef.current && !isWide.current &&  !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
         setIsSideBarOpen(false);
       }
     };
@@ -38,7 +49,9 @@ const TeacherTopMenuPage = () => {
 
   const onSideMenuClick = (goto)=>{
     navigate(goto)
-    setIsSideBarOpen(false)
+    if (!isWide){
+      setIsSideBarOpen(false)    
+    }
   }
 
   const onProfileClick = () =>{
@@ -73,30 +86,31 @@ const TeacherTopMenuPage = () => {
             </div>
           </div>
         </div>
-        <div className={isSideBarOpen ? "bg-blur-shown" :"bg-blur-hidden"}/>
-        <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown":"sidebar-container-hidden"}`} ref={sideMenuRef}>
-          <div className="sidebar-user-info">
-            <img src={profilepic} alt="profilepic" onClick={onProfileClick}/>
-            <p>{username}</p>
+        <div className="page-content">
+        <div className={isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"}/>
+        <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWide.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
+            <div className="sidebar-user-info">
+              <img src={profilepic} alt="profilepic" onClick={onProfileClick}/>
+              <p>{username}</p>
+            </div>
+            <div className="sidemenu-buttons">
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/current/`)}>
+                Текущие проекты
+              </div>
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/rate/`)}>
+                Выставление оценок
+              </div>
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/approve/`)}>
+                Одобрение проектов
+              </div>
+              <div className="sidebar-separator"/>
+            </div>
           </div>
-          <div className="sidemenu-buttons">
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/current/`)}>
-              Текущие проекты
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/rate/`)}>
-              Выставление оценок
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/approve/`)}>
-              Одобрение проектов
-            </div>
-            <div className="sidebar-separator"/>
-          </div>
-          
+          <Outlet/>
         </div>
-        <Outlet/>
 
       </div>
       

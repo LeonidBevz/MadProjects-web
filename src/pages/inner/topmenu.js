@@ -13,17 +13,28 @@ import "../../css/topmenu.css"
 const TopMenuPage = () => {
   const {isNightTheme, onThemeChange} = useToken()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
+  const isWide = useRef(window.innerWidth > 1100)
   const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
   const username = "Бевз Леонид Александрович"
   const project = "audionautica"
   const navigate = useNavigate()
-
+  
   const sideMenuRef = useRef()
   const buttonRef = useRef()
 
+  const handleResize = () => {
+    isWide.current = window.innerWidth > 1100;
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    
+    return ()=>{window.removeEventListener('resize', handleResize)}
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sideMenuRef.current  && buttonRef.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
+      if (sideMenuRef.current  && buttonRef.current && !isWide.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
         setIsSideBarOpen(false);
       }
     };
@@ -41,10 +52,11 @@ const TopMenuPage = () => {
 
   const onSideMenuClick = (goto)=>{
     navigate(goto)
-    setIsSideBarOpen(false)
+    if (!isWide){
+      setIsSideBarOpen(false)
+    }
   }
 
- 
     return (
       <div className="main-container">          
         <div className="top-menu">
@@ -72,38 +84,39 @@ const TopMenuPage = () => {
             </div>
           </div>
         </div>
-        <div className={isSideBarOpen ? "bg-blur-shown" :"bg-blur-hidden"}/>
-        <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown":"sidebar-container-hidden"}`} ref={sideMenuRef}>
-          <div className="sidebar-user-info">
-            <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/profile")}}/>
-            <p>{username}</p>
+        <div className="page-content">
+          <div className={isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"}/>
+          <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWide.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
+            <div className="sidebar-user-info">
+              <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/profile")}}/>
+              <p>{username}</p>
+            </div>
+            <div className="sidemenu-buttons">
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/activity/`)}>
+                Активность
+              </div>
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/messenger/`)}>
+                Мессенджер
+              </div>
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/info/`)}>
+                Информация
+              </div>
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/kanban/`)}>
+                Канбан
+              </div>
+              <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/settings/`)}>
+                Настройки
+              </div>
+            <div className="sidebar-separator-end"/>
+            </div>
           </div>
-          <div className="sidemenu-buttons">
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/activity/`)}>
-              Активность
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/messenger/`)}>
-              Мессенджер
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/info/`)}>
-              Информация
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/kanban/`)}>
-              Канбан
-            </div>
-            <div className="sidebar-separator"/>
-            <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${project}/settings/`)}>
-              Настройки
-            </div>
-          <div className="sidebar-separator-end"/>
-          </div>
-          
+          <Outlet/>
         </div>
-        <Outlet/>
 
       </div>
       

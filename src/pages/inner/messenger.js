@@ -14,7 +14,7 @@ const MessengerPage = () => {
     const [groupedMessages, setGroupedMessages] = useState([])
     const groupedMessagesRef = useRef(groupedMessages)
     const activeChatRef = useRef(activeChat)
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1240);
     const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
     const chatContainer = useRef(null)
 
@@ -31,7 +31,7 @@ const MessengerPage = () => {
     } 
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1000);
+      setIsMobile(window.innerWidth < 1240);
       setIsSuperWide(window.innerWidth > 1900)
     };
 
