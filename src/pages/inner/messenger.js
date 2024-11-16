@@ -5,7 +5,7 @@ import useToken from "../../hooks/useToken";
 import "../../css/messenger.css"
 
 const MessengerPage = () => {
-    const {ws, sendAction, iswsConnected} = useToken();
+    const {sendAction, iswsConnected} = useToken();
     const [activeChat, setActiveChat] = useState(null);
     const [isChatListVisible, setChatListVisible] = useState(true);
     const [chatsList,setChatList] = useState([])
@@ -39,23 +39,26 @@ const MessengerPage = () => {
       window.addEventListener('resize', handleResize);
       
     }, []);
-
+   
     useEffect(()=>{
-      if (ws.current && iswsConnected){
-        sendAction('Messenger.Start');
-        sendAction("Messenger.RequestChatsList",{
-          projectId: 1
-        })
-        console.log('Messages ws subscribed');
-      
-        const currentWs = ws.current;
+      if (!navigator.serviceWorker.controller) return
+      if (!iswsConnected) return
 
-        currentWs.onmessage = (event) => {
-          const message = JSON.parse(event.data);
+      sendAction('Messenger.Start');
+      sendAction("Messenger.RequestChatsList",{
+        projectId: 1
+      })
+      console.log('Messages ws subscribed');
+
+      const onmessage = (event )=>{
+        const SWmessage = event.data;
+        if (SWmessage.type === 'RECEIVE_MESSAGE') {
+          const message = JSON.parse(SWmessage.data)
           if (message.type ==="entities.Action.Messenger.SendChatsList"){
+            console.log(message.chats)
             setChatList(message.chats)
           }
-          else if (message.type ==="entities.Action.Messenger.SendChatMessages"){
+          else if (message.type === "entities.Action.Messenger.SendChatMessages"){
             setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
           }
           else if(message.type === "entities.Action.Messenger.NewMessage") {
@@ -66,20 +69,18 @@ const MessengerPage = () => {
           }
           else if(message.type ==="entities.Action.Messenger.UpdateChatUnreadCount"){
             updateUnreadCount(message.chatId, message.count)
-          }
-        };
+          };
+        }
+      }
+      navigator.serviceWorker.addEventListener('message', onmessage)
 
-        return () => {
-          window.removeEventListener('resize', handleResize);
-          if (currentWs) {
-            sendAction('Messenger.Stop');
-            console.log("Messages ws unsubscribed")
-          }
-        };
-      };  
-
-  
-      
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        navigator.serviceWorker.removeEventListener('message', onmessage)
+        sendAction('Messenger.Stop');
+        console.log("Messages ws unsubscribed")
+        
+      };
     },[iswsConnected])
     
     useEffect(()=>{

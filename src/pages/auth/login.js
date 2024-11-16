@@ -10,11 +10,11 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const {isNightTheme} = useToken()
+    const {isNightTheme,  saveUserData} = useToken()
 
     const handleSubmit = (event) =>{
         event.preventDefault();
-        setErrorMessage("Бека нет")
+        saveUserData({name: "", id: 1})
         navigate("/profile/")
     } 
     const handleEmailChange = (event) => {

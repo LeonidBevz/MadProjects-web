@@ -1,4 +1,4 @@
-import {BackURL} from "../urls";
+import {BackURL, MessengerSocket} from "../urls";
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
@@ -9,22 +9,67 @@ export function useToken() {
   }
 
 export function TokenProvider({children}){
-    const [username, setUsername] = useState("")
+    const [userData, setUserData] = useState(localStorage.getItem('userdata') || null)
     const [isNightTheme, setIsNightTheme] = useState(localStorage.getItem('theme') === 'true' || false)
-    const ws = useRef(null)
+    const ws = useRef(null);
     const [iswsConnected, setIswsConnected] = useState(false)
-
-    const sendAction = (actionType, params) => {
-      const action = { type: "entities.Intent." + actionType, ...params };
-      ws.current.send(JSON.stringify(action));
-    };
-
-    useEffect(()=>{
-      const lastUsername = localStorage.getItem('username')
-      if (lastUsername){
-        setUsername(lastUsername)
+    const isSWRegistered = useRef(false)
+    const [userId, setUserId] = useState(parseInt(localStorage.getItem('userid')) || null) 
+    
+    useEffect(() => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker зарегистрирован');
+            isSWRegistered.current=true
+          })
+          .catch(error => {
+            console.error('Ошибка регистрации Service Worker:', error);
+          });
+    
+        // Прослушивание сообщений от Service Worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          const message = event.data;
+          if (message.type === 'LOG') {
+            console.log('Лог от Service Worker:', message);
+          }
+          if (message.type === 'RECEIVE_MESSAGE') {
+            
+          }
+          if (message.type ==='socket_opened'){
+            navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: '3', projectId: 1})});
+            setIswsConnected(true)
+          }
+          if (message.type ==='socket_already_opened'){
+            setIswsConnected(true)
+          }
+         
+          if (message.type ==='socket_closed'){
+            setIswsConnected(false)
+          }
+        });
+      } else {
+        console.log('Service Worker не поддерживается в этом браузере');
       }
-    },[])
+    }, []);
+   
+    useEffect (()=>{
+      if (!isSWRegistered) return
+      if (!navigator.serviceWorker.controller) return
+      if (userId){
+        console.log("try start")
+        navigator.serviceWorker.controller.postMessage({ type: 'start', url: MessengerSocket});
+        return
+      }
+      else {
+        navigator.serviceWorker.controller.postMessage({ type: 'close'});
+        isSWRegistered.current=false
+      }
+    },[userId, isSWRegistered])
+  
+    const sendAction = (actionType, params) => {
+      navigator.serviceWorker.controller.postMessage({type: "SEND_MESSAGE", data:  JSON.stringify({ type: "entities.Intent." + actionType, ...params })});
+    };    
 
     useEffect(() => {
       if (!isNightTheme) {
@@ -89,23 +134,33 @@ export function TokenProvider({children}){
         localStorage.setItem('refresh', token);
       };
 
-    const saveUsername = (username) =>{
-      localStorage.setItem('username', username);
-      setUsername(username);
+    const saveUserData = (data) =>{
+      localStorage.setItem('userdata', data);
+
+      if (!data.id){
+        console.log("wrong user data")
+        return
+      }
+      localStorage.setItem('userid', data.id);
+      setUserId(parseInt(data.id))
     }
     const updateUsername = async (token) => {
+      
+      return //old
       const newUsername = await getUsername(token)
       localStorage.setItem('username', newUsername);
-      setUsername(newUsername);
       console.log("new username: ",newUsername)
     }
   
-    const removeTokens = () => {
-      logOut(localStorage.getItem("refresh"),localStorage.getItem("access"))
+    const onLogout = () => {
+      //logOut(localStorage.getItem("refresh"),localStorage.getItem("access"))
       localStorage.removeItem('access');
       localStorage.removeItem('refresh');
-      localStorage.removeItem('username');
-      setUsername(null);
+      setUserData(null)
+      localStorage.removeItem('userdata');
+      setUserId(null)
+      localStorage.removeItem('userid');
+      window.location.href = '/login/';
     };
 
     const api = axios.create({
@@ -159,15 +214,16 @@ export function TokenProvider({children}){
     const contextValue= {
       saveAccessToken,
       saveRefreshToken,
-      removeTokens,    
-      username,
-      saveUsername,
-      updateUsername,
+      onLogout,    
+      userData,
+      userId,
+      saveUserData,
       api,
       isNightTheme, setIsNightTheme,
       onThemeChange,
       ws, sendAction,
-      iswsConnected, setIswsConnected
+      iswsConnected, setIswsConnected,
+      isSWRegistered
     }
     return (
         <TokenContext.Provider value={contextValue}>

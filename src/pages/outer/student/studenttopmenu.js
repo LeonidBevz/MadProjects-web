@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import useToken from "../../../hooks/useToken";
 
 const StudentTopMenuPage = () => {
-  const {isNightTheme, onThemeChange} = useToken()
+  const {isNightTheme, onThemeChange, onLogout} = useToken()
   const navigate = useNavigate()
  
     return (
@@ -32,7 +32,7 @@ const StudentTopMenuPage = () => {
                     </div>
                 </div>
                 <button className="topmenu-button" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
-                <button className="topmenu-button"><img src={LogoutIMG} alt="logout"/></button>
+                <button className="topmenu-button" onClick={onLogout}><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
           </div>

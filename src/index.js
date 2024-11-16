@@ -29,13 +29,13 @@ import ProjectsRatePage from "./pages/outer/teacher/projectsrate";
 import StudentProfileEditPage from "./pages/outer/student/editprofile";
 import ProfessorProfileEditPage from "./pages/outer/teacher/editprofile";
 
-const App = () => { 
+const App = () => {  
 
   return (
     <TokenProvider>
       <Router> 
         <Routes> 
-          <Route index element={<Navigate to="/welcome" />} />
+          <Route index element={<Navigate to="/profile" />} />
           {/*Навигация внутри проекта*/}
           <Route path="/" element={<TopMenuPage/>}>
             <Route path=":project/activity/" element={<ActivityPage/>}/>

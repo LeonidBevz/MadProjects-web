@@ -8,11 +8,10 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import useToken from "../../hooks/useToken";
 import LogoIco from "../../images/logoico";
-import {MessengerSocket} from "../../urls"
 import "../../css/topmenu.css"
 
 const TopMenuPage = () => {
-  const {isNightTheme, onThemeChange, ws, sendAction, setIswsConnected} = useToken()
+  const {isNightTheme, onThemeChange} = useToken()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
   const username = "Бевз Леонид Александрович"
@@ -21,35 +20,6 @@ const TopMenuPage = () => {
 
   const sideMenuRef = useRef()
   const buttonRef = useRef()
-
-  useEffect(()=>{
-    ws.current = new WebSocket(MessengerSocket);
-
-    ws.current.onopen = () => {
-      sendAction('Authorize', {
-        jwt: '3',
-        projectId: 1,
-      });
-      setIswsConnected(true)
-      console.log('WebSocket connected');
-    }
-
-    ws.current.onerror = (error) =>{
-      console.error("WebSocket error:", error);
-    }
-
-    ws.current.onclose = () => {
-      console.log('WebSocket disconnected');
-      setIswsConnected(false)
-    };
-
-    return () => {
-      if (ws.current) {
-        ws.current.close()
-      }
-    };
-
-  },[])
 
   useEffect(() => {
     const handleClickOutside = (event) => {

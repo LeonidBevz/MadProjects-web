@@ -75,27 +75,30 @@ const KanbanPage = () => {
   } 
   
   useEffect(()=>{
-    if (ws.current && iswsConnected){
-      sendAction('Kanban.Start');
-      sendAction("Kanban.GetKanban")
-      console.log('Kanban ws subscribed');
-    
-      const currentWs = ws.current;
+    if (!navigator.serviceWorker.controller) return
+    if (!iswsConnected) return
 
-      currentWs.onmessage = (event) => {
-          const message = JSON.parse(event.data);
-          if (message.type === "entities.Action.Kanban.SetState") {
-              refactorKanbanData(message);
-          }
-      };
+    sendAction('Kanban.Start');
+    sendAction("Kanban.GetKanban")
+    console.log('Kanban ws subscribed');
 
-      return () => {
-          if (currentWs) {
-              sendAction('Kanban.Stop');
-              console.log("Kanban ws unsubscribed");
-          }
-      };
-    };  
+    onmessage = (event) =>{
+      const SWmessage = event.data;
+      if (SWmessage.type === 'RECEIVE_MESSAGE') {
+        const message = JSON.parse(SWmessage.data)
+        if (message.type === "entities.Action.Kanban.SetState") {
+          refactorKanbanData(message);
+        }
+      }
+    }
+    navigator.serviceWorker.addEventListener('message', onmessage)
+
+    return () => {
+      navigator.serviceWorker.removeEventListener("message", onmessage)
+      sendAction('Kanban.Stop');
+      console.log("Kanban ws unsubscribed")
+      ;
+    };
   // eslint-disable-next-line   
   },[iswsConnected])
 

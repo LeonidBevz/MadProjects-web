@@ -6,9 +6,8 @@ import "../../../css/profilepage.css"
 
 const ProfilePage = () => {
     const {isNightTheme} = useToken()
-    const [data, setData] = useState({username: "Бунделев Илья Иииигоревич", gitlink: "https://github.com/Kaelesty", EmailLink: "example@gmail.com", group: "4215"})
-
     const navigate = useNavigate()
+    const [data, setData] = useState({username: "Бунделев Илья Иииигоревич", gitlink: "https://github.com/Kaelesty", EmailLink: "example@gmail.com", group: "4215"})
   
     return (
       <div className="profile-page">          
