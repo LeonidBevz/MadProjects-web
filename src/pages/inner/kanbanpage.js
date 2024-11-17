@@ -50,7 +50,7 @@ function formatDate(milliseconds) {
 }
 
 const KanbanPage = () => {
-  const {isNightTheme, ws, sendAction, iswsConnected } = useToken();
+  const {isNightTheme, sendAction, iswsConnected, projectId } = useToken();
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
   const [cardToEdit, setCardToEdit] = useState(null)
@@ -78,15 +78,15 @@ const KanbanPage = () => {
     if (!navigator.serviceWorker.controller) return
     if (!iswsConnected) return
 
-    sendAction('Kanban.Start');
-    sendAction("Kanban.GetKanban")
+    sendAction('Kanban.Start', {projectId: projectId});
+    sendAction("Kanban.GetKanban", {projectId: projectId})
     console.log('Kanban ws subscribed');
 
     onmessage = (event) =>{
       const SWmessage = event.data;
       if (SWmessage.type === 'RECEIVE_MESSAGE') {
         const message = JSON.parse(SWmessage.data)
-        if (message.type === "entities.Action.Kanban.SetState") {
+        if (message.projectId===projectId && message.type === "entities.Action.Kanban.SetState") {
           refactorKanbanData(message);
         }
       }
@@ -95,7 +95,7 @@ const KanbanPage = () => {
 
     return () => {
       navigator.serviceWorker.removeEventListener("message", onmessage)
-      sendAction('Kanban.Stop');
+      sendAction('Kanban.Stop', {projectId: projectId});
       console.log("Kanban ws unsubscribed")
       ;
     };
@@ -112,6 +112,7 @@ const KanbanPage = () => {
 
     sendAction("Kanban.CreateColumn",{
       name: newName,
+      projectId: projectId
     })
 
     setIsDeleteWindowShown(0)
@@ -127,6 +128,7 @@ const KanbanPage = () => {
     setCardsCount(cardsCount+1)    
 
     sendAction("Kanban.CreateKard",{
+      projectId: projectId,
       name: newName,
       desc: "Создано на огрызке сайта без описания",
       columnId: rowId
@@ -136,6 +138,7 @@ const KanbanPage = () => {
 
   const deleteRow = (rowId) => {
     sendAction("Kanban.DeleteColumn", {
+      projectId: projectId,
       id: rowId
     })
     setIsDeleteWindowShown(0)
@@ -148,6 +151,7 @@ const KanbanPage = () => {
 
   const deleteCard = (cardId) => {
     sendAction("Kanban.DeleteKard", {
+      projectId: projectId,
       id: cardId
     })
     setIsDeleteWindowShown(0)
@@ -167,6 +171,7 @@ const KanbanPage = () => {
   }
   const setRowName = (rowId, newName) => {
     sendAction("Kanban.UpdateColumn", {
+      projectId: projectId,
       id: rowId,
       name: newName
     })
@@ -182,6 +187,7 @@ const KanbanPage = () => {
 
   const setCardName = (cardId, newName) =>{   
     sendAction("Kanban.UpdateKard", {
+      projectId: projectId,
       id: cardId,
       name: newName,
       desc: null
@@ -212,6 +218,7 @@ const KanbanPage = () => {
       setCards(newColumnOrder)
 
       sendAction("Kanban.MoveColumn", {
+        projectId: projectId,
         id: cards[source.index].id,
         newPosition: destination.index
       })
@@ -240,6 +247,7 @@ const KanbanPage = () => {
         )
       );
       sendAction("Kanban.MoveKard", {
+        projectId: projectId,
         id: startColumn.kards[source.index].id,
         columnId: startColumn.id,
         newColumnId: finishColumn.id,
@@ -272,6 +280,7 @@ const KanbanPage = () => {
     );
     
     sendAction("Kanban.MoveKard", {
+      projectId: projectId,
       id: startColumn.kards[source.index].id,
       columnId: startColumn.id,
       newColumnId: finishColumn.id,
@@ -281,7 +290,7 @@ const KanbanPage = () => {
   };
 
   return (
-    <div className="kanban-page">
+    <div className="kanban-page" id="page">
       <div className={isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
       {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}

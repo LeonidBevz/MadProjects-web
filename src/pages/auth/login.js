@@ -10,7 +10,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const {isNightTheme,  saveUserData} = useToken()
+    const {isNightTheme,  saveUserData, iswsConnected} = useToken()
 
     const handleSubmit = (event) =>{
         event.preventDefault();
@@ -24,7 +24,9 @@ const LoginPage = () => {
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
-
+    if(iswsConnected){//waiting socket to disconnect
+        <div>Wait, Logging out</div>
+    }
     return (
       <div className="welcome-page">          
             <div className="welcome-container">

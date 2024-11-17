@@ -49,7 +49,7 @@ const TeacherTopMenuPage = () => {
 
   const onSideMenuClick = (goto)=>{
     navigate(goto)
-    if (!isWide){
+    if (!isWide.current){
       setIsSideBarOpen(false)    
     }
   }

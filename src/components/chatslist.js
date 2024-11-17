@@ -43,7 +43,7 @@ const ChatsList = ({chats, onChatSelect}) => {
     const {isNightTheme} = useToken()
   
     return (     
-        <div className="chats-list">
+        <div className="chats-list" id="chat-list">
             {chats.map((chat,index)=>( <div className="chat-list-tile" key={index} onClick={()=>onChatSelect(chat)}>
               {chat.chatType === "Public" && <BookmarksIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
               {chat.chatType === "MembersPrivate" && <MembersPrivateIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}

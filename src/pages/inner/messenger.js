@@ -5,7 +5,7 @@ import useToken from "../../hooks/useToken";
 import "../../css/messenger.css"
 
 const MessengerPage = () => {
-    const {sendAction, iswsConnected} = useToken();
+    const {sendAction, iswsConnected, projectId, isSideBarPinned} = useToken();
     const [activeChat, setActiveChat] = useState(null);
     const [isChatListVisible, setChatListVisible] = useState(true);
     const [chatsList,setChatList] = useState([])
@@ -14,13 +14,26 @@ const MessengerPage = () => {
     const [groupedMessages, setGroupedMessages] = useState([])
     const groupedMessagesRef = useRef(groupedMessages)
     const activeChatRef = useRef(activeChat)
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 1240);
-    const [isSuperWide, setIsSuperWide] = useState(window.innerWidth > 1900);
+    const [width, setWidth] = useState(window.innerWidth);
+    const [isMobile, setIsMobile] = useState(((isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)))
     const chatContainer = useRef(null)
+
+    useEffect(()=>{
+      const chatList = document.getElementById("chat-list")
+      if (!chatList) return
+      if(isSideBarPinned){
+        chatList.classList.add("chat-list-pinned")
+      }
+      else{
+      chatList.classList.remove("chat-list-pinned")
+      }
+      
+    },[isSideBarPinned])
 
     const sendMessage = (newMessage) =>{
       if (newMessage.trim() === '') return;
       sendAction("Messenger.SendMessage",{
+        projectId: projectId,
         chatId: activeChat.id, 
         message: newMessage
       })
@@ -31,22 +44,22 @@ const MessengerPage = () => {
     } 
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1240);
-      setIsSuperWide(window.innerWidth > 1900)
+      setWidth(window.innerWidth);
     };
 
     useEffect(() => {
       window.addEventListener('resize', handleResize);
-      
     }, []);
    
     useEffect(()=>{
       if (!navigator.serviceWorker.controller) return
       if (!iswsConnected) return
 
-      sendAction('Messenger.Start');
+      sendAction('Messenger.Start', {
+        projectId: projectId
+      });
       sendAction("Messenger.RequestChatsList",{
-        projectId: 1
+        projectId: projectId
       })
       console.log('Messages ws subscribed');
 
@@ -54,8 +67,8 @@ const MessengerPage = () => {
         const SWmessage = event.data;
         if (SWmessage.type === 'RECEIVE_MESSAGE') {
           const message = JSON.parse(SWmessage.data)
+          console.log("got", message)
           if (message.type ==="entities.Action.Messenger.SendChatsList"){
-            console.log(message.chats)
             setChatList(message.chats)
           }
           else if (message.type === "entities.Action.Messenger.SendChatMessages"){
@@ -77,21 +90,26 @@ const MessengerPage = () => {
       return () => {
         window.removeEventListener('resize', handleResize);
         navigator.serviceWorker.removeEventListener('message', onmessage)
-        sendAction('Messenger.Stop');
+        sendAction('Messenger.Stop',{
+          projectId: projectId
+        });
         console.log("Messages ws unsubscribed")
         
       };
     },[iswsConnected])
     
     useEffect(()=>{
-        if (isMobile && activeChat) {
-            setChatListVisible(false)
-        } 
-        else{
-            setChatListVisible(true)
-        }
-        // eslint-disable-next-line
-    },[isMobile])
+      const isMobileNew = (isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)
+      console.log(isMobileNew)
+      setIsMobile(isMobileNew)
+      if (isMobileNew && activeChat) {
+          setChatListVisible(false) 
+      } 
+      else{
+          setChatListVisible(true)
+      }
+      // eslint-disable-next-line
+    },[width, isSideBarPinned])
 
     useEffect(()=>{
       groupedMessagesRef.current = groupedMessages 
@@ -194,6 +212,7 @@ const MessengerPage = () => {
       }
       if (!initialMessages.some(message => message.chatId === chat.id)){
         sendAction("Messenger.RequestChatMessages",{
+          projectId: projectId,
           chatId: chat.id
         })
       }
@@ -286,24 +305,25 @@ const MessengerPage = () => {
   
   const onReadUntil = (messageId) =>{
     sendAction("Messenger.ReadMessagesBefore",{
+      projectId: projectId,
       messageId: messageId,
       chatId: activeChat.id
     })
   }
 
   return (
-    <div className="messenger-page"> 
+    <div className="messenger-page" id="page"> 
       {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect}/>)}
       {activeChat ? <ChatWindow 
         chat={activeChat} 
         groupedMessages={groupedMessages.find(message => message.chatId === activeChat.id) || { read: [], unread: [] }} 
         onSendMessage={sendMessage} 
         isMobile={isMobile} 
-        isSuperWide={isSuperWide} 
+        isSuperWide={width > 1900} 
         onBackClick={handleBackClick}
         onReadUntil={onReadUntil}
         containerRef={chatContainer}
-      /> : !isMobile ? <div className="no-chat-text">Выберите чат</div>:<></>}
+      /> : !(isMobile) ? <div className="no-chat-text">Выберите чат</div>:<></>}
     </div>
   );
 }

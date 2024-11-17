@@ -57,7 +57,7 @@ const SprintEditPage = () => {
       setNewDescription(event.target.value);
     }
     return (
-      <div className="sprint-page">          
+      <div className="sprint-page" id="page">          
         <h2>Редактировать спринт</h2>
         <div className="edit-container">
           <form onSubmit={handleSubmit}>

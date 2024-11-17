@@ -1,3 +1,10 @@
+.kanban-page{
+    width: 100vw;
+    height: calc(100vh - 45px);
+    height: calc(100dvh - 45px);
+    box-sizing: border-box;
+    overflow: auto;
+}
 .kanban-main-container{
    padding: 1rem;
    padding-bottom: 0;

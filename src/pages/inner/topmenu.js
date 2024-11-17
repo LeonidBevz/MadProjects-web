@@ -11,9 +11,10 @@ import LogoIco from "../../images/logoico";
 import "../../css/topmenu.css"
 
 const TopMenuPage = () => {
-  const {isNightTheme, onThemeChange} = useToken()
+  const {isNightTheme, onThemeChange, setIsSideBarPinned} = useToken()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
-  const isWide = useRef(window.innerWidth > 1100)
+  const [isWide, setIsWide] = useState(window.innerWidth > 1100)
+  const isWideRef = useRef(window.innerWidth > 1100)
   const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
   const username = "Бевз Леонид Александрович"
   const project = "audionautica"
@@ -23,7 +24,7 @@ const TopMenuPage = () => {
   const buttonRef = useRef()
 
   const handleResize = () => {
-    isWide.current = window.innerWidth > 1100;
+    setIsWide(window.innerWidth > 1100);
   };
 
   useEffect(() => {
@@ -34,10 +35,11 @@ const TopMenuPage = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sideMenuRef.current  && buttonRef.current && !isWide.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
+      if (sideMenuRef.current  && buttonRef.current && !isWideRef.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
         setIsSideBarOpen(false);
       }
     };
+    
 
     if (isSideBarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -56,6 +58,22 @@ const TopMenuPage = () => {
       setIsSideBarOpen(false)
     }
   }
+
+  useEffect(()=>{
+    if (isWide && isSideBarOpen)
+    {
+      setIsSideBarPinned(true)
+    }
+    else{
+      setIsSideBarPinned(false)
+    }
+  },[isWide, isSideBarOpen])
+
+  useEffect(()=>{
+    isWideRef.current=isWide
+  },[isWide])
+  
+  
 
     return (
       <div className="main-container">          
@@ -86,7 +104,7 @@ const TopMenuPage = () => {
         </div>
         <div className="page-content">
           <div className={isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"}/>
-          <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWide.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
+          <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWideRef.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
             <div className="sidebar-user-info">
               <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/profile")}}/>
               <p>{username}</p>

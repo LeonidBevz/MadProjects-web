@@ -13,15 +13,19 @@ export function TokenProvider({children}){
     const [isNightTheme, setIsNightTheme] = useState(localStorage.getItem('theme') === 'true' || false)
     const ws = useRef(null);
     const [iswsConnected, setIswsConnected] = useState(false)
-    const isSWRegistered = useRef(false)
+    const [isSWRegistered, setIsSWRegistered] = useState(false)
     const [userId, setUserId] = useState(parseInt(localStorage.getItem('userid')) || null) 
+    const [projectId, setProjectId] = useState(1)
+    const [isSideBarPinned, setIsSideBarPinned] = useState(false)
     
     useEffect(() => {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
           .then(registration => {
-            console.log('Service Worker зарегистрирован');
-            isSWRegistered.current=true
+            if (navigator.serviceWorker.controller){
+              setIsSWRegistered(true)
+            }
+            console.log('Service Worker зарегистрирован');         
           })
           .catch(error => {
             console.error('Ошибка регистрации Service Worker:', error);
@@ -33,39 +37,51 @@ export function TokenProvider({children}){
           if (message.type === 'LOG') {
             console.log('Лог от Service Worker:', message);
           }
-          if (message.type === 'RECEIVE_MESSAGE') {
+          else if (message.type === 'RECEIVE_MESSAGE') {
             
           }
-          if (message.type ==='socket_opened'){
-            navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: '3', projectId: 1})});
+          else if (message.type ==='socket_opened'){
+            navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: '3'})});
             setIswsConnected(true)
           }
-          if (message.type ==='socket_already_opened'){
+          else if (message.type ==='socket_already_opened'){
             setIswsConnected(true)
           }
-         
-          if (message.type ==='socket_closed'){
+          else if (message.type ==='socket_closed'){
             setIswsConnected(false)
           }
+          else if (message.type ==='SW_registered'){
+            setIsSWRegistered(true)  
+          }
+         
         });
       } else {
+        alert("Service Worker не поддерживается в вашем браузере, некоторые функции ограничены.")
         console.log('Service Worker не поддерживается в этом браузере');
       }
     }, []);
    
     useEffect (()=>{
+      console.log("try start", isSWRegistered, userId, navigator.serviceWorker.controller)
       if (!isSWRegistered) return
-      if (!navigator.serviceWorker.controller) return
+      if (!navigator.serviceWorker.controller) {
+        
+        return
+      }
       if (userId){
-        console.log("try start")
+        
         navigator.serviceWorker.controller.postMessage({ type: 'start', url: MessengerSocket});
         return
       }
       else {
         navigator.serviceWorker.controller.postMessage({ type: 'close'});
-        isSWRegistered.current=false
+        setIsSWRegistered(false)
       }
     },[userId, isSWRegistered])
+
+    useEffect (()=>{
+      console.log(isSWRegistered)
+    },[isSWRegistered])
   
     const sendAction = (actionType, params) => {
       navigator.serviceWorker.controller.postMessage({type: "SEND_MESSAGE", data:  JSON.stringify({ type: "entities.Intent." + actionType, ...params })});
@@ -223,7 +239,9 @@ export function TokenProvider({children}){
       onThemeChange,
       ws, sendAction,
       iswsConnected, setIswsConnected,
-      isSWRegistered
+      isSWRegistered,
+      projectId, setProjectId,
+      isSideBarPinned, setIsSideBarPinned
     }
     return (
         <TokenContext.Provider value={contextValue}>
