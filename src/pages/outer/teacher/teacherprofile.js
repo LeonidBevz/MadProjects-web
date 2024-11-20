@@ -20,7 +20,7 @@ const TeacherProfilePage = () => {
     }
   
     return (
-      <div className="profile-page">
+      <div className="profile-page page">
         <div className={modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
         {modalWindow === 1 && (<CreateGroupModal onCancel={()=>{setModalWindow(0)}} onConfirm={onGroupCreate}/>)}          
         <div className="profile-page-content">

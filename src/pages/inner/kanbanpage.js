@@ -6,6 +6,7 @@ import PlusIco from "../../images/plus";
 import EditModal from "../../components/editmodal";
 import DeleteModal from "../../components/deletemodal";
 import "../../css/kanbanpage.css";
+import Loading from "../../components/loading";
 
 function formatDate(milliseconds) {
     const getWordEnding = (number, one, two, five) => {
@@ -58,6 +59,7 @@ const KanbanPage = () => {
   const [rowToEditId, setRowToEditId] = useState(null)
   const [newName, setNewName] = useState("")
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
 
   const [rowsCount,setRowsCount] = useState(cards.length)
   const [cardsCount,setCardsCount] = useState(cards.reduce((total, row) => total + row.kards.length, 0))
@@ -86,8 +88,9 @@ const KanbanPage = () => {
       const SWmessage = event.data;
       if (SWmessage.type === 'RECEIVE_MESSAGE') {
         const message = JSON.parse(SWmessage.data)
-        if (message.projectId===projectId && message.type === "entities.Action.Kanban.SetState") {
+        if (message.projectId === projectId && message.type === "entities.Action.Kanban.SetState") {
           refactorKanbanData(message);
+          setIsLoading(false)
         }
       }
     }
@@ -289,8 +292,24 @@ const KanbanPage = () => {
 
   };
 
+  if (!'serviceWorker' in navigator) {
+    return(
+      <div className="no-chat-text page">В вашем браузере не поддерживается serviceWorker</div>
+    )
+  }
+  if (iswsConnected === null || (isLoading && iswsConnected)) {
+    return(
+      <Loading/>
+    )
+  }
+  if (!iswsConnected) {
+    return(
+      <div className="no-chat-text page">Ошибка подключения к серверу, перезагрузите страницу.</div>
+    )
+  }
+
   return (
-    <div className="kanban-page" id="page">
+    <div className="kanban-page page">
       <div className={isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
       {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}

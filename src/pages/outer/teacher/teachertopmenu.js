@@ -55,7 +55,9 @@ const TeacherTopMenuPage = () => {
   }
 
   const onProfileClick = () =>{
-    setIsSideBarOpen(false)
+    if (!isWide.current){
+      setIsSideBarOpen(false)    
+    }
     navigate("/teacher/profile")
   }
  

@@ -30,6 +30,9 @@
     margin-bottom: 0.8rem;
     min-width: max-content;
 }
+.active-chat-list-tile{
+    outline: 2px solid var(--main-blue-color);
+}
 .chat-list-tile p{
     margin: 5px 0px;
 }

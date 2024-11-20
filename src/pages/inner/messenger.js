@@ -3,20 +3,41 @@ import ChatsList from "../../components/chatslist";
 import ChatWindow from "../../components/chatwindow";
 import useToken from "../../hooks/useToken";
 import "../../css/messenger.css"
+import Loading from "../../components/loading";
 
 const MessengerPage = () => {
     const {sendAction, iswsConnected, projectId, isSideBarPinned} = useToken();
+    const [isLoading, setIsLoading] = useState(true)
+
     const [activeChat, setActiveChat] = useState(null);
-    const [isChatListVisible, setChatListVisible] = useState(true);
+    const activeChatRef = useRef(activeChat)
+    const chatContainer = useRef(null)
+    
     const [chatsList,setChatList] = useState([])
     const chatsListRef = useRef(chatsList)
+    const [isChatListVisible, setChatListVisible] = useState(true);
+
     const [initialMessages, setInitialMessages] = useState([])
     const [groupedMessages, setGroupedMessages] = useState([])
     const groupedMessagesRef = useRef(groupedMessages)
-    const activeChatRef = useRef(activeChat)
+    
     const [width, setWidth] = useState(window.innerWidth);
     const [isMobile, setIsMobile] = useState(((isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)))
-    const chatContainer = useRef(null)
+
+
+    //resize
+    const handleBackClick = () =>{
+      setActiveChat(null)
+      setChatListVisible(true)
+    } 
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    useEffect(() => {
+      window.addEventListener('resize', handleResize);
+    }, []);
 
     useEffect(()=>{
       const chatList = document.getElementById("chat-list")
@@ -30,6 +51,19 @@ const MessengerPage = () => {
       
     },[isSideBarPinned])
 
+    useEffect(()=>{
+      const isMobileNew = (isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)
+      setIsMobile(isMobileNew)
+      if (isMobileNew && activeChat) {
+          setChatListVisible(false) 
+      } 
+      else{
+          setChatListVisible(true)
+      }
+      // eslint-disable-next-line
+    },[width, isSideBarPinned])
+
+    //Действия с сокетом
     const sendMessage = (newMessage) =>{
       if (newMessage.trim() === '') return;
       sendAction("Messenger.SendMessage",{
@@ -38,19 +72,7 @@ const MessengerPage = () => {
         message: newMessage
       })
     }
-    const handleBackClick = () =>{
-        setActiveChat(null)
-        setChatListVisible(true)
-    } 
-
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-
-    useEffect(() => {
-      window.addEventListener('resize', handleResize);
-    }, []);
-   
+    
     useEffect(()=>{
       if (!navigator.serviceWorker.controller) return
       if (!iswsConnected) return
@@ -67,20 +89,20 @@ const MessengerPage = () => {
         const SWmessage = event.data;
         if (SWmessage.type === 'RECEIVE_MESSAGE') {
           const message = JSON.parse(SWmessage.data)
-          console.log("got", message)
-          if (message.type ==="entities.Action.Messenger.SendChatsList"){
+          if (message.projectId===projectId && message.type ==="entities.Action.Messenger.SendChatsList"){
             setChatList(message.chats)
+            setIsLoading(false)
           }
-          else if (message.type === "entities.Action.Messenger.SendChatMessages"){
+          else if (message.projectId===projectId && message.type === "entities.Action.Messenger.SendChatMessages"){
             setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
           }
-          else if(message.type === "entities.Action.Messenger.NewMessage") {
+          else if(message.projectId===projectId && message.type === "entities.Action.Messenger.NewMessage") {
             if (groupedMessagesRef.current && groupedMessagesRef.current.some(chat => chat.chatId === message.chatId)){
               addToGroupedMessages(message)
             }
             addLastMessage(message)          
           }
-          else if(message.type ==="entities.Action.Messenger.UpdateChatUnreadCount"){
+          else if(message.projectId===projectId && message.type ==="entities.Action.Messenger.UpdateChatUnreadCount"){
             updateUnreadCount(message.chatId, message.count)
           };
         }
@@ -98,19 +120,8 @@ const MessengerPage = () => {
       };
     },[iswsConnected])
     
-    useEffect(()=>{
-      const isMobileNew = (isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)
-      console.log(isMobileNew)
-      setIsMobile(isMobileNew)
-      if (isMobileNew && activeChat) {
-          setChatListVisible(false) 
-      } 
-      else{
-          setChatListVisible(true)
-      }
-      // eslint-disable-next-line
-    },[width, isSideBarPinned])
 
+    //Логика группировки
     useEffect(()=>{
       groupedMessagesRef.current = groupedMessages 
       // eslint-disable-next-line
@@ -182,6 +193,7 @@ const MessengerPage = () => {
       // eslint-disable-next-line
   },[initialMessages])
 
+
   const scrollChatToNewMess = () =>{
     const container = chatContainer.current;
     if (!container){return}
@@ -205,6 +217,7 @@ const MessengerPage = () => {
       }
     },1)
   }
+  
   const handleChatSelect = (chat) => {
       setActiveChat(chat);
       if (isMobile) {
@@ -311,9 +324,27 @@ const MessengerPage = () => {
     })
   }
 
+  if (!'serviceWorker' in navigator) {
+    return(
+      <div className="no-chat-text page">В вашем браузере не поддерживается serviceWorker</div>
+    )
+  }
+
+  if (iswsConnected === null || (isLoading && iswsConnected)) {
+    return(
+      <Loading/>
+    )
+  }
+  if (!iswsConnected) {
+    return(
+      <div className="no-chat-text page">Ошибка подключения к серверу, перезагрузите страницу.</div>
+    )
+  }
+
+
   return (
-    <div className="messenger-page" id="page"> 
-      {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect}/>)}
+    <div className="messenger-page page"> 
+      {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect} activeChat={activeChat}/>)}
       {activeChat ? <ChatWindow 
         chat={activeChat} 
         groupedMessages={groupedMessages.find(message => message.chatId === activeChat.id) || { read: [], unread: [] }} 

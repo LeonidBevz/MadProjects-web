@@ -31,7 +31,7 @@ const ProfessorProfileEditPage = () => {
     }
     
     return (
-      <div className="sprint-page">          
+      <div className="sprint-page page">          
         <h2>Редактировать профиль</h2>
         <div className="edit-container">
           <form onSubmit={handleSubmit}>

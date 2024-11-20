@@ -1,6 +1,7 @@
 import {BackURL, MessengerSocket} from "../urls";
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const TokenContext = createContext();
 
@@ -12,11 +13,12 @@ export function TokenProvider({children}){
     const [userData, setUserData] = useState(localStorage.getItem('userdata') || null)
     const [isNightTheme, setIsNightTheme] = useState(localStorage.getItem('theme') === 'true' || false)
     const ws = useRef(null);
-    const [iswsConnected, setIswsConnected] = useState(false)
+    const [iswsConnected, setIswsConnected] = useState(null)
     const [isSWRegistered, setIsSWRegistered] = useState(false)
     const [userId, setUserId] = useState(parseInt(localStorage.getItem('userid')) || null) 
     const [projectId, setProjectId] = useState(1)
     const [isSideBarPinned, setIsSideBarPinned] = useState(false)
+    const navigate = useNavigate()
     
     useEffect(() => {
       if ('serviceWorker' in navigator) {
@@ -34,13 +36,7 @@ export function TokenProvider({children}){
         // Прослушивание сообщений от Service Worker
         navigator.serviceWorker.addEventListener('message', (event) => {
           const message = event.data;
-          if (message.type === 'LOG') {
-            console.log('Лог от Service Worker:', message);
-          }
-          else if (message.type === 'RECEIVE_MESSAGE') {
-            
-          }
-          else if (message.type ==='socket_opened'){
+          if (message.type ==='socket_opened'){
             navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: '3'})});
             setIswsConnected(true)
           }
@@ -53,7 +49,6 @@ export function TokenProvider({children}){
           else if (message.type ==='SW_registered'){
             setIsSWRegistered(true)  
           }
-         
         });
       } else {
         alert("Service Worker не поддерживается в вашем браузере, некоторые функции ограничены.")
@@ -62,20 +57,20 @@ export function TokenProvider({children}){
     }, []);
    
     useEffect (()=>{
-      console.log("try start", isSWRegistered, userId, navigator.serviceWorker.controller)
+      console.log("try start", isSWRegistered, userId)
       if (!isSWRegistered) return
       if (!navigator.serviceWorker.controller) {
-        
         return
       }
+      
       if (userId){
-        
         navigator.serviceWorker.controller.postMessage({ type: 'start', url: MessengerSocket});
         return
       }
       else {
-        navigator.serviceWorker.controller.postMessage({ type: 'close'});
-        setIsSWRegistered(false)
+        navigator.serviceWorker.controller.postMessage({ type: 'close'});   
+        alert("unauthorized")
+        navigate('/login/')     
       }
     },[userId, isSWRegistered])
 
@@ -176,7 +171,7 @@ export function TokenProvider({children}){
       localStorage.removeItem('userdata');
       setUserId(null)
       localStorage.removeItem('userid');
-      window.location.href = '/login/';
+      navigate('/login/');
     };
 
     const api = axios.create({
@@ -219,7 +214,7 @@ export function TokenProvider({children}){
             originalRequest.headers['Authorization'] = `Bearer ${newTokens.access}`;
             return api(originalRequest);  // Повторяем запрос с новым токеном
           } else {
-            window.location.href = '/login/';
+           navigate('/login/');
           }
         }
     

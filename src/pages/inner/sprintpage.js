@@ -36,7 +36,7 @@ const SprintPage = () => {
     ]);
   
     return (
-      <div className="sprint-page" id="page">  
+      <div className="sprint-page page">  
          <div className="sprint-info-container">
               <div className="flex-title">
                 <h2>{`Спринт / ${sprint}`} </h2>

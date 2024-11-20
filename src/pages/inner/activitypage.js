@@ -66,7 +66,7 @@ const ActivityPage = () => {
     ];
 
     return (
-      <div className="activity-page" id="page">
+      <div className="activity-page page">
         <div className="activity-page-container">
           <div className="commits-container">
             <h2>{`Общая активность за ${year} год`}</h2>

@@ -16,7 +16,7 @@ const InfoPage = () => {
     })
   
     return (
-      <div className="info-page" id='page'>          
+      <div className="info-page page">          
          <div className="info-container">
             <h1>{`${project}`} </h1>
             <div className="info-tile">

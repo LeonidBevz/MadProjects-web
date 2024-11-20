@@ -1,4 +1,4 @@
-import React from "react";
+import React, { act } from "react";
 import BookmarksIco from "../images/bookmarks";
 import useToken from "../hooks/useToken";
 import MembersPrivateIco from "../images/memprivate";
@@ -39,12 +39,12 @@ function getTimeAgo(date) {
 }
 
   
-const ChatsList = ({chats, onChatSelect}) => {
+const ChatsList = ({chats, onChatSelect, activeChat}) => {
     const {isNightTheme} = useToken()
   
     return (     
         <div className="chats-list" id="chat-list">
-            {chats.map((chat,index)=>( <div className="chat-list-tile" key={index} onClick={()=>onChatSelect(chat)}>
+            {chats.map((chat,index)=>( <div className={`chat-list-tile ${activeChat && activeChat.id === chat.id ? "active-chat-list-tile" :""}`} key={index} onClick={()=>onChatSelect(chat)}>
               {chat.chatType === "Public" && <BookmarksIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
               {chat.chatType === "MembersPrivate" && <MembersPrivateIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}
               {chat.chatType === "CuratorPrivate" && <MembersPrivateIco color={isNightTheme ? "#d4d3cf" : "black"} className="chatIco"/>}

@@ -36,7 +36,7 @@ const ProjectsApprovePage = () => {
     }
 
     return (
-      <div className="info-page">  
+      <div className="info-page page">  
         <div className="info-container">
             <h2>Одобрение тем проектов</h2>       
             {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, создайте группу проектов в профиле, и ожидайте заявок от студентов."}/> : <Table titles={titles} data={table} onApprove={onApprove} onDeny={onDeny}/>}       

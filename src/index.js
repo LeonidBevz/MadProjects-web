@@ -32,8 +32,8 @@ import ProfessorProfileEditPage from "./pages/outer/teacher/editprofile";
 const App = () => {  
 
   return (
-    <TokenProvider>
-      <Router> 
+    <Router> 
+      <TokenProvider>
         <Routes> 
           <Route index element={<Navigate to="/profile" />} />
           {/*Навигация внутри проекта*/}
@@ -70,8 +70,8 @@ const App = () => {
           
           <Route path='*' element={<NotFoundPage/>}/>
         </Routes>
-      </Router>
-    </TokenProvider>
+      </TokenProvider>
+    </Router>
   );
 }
 
