@@ -64,6 +64,7 @@ function createWebSocket(url){
     socket.onerror = (error) => {
       console.error('WebSocket ошибка:', error);
       socket = null;
+      authorized = false
 
       self.clients.matchAll().then(clients => {
         clients.forEach(client => {
@@ -75,6 +76,7 @@ function createWebSocket(url){
     socket.onclose = () => {
       console.log('WebSocket закрыт');
       socket = null;
+      authorized = false
 
       self.clients.matchAll().then(clients => {
         clients.forEach(client => {

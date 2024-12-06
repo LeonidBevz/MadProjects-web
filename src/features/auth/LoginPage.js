@@ -13,7 +13,7 @@ const LoginPage = () => {
 
     const { iswsConnected } = useWebSocket()
     const { saveUserData } = useAuth()
-    const { api } = useApi()
+    const api = useApi()
 
     const handleSubmit = (event) =>{
         event.preventDefault();
@@ -21,6 +21,7 @@ const LoginPage = () => {
 
         const fetchData = async () => {
             try {           
+              console.log(api, "z")
               const response = await api.post(`/api/account/login/`, {
                 email: 'goool@123',
                 password: '123'

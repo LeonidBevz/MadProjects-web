@@ -11,7 +11,7 @@ export function useWebSocket() {
 
 export function WebSocketProvider({ children }) {
   const ws = useRef(null);
-  const [iswsConnected, setIswsConnected] = useState(false);
+  const [iswsConnected, setIswsConnected] = useState(null);
   const [isSWRegistered, setIsSWRegistered] = useState(false);
   const navigate = useNavigate();
   const {userId} = useAuth()
@@ -32,8 +32,10 @@ export function WebSocketProvider({ children }) {
       // Прослушивание сообщений от Service Worker
       navigator.serviceWorker.addEventListener('message', (event) => {
         const message = event.data;
+        console.log(message)
         if (message.type ==='socket_opened'){
           navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: '3'})});
+          console.log("try auth socket")
           setIswsConnected(true)
         }
         else if (message.type ==='socket_already_opened'){

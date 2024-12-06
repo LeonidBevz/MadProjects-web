@@ -8,6 +8,8 @@ import { ApiProvider } from "features/shared/contexts/ApiContext";
 import { ThemeProvider } from "features/shared/contexts/ThemeContext";
 import { WebSocketProvider } from "features/shared/contexts/WebSocketContext";
 
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import Loading from "features/shared/components/Loading";
 import "css/index.css"
 
@@ -35,57 +37,66 @@ import ProjectsApprovePage from "features/profile/teacher/ProjectsApprove";
 import ProjectsRatePage from "features/profile/teacher/ProjectsRate";
 import StudentProfileEditPage from "features/profile/student/EditProfilePage";
 import ProfessorProfileEditPage from "features/profile/teacher/EditProfile";
+import AnaliticsPage from "features/project/AnaliticsPage";
+import GitAuthPage from "features/auth/GitAuthPage";
 
 const App = () => {  
+  const queryClient = new QueryClient();
 
   return (
     <Router> 
-      <AuthProvider>
-        <ThemeProvider>
-          <WebSocketProvider>
-            <ApiProvider>
-              <Routes> 
-                <Route index element={<Navigate to="/profile" />} />
-                {/*Навигация внутри проекта*/}
-                <Route path="/" element={<TopMenuPage/>}>
-                  <Route path=":projectId/activity/" element={<ActivityPage/>}/>
-                  <Route path=":projectId/info/" element={<InfoPage/>}/>
-                  <Route path=":projectId/kanban/" element={<KanbanPage/>}/>
-                  <Route path=":projectId/messenger/" element={<MessengerPage/>}/>
-                  <Route path=":projectId/sprints/:sprint" element={<SprintPage/>}/>
-                  <Route path=":projectId/sprints/:sprint/edit" element={<SprintEditPage/>}/>
-                  <Route path=":projectId/sprints/create" element={<SprintCreatePage/>}/>
-                  <Route path=":projectId/settings/" element={<SettingsPage/>}/>
-                </Route>
-                {/*Навигация вне проекта для студента*/}
-                <Route path="/" element={<StudentTopMenuPage/>}>
-                  <Route path='profile/' element={<ProfilePage/>}/>
-                  <Route path='createProject/' element={<CreateProjectPage/>}/>
-                  <Route path="profile/edit" element={<StudentProfileEditPage/>}/>
-                </Route>
-                {/*Навигация вне проекта для преподавателя*/}
-                <Route path="/teacher/" element={<TeacherTopMenuPage/>}>
-                  <Route index element={<Navigate to="/teacher/profile" />}/>
-                  <Route path='profile/' element={<TeacherProfilePage/>}/>
-                  <Route path="current/" element={<CurrentProjectsPage/>}/>
-                  <Route path="approve/" element={<ProjectsApprovePage/>}/>
-                  <Route path="rate/" element={<ProjectsRatePage/>}/>
-                  <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
-                  <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
-                </Route>
-                 {/*Навигация авторизации*/}
-                <Route path='/welcome/' element={<WelcomePage/>}/>
-                <Route path='/login/' element={<LoginPage/>}/>
-                <Route path='/register/' element={<RegisterPage/>}/>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ThemeProvider>
+            <WebSocketProvider>
+              <ApiProvider>
+                <Routes> 
+                  <Route index element={<Navigate to="/profile" />} />
+                  {/*Навигация внутри проекта*/}
+                  <Route path="/" element={<TopMenuPage/>}>
+                    <Route path=":projectId/activity/" element={<ActivityPage/>}/>
+                    <Route path=":projectId/info/" element={<InfoPage/>}/>
+                    <Route path=":projectId/kanban/" element={<KanbanPage/>}/>
+                    <Route path=":projectId/messenger/" element={<MessengerPage/>}/>
+                    <Route path=":projectId/sprints/:sprint" element={<SprintPage/>}/>
+                    <Route path=":projectId/sprints/:sprint/edit" element={<SprintEditPage/>}/>
+                    <Route path=":projectId/sprints/create" element={<SprintCreatePage/>}/>
+                    <Route path=":projectId/settings/" element={<SettingsPage/>}/>
+                    <Route path=':projectId/analitics/' element={<AnaliticsPage/>}/>
+                  </Route>
+                  {/*Навигация вне проекта для студента*/}
+                  <Route path="/" element={<StudentTopMenuPage/>}>
+                    <Route path='profile/' element={<ProfilePage/>}/>
+                    <Route path='createProject/' element={<CreateProjectPage/>}/>
+                    <Route path="profile/edit" element={<StudentProfileEditPage/>}/>
+                  </Route>
+                  {/*Навигация вне проекта для преподавателя*/}
+                  <Route path="/teacher/" element={<TeacherTopMenuPage/>}>
+                    <Route index element={<Navigate to="/teacher/profile" />}/>
+                    <Route path='profile/' element={<TeacherProfilePage/>}/>
+                    <Route path="current/" element={<CurrentProjectsPage/>}/>
+                    <Route path="approve/" element={<ProjectsApprovePage/>}/>
+                    <Route path="rate/" element={<ProjectsRatePage/>}/>
+                    <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
+                    <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
+                  </Route>
+                   {/*Навигация авторизации*/}
+                  <Route path='/welcome/' element={<WelcomePage/>}/>
+                  <Route path='/login/' element={<LoginPage/>}/>
+                  <Route path='/register/' element={<RegisterPage/>}/>
+                  <Route path='/git/auth/' element={<GitAuthPage/>}></Route>
 
-                <Route path='/loading/' element={<Loading/>}/>
+                  <Route path='/loading/' element={<Loading/>}/>
+             
 
-                <Route path='*' element={<NotFoundPage/>}/>
-              </Routes>
-            </ApiProvider>
-          </WebSocketProvider>
-        </ThemeProvider>
-      </AuthProvider>
+
+                  <Route path='*' element={<NotFoundPage/>}/>
+                </Routes>
+              </ApiProvider>
+            </WebSocketProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </Router>
   );
 }
