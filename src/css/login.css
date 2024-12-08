@@ -120,7 +120,87 @@
     text-align: center;
 }
 
+.password-tooltip {
+  position: absolute;
+  bottom: 110%;
+  background-color: var(--card-color);
+  color: #333;
+  border: var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
 
+.password-tooltip ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.password-tooltip li {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.password-container{
+    position: relative;
+}
+
+.password-input:user-invalid{
+    outline: none !important;
+    border: 1px solid var(--border-color) !important;
+}
+.password-input:user-valid{
+    outline: none !important;
+    border: 1px solid var(--border-color) !important;
+}
+.eye-icon{
+    height: 24px ;
+    cursor: pointer;
+}
+.flex-pass{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.politics-link{
+    text-decoration: underline;
+    color: var(--main-blue-color);
+    cursor: pointer;
+}
+.flex-agree{
+    display: flex;
+    align-items: center;
+}
+.checkbox{
+    width: 1.5rem !important;
+    height: 1.5rem;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+}
+.policy-modal{
+    position: fixed;
+    width: 50rem;
+    height: 50rem;
+    top: calc(50% - 25rem);
+    left: calc(50% - 25rem);
+    padding: 1.5rem;
+    z-index: 9;
+    border-radius: 10px;
+    background-color: var(--card-color);
+    overflow-y: auto;
+}
+.policy-modal pre{
+    word-break: break-word;
+    white-space: pre-wrap;
+    margin: 0;
+}
+.policy-modal span{
+    font-weight: 500;
+}
  
 @media (width < 25rem) {
     .welcome-container {

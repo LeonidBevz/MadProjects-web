@@ -8,12 +8,17 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "features/shared/contexts/ThemeContext";
 import { useAuth } from "features/shared/contexts/AuthContext";
+import Loading from "features/shared/components/Loading";
 
 const StudentTopMenuPage = () => {
   const {isNightTheme, onThemeChange} = useTheme()
-  const { onLogout } = useAuth()
+  const { handleLogOut, isLoggingOut } = useAuth()
   const navigate = useNavigate()
- 
+
+  if (isLoggingOut){
+    return (<Loading/>)
+  }
+  
     return (
       <div className="main-container">          
         <div className="top-menu">
@@ -34,7 +39,7 @@ const StudentTopMenuPage = () => {
                     </div>
                 </div>
                 <button className="topmenu-button" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
-                <button className="topmenu-button" onClick={onLogout}><img src={LogoutIMG} alt="logout"/></button>
+                <button className="topmenu-button" onClick={handleLogOut}><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
           </div>

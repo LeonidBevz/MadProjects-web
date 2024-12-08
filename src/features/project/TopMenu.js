@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import LogoIco from "images/logoico";
 import "css/topmenu.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import { useAuth } from "features/shared/contexts/AuthContext";
+import Loading from "features/shared/components/Loading";
 
 const TopMenuPage = () => {
   const {isNightTheme, onThemeChange, setIsSideBarPinned} = useTheme()
@@ -22,6 +24,8 @@ const TopMenuPage = () => {
   
   const sideMenuRef = useRef()
   const buttonRef = useRef()
+
+  const { handleLogOut, isLoggingOut } = useAuth()
 
   const handleResize = () => {
     setIsWide(window.innerWidth > 1100);
@@ -73,6 +77,9 @@ const TopMenuPage = () => {
     isWideRef.current=isWide
   },[isWide])
   
+  if (isLoggingOut){
+    return (<Loading/>)
+  }
   
 
     return (
@@ -97,7 +104,7 @@ const TopMenuPage = () => {
                     </div>
                 </div>
                 <button className="topmenu-button" onClick={()=>{navigate("/profile")}}><img src={ProfileIMG} alt="profile"/></button>
-                <button className="topmenu-button"><img src={LogoutIMG} alt="logout"/></button>
+                <button className="topmenu-button" onClick={handleLogOut}><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
           </div>

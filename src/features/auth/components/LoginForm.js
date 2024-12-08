@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import LogoIco from 'images/logoico';
 import { useTheme } from "features/shared/contexts/ThemeContext";
 
-const LoginForm = ({onSubmit}) =>{
+const LoginForm = ({onSubmit, errorMessage, isLoading}) =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+   
     
 
     const {isNightTheme} = useTheme()
@@ -18,6 +18,11 @@ const LoginForm = ({onSubmit}) =>{
         setPassword(event.target.value);
     };
 
+    const handleSubmit = (event) =>{
+        event.preventDefault();
+        onSubmit({email: email, password: password})
+    }
+
     return (
         <div className="welcome-page">          
             <div className="welcome-container">
@@ -28,7 +33,7 @@ const LoginForm = ({onSubmit}) =>{
                     <LogoIco color={isNightTheme ? "white" : "black"} className="welcome-logo"/>
                     <div className='welcome-separator'></div>
                     <div className='welcome-content'>
-                        <form onSubmit={onSubmit}>
+                        <form onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="email">Email</label>
                                 <input

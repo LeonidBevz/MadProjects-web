@@ -92,7 +92,7 @@ const KanbanPage = () => {
     onmessage = (event) =>{
       const SWmessage = event.data;
       if (SWmessage.type === 'RECEIVE_MESSAGE') {
-        const message = JSON.parse(SWmessage.data)
+        const message = SWmessage.data
         if (message.projectId === projectIdInt && message.type === "entities.Action.Kanban.SetState") {
           refactorKanbanData(message);
           setIsLoading(false)
@@ -104,8 +104,7 @@ const KanbanPage = () => {
     return () => {
       navigator.serviceWorker.removeEventListener("message", onmessage)
       sendAction('Kanban.Stop', {projectId: projectIdInt});
-      console.log("Kanban ws unsubscribed")
-      ;
+      console.log("Kanban ws unsubscribed");
     };
   // eslint-disable-next-line   
   },[iswsConnected])
@@ -297,7 +296,7 @@ const KanbanPage = () => {
 
   };
 
-  if (!'serviceWorker' in navigator) {
+  if (!('serviceWorker' in navigator)) {
     return(
       <div className="no-chat-text page">В вашем браузере не поддерживается serviceWorker</div>
     )

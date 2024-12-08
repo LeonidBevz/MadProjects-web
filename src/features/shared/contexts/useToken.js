@@ -24,9 +24,7 @@ export function TokenProvider({children}){
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
           .then(registration => {
-            if (navigator.serviceWorker.controller){
-              setIsSWRegistered(true)
-            }
+              setIsSWRegistered(true)   
             console.log('Service Worker зарегистрирован');         
           })
           .catch(error => {

@@ -11,14 +11,15 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(localStorage.getItem("userdata") || null);
   const [userId, setUserId] = useState(parseInt(localStorage.getItem("userid")) || null);
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const saveAccessToken = (token) => {
     localStorage.setItem("access", token);
   };
 
-  const saveRefreshToken = (token) => {
+  /*const saveRefreshToken = (token) => {
     localStorage.setItem("refresh", token);
-  };
+  };*/
 
   const saveUserData = (data) => {
     localStorage.setItem("userdata", data);
@@ -27,12 +28,12 @@ export function AuthProvider({ children }) {
       return;
     }
     localStorage.setItem("userid", data.id);
-    setUserId(parseInt(data.id));
+    setUserId(data.id);
   };
 
   const onLogout = () => {
     localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
+    //localStorage.removeItem("refresh");
     setUserData(null);
     localStorage.removeItem("userdata");
     setUserId(null);
@@ -40,13 +41,44 @@ export function AuthProvider({ children }) {
     navigate("/login/");
   };
 
+  const handleLogOut = async () => {
+    if (!navigator.serviceWorker.controller) {
+      console.error("Service Worker не доступен");
+      onLogout(); 
+      return;
+    }
+  
+    try {
+      navigator.serviceWorker.controller.postMessage({ type: 'close' });
+      setIsLoggingOut(true)
+
+      await new Promise((resolve) => {
+        const handleMessage = (event) => {
+          if (event.data.type === 'socket_closed') {
+            navigator.serviceWorker.removeEventListener('message', handleMessage);
+            resolve();
+          }
+        };
+  
+        navigator.serviceWorker.addEventListener('message', handleMessage);
+      });
+  
+      onLogout();
+      setIsLoggingOut(false)
+    } catch (error) {
+      console.error("Ошибка при logout:", error);
+      onLogout();
+      setIsLoggingOut(false)
+    }
+  };
+
   const value = {
     saveAccessToken,
-    saveRefreshToken,
-    onLogout,
+    handleLogOut,
     userData,
     userId,
     saveUserData,
+    isLoggingOut,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

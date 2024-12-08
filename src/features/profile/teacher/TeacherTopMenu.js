@@ -8,6 +8,8 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LogoIco from "images/logoico";
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import { useAuth } from "features/shared/contexts/AuthContext";
+import Loading from "features/shared/components/Loading";
 
 const TeacherTopMenuPage = () => {
   const {isNightTheme, onThemeChange} = useTheme()
@@ -18,6 +20,8 @@ const TeacherTopMenuPage = () => {
   const sideMenuRef = useRef()
   const buttonRef = useRef()
   const isWide = useRef(window.innerWidth>1100)
+
+  const { handleLogOut, isLoggingOut } = useAuth()
 
   const handleResize = () => {
     isWide.current = window.innerWidth > 1100;
@@ -60,6 +64,11 @@ const TeacherTopMenuPage = () => {
     }
     navigate("/teacher/profile")
   }
+
+  if (isLoggingOut){
+    return (<Loading/>)
+  }
+  
  
     return (
       <div className="main-container">          
@@ -83,7 +92,7 @@ const TeacherTopMenuPage = () => {
                     </div>
                 </div>
                 <button className="topmenu-button" onClick={onProfileClick}><img src={ProfileIMG} alt="profile"/></button>
-                <button className="topmenu-button"><img src={LogoutIMG} alt="logout"/></button>
+                <button className="topmenu-button" onClick={handleLogOut}><img src={LogoutIMG} alt="logout"/></button>
                 
             </div>
           </div>

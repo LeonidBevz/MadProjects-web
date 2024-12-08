@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navigate} from 'react-router-dom'
 
 import { AuthProvider } from "features/shared/contexts/AuthContext";
-import { ApiProvider } from "features/shared/contexts/ApiContext";
 import { ThemeProvider } from "features/shared/contexts/ThemeContext";
 import { WebSocketProvider } from "features/shared/contexts/WebSocketContext";
 
@@ -48,12 +47,10 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ThemeProvider>
-            <WebSocketProvider>
-              <ApiProvider>
                 <Routes> 
                   <Route index element={<Navigate to="/profile" />} />
                   {/*Навигация внутри проекта*/}
-                  <Route path="/" element={<TopMenuPage/>}>
+                  <Route path="/" element={ <WebSocketProvider>   <TopMenuPage/>  </WebSocketProvider>}>
                     <Route path=":projectId/activity/" element={<ActivityPage/>}/>
                     <Route path=":projectId/info/" element={<InfoPage/>}/>
                     <Route path=":projectId/kanban/" element={<KanbanPage/>}/>
@@ -65,13 +62,13 @@ const App = () => {
                     <Route path=':projectId/analitics/' element={<AnaliticsPage/>}/>
                   </Route>
                   {/*Навигация вне проекта для студента*/}
-                  <Route path="/" element={<StudentTopMenuPage/>}>
+                  <Route path="/" element={ <WebSocketProvider> <StudentTopMenuPage/> </WebSocketProvider>}>
                     <Route path='profile/' element={<ProfilePage/>}/>
                     <Route path='createProject/' element={<CreateProjectPage/>}/>
                     <Route path="profile/edit" element={<StudentProfileEditPage/>}/>
                   </Route>
                   {/*Навигация вне проекта для преподавателя*/}
-                  <Route path="/teacher/" element={<TeacherTopMenuPage/>}>
+                  <Route path="/teacher/" element={<WebSocketProvider> <TeacherTopMenuPage/> </WebSocketProvider>}>
                     <Route index element={<Navigate to="/teacher/profile" />}/>
                     <Route path='profile/' element={<TeacherProfilePage/>}/>
                     <Route path="current/" element={<CurrentProjectsPage/>}/>
@@ -80,6 +77,7 @@ const App = () => {
                     <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
                     <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
                   </Route>
+
                    {/*Навигация авторизации*/}
                   <Route path='/welcome/' element={<WelcomePage/>}/>
                   <Route path='/login/' element={<LoginPage/>}/>
@@ -92,8 +90,6 @@ const App = () => {
 
                   <Route path='*' element={<NotFoundPage/>}/>
                 </Routes>
-              </ApiProvider>
-            </WebSocketProvider>
           </ThemeProvider>
         </AuthProvider>
       </QueryClientProvider>

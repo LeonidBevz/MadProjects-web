@@ -94,7 +94,7 @@ const MessengerPage = () => {
       const onmessage = (event )=>{
         const SWmessage = event.data;
         if (SWmessage.type === 'RECEIVE_MESSAGE') {
-          const message = JSON.parse(SWmessage.data)
+          const message = SWmessage.data
           if (message.projectId===projectIdInt && message.type ==="entities.Action.Messenger.SendChatsList"){
             setChatList(message.chats)
             setIsLoading(false)
