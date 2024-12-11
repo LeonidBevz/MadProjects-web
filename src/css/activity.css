@@ -93,6 +93,11 @@
 .nopoint{
     cursor: default;
 }
+.grid-hidden{
+    visibility: hidden;
+    opacity: 0;
+    z-index: -1;
+}
 
 @media (max-width: 719px) {
     .activity{

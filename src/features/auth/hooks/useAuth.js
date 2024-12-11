@@ -5,14 +5,12 @@ import { useAuth } from 'features/shared/contexts/AuthContext';
 
 export const useRegister = () => {
   const {saveAccessToken, saveUserData} = useAuth()
-  const navigate = useNavigate()
   
   return useMutation(registerUser,{
     onSuccess: (data) => {
         saveAccessToken(data.token)
         saveUserData(data)
-        navigate("/profile/")
-    }
+      }
   });
 };
 

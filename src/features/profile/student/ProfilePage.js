@@ -3,34 +3,47 @@ import { useNavigate, Link } from "react-router-dom";
 import RightArrowIco from "images/arrowrightico";
 import "css/profilepage.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import { useGetProfileGitData } from "../hooks/useProfile";
+import { useAuth } from "features/shared/contexts/AuthContext";
+import Loading from "features/shared/components/Loading";
+import GitLink from "../components/GitLink";
 
 const ProfilePage = () => {
     const { isNightTheme } = useTheme()
     const navigate = useNavigate()
+
+    const {accessToken, userId} = useAuth()
+
     const [data, setData] = useState({username: "Бунделев Илья Иииигоревич", gitlink: "https://github.com/Kaelesty", EmailLink: "example@gmail.com", group: "4215"})
-  
+    
+    const { 
+        data: gitData, 
+        isLoading: isGitDataLoading, 
+        error: gitError, 
+        isSuccess: isGitSuccess
+    } = useGetProfileGitData(accessToken, userId)
+    
     return (
       <div className="profile-page">          
         <div className="profile-page-content">
             <div className="profile-info">
                 <div className="profile-pic-container">
-                    <div className="prifile-image">
-                        <img className="profile-pic" src="https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg" alt="profile"/>
+                    {isGitDataLoading && (<Loading/>)}
+                    {!isGitDataLoading && (
+                        <div className="prifile-image">
+                        <img className="profile-pic" src={isGitSuccess ? gitData.githubAvatar : "/baseProfilePic.png"} alt="profile"/>
                         <Link to="/profile/edit/" >
                           <button className="profile-edit-but"/>
                         </Link>
                     </div>
+                    )}
                     <p className="profile-username">{data.username}</p>
                     <p>Группа {data.group}</p>
                 </div>
                 <div>
-                    <div className="link-container">
-                        <p>GitHub: </p>
-                        <div className="profile-link">
-                            <a href={data.gitlink}>{data.gitlink}</a>
-                            <div className="profile-sep"> </div>
-                        </div>
-                    </div>
+                    {accessToken && userId && (
+                        <GitLink data={gitData} isLoading={isGitDataLoading} error={gitError}/>
+                    )}
                     <div className="link-container">
                         <p>Email: </p>
                         <div className="profile-link">

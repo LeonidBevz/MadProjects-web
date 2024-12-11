@@ -41,3 +41,19 @@
     color: var(--text-color);
     
 }
+.git-not-auth-container button{
+    width: auto;
+    background-color: var(--main-blue-color);
+    color: var(--alt-text-color);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+.git-not-auth-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

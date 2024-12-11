@@ -7,8 +7,10 @@ import { useTheme } from 'features/shared/contexts/ThemeContext';
 import EmailConfirm from './components/EmailConfirmForm';
 import { useRegister } from './hooks/useAuth';
 import PolicyModal from './components/PrivacyPolicy';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
+    const navigate = useNavigate()
     const [errorMessage, setErrorMessage] = useState('')
     
     const [isEmailConfirm, setIsEmailConfirm] = useState(false)
@@ -36,7 +38,7 @@ const RegisterPage = () => {
         password: ""
     })
 
-    const { mutate, isLoading, error, isSuccess } = useRegister();
+    const { mutate, data, isLoading, error, isSuccess } = useRegister();
 
     const handleSubmit = () =>{
         if (isProfessor){
@@ -82,6 +84,13 @@ const RegisterPage = () => {
     const handleEmailSubmit = (event) =>{
         event.preventDefault();
         setIsEmailConfirm(false)
+        if (!data.id){
+            setErrorMessage("Что-то пошло сильно не так")
+        }
+        else{
+            navigate(`/git/auth?code=&state=${data.id}`)
+        }
+        
     } 
   
 

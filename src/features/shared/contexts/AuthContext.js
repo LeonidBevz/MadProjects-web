@@ -8,8 +8,8 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [userData, setUserData] = useState(localStorage.getItem("userdata") || null);
-  const [userId, setUserId] = useState(parseInt(localStorage.getItem("userid")) || null);
+  const [userId, setUserId] = useState(localStorage.getItem("userid") || null);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("access") || null);
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
@@ -22,29 +22,29 @@ export function AuthProvider({ children }) {
   };*/
 
   const saveUserData = (data) => {
-    localStorage.setItem("userdata", data);
     if (!data.id) {
       console.log("wrong user data");
       return;
     }
     localStorage.setItem("userid", data.id);
     setUserId(data.id);
+    setAccessToken(data.token)
   };
 
   const onLogout = () => {
     localStorage.removeItem("access");
+    setAccessToken(null)
     //localStorage.removeItem("refresh");
-    setUserData(null);
     localStorage.removeItem("userdata");
     setUserId(null);
     localStorage.removeItem("userid");
-    navigate("/login/");
   };
 
-  const handleLogOut = async () => {
+  const handleLogOut = async (navigateToLogin = true) => {
     if (!navigator.serviceWorker.controller) {
       console.error("Service Worker не доступен");
       onLogout(); 
+      if (navigateToLogin) navigate("/login/");
       return;
     }
   
@@ -64,10 +64,12 @@ export function AuthProvider({ children }) {
       });
   
       onLogout();
+      if (navigateToLogin) navigate("/login/");
       setIsLoggingOut(false)
     } catch (error) {
       console.error("Ошибка при logout:", error);
       onLogout();
+      if (navigateToLogin) navigate("/login/");
       setIsLoggingOut(false)
     }
   };
@@ -75,8 +77,8 @@ export function AuthProvider({ children }) {
   const value = {
     saveAccessToken,
     handleLogOut,
-    userData,
     userId,
+    accessToken,
     saveUserData,
     isLoggingOut,
   };

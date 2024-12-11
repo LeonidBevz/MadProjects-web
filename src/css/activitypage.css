@@ -35,13 +35,13 @@
     margin-bottom: 5px;
 }
 .year{
-    flex: 0 0 20%;
+    flex: 0 0 32%;
 }
 .member{
-    flex: 0 0 36%;
+    flex: 0 0 64%;
 }
 .repo{
-    flex: 0 0 36%;
+    flex: 1
 }
 .flex1{
     flex: 1;

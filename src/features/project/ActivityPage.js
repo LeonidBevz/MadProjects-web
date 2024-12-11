@@ -18,7 +18,6 @@ const ActivityPage = () => {
     return (
       <div className="activity-page page">
         <div className="activity-page-container">
-          <GitActivity/>
           <div className="activity-right-container">
             {lastActivityData.length !== 0 &&(
               <div className="last-activity-container">
@@ -31,7 +30,7 @@ const ActivityPage = () => {
                         linkTo={data.linkTo}
                         text={data.text}
                         key={index}
-                        />
+                      />
                     ))}
 
                 </div>
@@ -53,6 +52,7 @@ const ActivityPage = () => {
               </div>
             </div>
           </div>
+          <GitActivity/>
         </div>    
       </div>
       

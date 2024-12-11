@@ -14,6 +14,7 @@ const useGitAuth = (code, state) => {
     {
       enabled: !!code && !!state,
       retry: false,
+      refetchOnWindowFocus: false,
     }
   );
 };

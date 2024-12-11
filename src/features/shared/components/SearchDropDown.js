@@ -34,7 +34,7 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
   
       return () => clearTimeout(searchTimer);
       // eslint-disable-next-line
-    }, [searchValue]);
+    }, [searchValue, values]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {

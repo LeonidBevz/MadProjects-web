@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from "react";
 import "css/activity.css"
+import Loading from "features/shared/components/Loading";
 
 function getDayOfWeek(date) {
   const day = date.getDay();
@@ -69,52 +70,20 @@ const getActivityWord = (count) => {
     return `${count} активностей`;
   }
 };
-const Activity = () => {
-    const year = 2025
+const Activity = ({year, activities, isRepoError, isRepoLoading}) => {
     const date = new Date(`${year}-01-01`); 
+    const [isLeapYear, setIsLeapYear] = useState(year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
     const FirstJanDayOfWeek = getDayOfWeek(date);
-    const [activities, setActivities] = useState({
-      1: 57,
-      3: 82,
-      5: 76,
-      6: 29,
-      8: 89,
-      9: 33,
-      11: 92,
-      12: 11,
-      14: 24,
-      15: 64,
-      17: 68,
-      18: 38,
-      19: 95,
-      21: 88,
-      22: 84,
-      24: 14,
-      25: 66,
-      27: 78,
-      28: 57,
-      29: 63,
-      31: 77,
-      32: 90,
-      34: 27,
-      35: 76,
-      36: 99,
-      38: 46,
-      39: 85,
-      41: 73,
-      42: 60,
-      44: 70,
-      45: 60,
-      47: 94,
-      48: 15,
-      50: 50,
-      299: 81
-    })
+    
     const [Q,setQ]=useState([0,0,0])
     const [sum,setSum]=useState(0)
     const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     const months = [ 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн','Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
    
+    useEffect(()=>{
+      setIsLeapYear(year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0))
+    },[year])
+
     useEffect(()=>{
       const activityValues = Object.values(activities);
 
@@ -145,6 +114,17 @@ const Activity = () => {
       }
   
     };
+
+    if (isRepoError){
+      <div>
+        Ошибка загруки коммитов
+      </div>
+    }
+    if (isRepoLoading){
+      return(
+        <Loading/>
+      )
+    }
     
     return (
       <div className="activity">
@@ -171,7 +151,12 @@ const Activity = () => {
                     "grid-item-75" : 
                   activities[i * 7 + j - FirstJanDayOfWeek] > Q[2] ?
                     "grid-item-100" :
-                    "grid-item-0")
+                    "grid-item-0") +
+                    (i * 7 + j - FirstJanDayOfWeek < 0 ? 
+                      " grid-hidden" : 
+                     i * 7 + j - FirstJanDayOfWeek >= 366 && isLeapYear ? " grid-hidden" :
+                     i * 7 + j - FirstJanDayOfWeek >= 365 && !isLeapYear ? " grid-hidden" : ""
+                    )
                   } 
                   onMouseEnter={(event) => handleMouseEnter(event)}
                   key={i * 7 + j - FirstJanDayOfWeek} 

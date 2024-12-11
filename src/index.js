@@ -82,7 +82,7 @@ const App = () => {
                   <Route path='/welcome/' element={<WelcomePage/>}/>
                   <Route path='/login/' element={<LoginPage/>}/>
                   <Route path='/register/' element={<RegisterPage/>}/>
-                  <Route path='/git/auth/' element={<GitAuthPage/>}></Route>
+                  <Route path='/git/auth/' element={<WebSocketProvider> <GitAuthPage/> </WebSocketProvider>}></Route>
 
                   <Route path='/loading/' element={<Loading/>}/>
              

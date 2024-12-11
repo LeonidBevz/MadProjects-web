@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect} from "react"
 import { useLocation, useNavigate } from 'react-router-dom';
 import GitAuthForm from "./components/GitAuthForm"
 import Loading from "features/shared/components/Loading";
@@ -9,16 +9,15 @@ const GitAuthPage = () =>{
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get("code");
-    const jwt = queryParams.get("state");
-    const jwtInt = parseInt(jwt)
+    const state = queryParams.get("state");
+    //state= userId
     const navigate = useNavigate()
 
-
     const handleGitAuth = () =>{
-        window.location.href = "https://github.com/login/oauth/authorize?client_id=Iv23liCiBaSIoD9dEHe6"+"&state="+jwt;
+        window.location.href = `https://github.com/login/oauth/authorize?client_id=Iv23liCiBaSIoD9dEHe6&state=${state}`;
     }
-
-    const { data, isLoading, error, isSuccess } = useGitAuth(code, jwtInt);
+    
+    const { data, isLoading, error, isSuccess } = useGitAuth(code, state);
 
     useEffect(()=>{ 
         if (!isSuccess) return
@@ -26,11 +25,12 @@ const GitAuthPage = () =>{
         console.log("succ")          
         const timer = setTimeout(()=>{
             navigate('/profile/')
-        },5000)
+    },5000)
 
         return () => clearTimeout(timer);
     },[isSuccess])
-    if (!jwt) return <div>No jwt provided!</div>
+
+    if (!state) return <div>No state provided!</div>
     if (isLoading) return <Loading/>;
     if (isSuccess) return <GitAuthSuccessful onSkip={()=>{navigate("/profile/")}}/>
     if (error) return <div>Ошибка: {error.message}</div>;
