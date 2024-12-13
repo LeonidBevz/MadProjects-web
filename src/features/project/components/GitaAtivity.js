@@ -9,7 +9,7 @@ import { useAuth } from "features/shared/contexts/AuthContext"
 import GitLogo from "images/gitlogo.svg"
 
 const GitActivity = () => {
-    const {userId} = useAuth()
+    const {accessToken} = useAuth()
     const navigate = useNavigate()
     const projectId = 3
 
@@ -27,8 +27,8 @@ const GitActivity = () => {
     const [commitsToDisplay, setCommitsToDisplay] = useState();
     const [activities, setActivities] = useState() //1:57, 2:33
 
-    const { data: branchesData, isLoading: isReposLoading, error: reposError } = useGetRepos({jwt: userId, projectId: projectId}); 
-    const { data: repoData, isLoading: isRepoLoading, error: isRepoError } = useGetRepoData({jwt: userId, sha: chosenRepoSha, repoName: chosenRepo});
+    const { data: branchesData, isLoading: isReposLoading, error: reposError } = useGetRepos({ projectId: projectId}); 
+    const { data: repoData, isLoading: isRepoLoading, error: isRepoError } = useGetRepoData({ sha: chosenRepoSha, repoName: chosenRepo});
     
     function formatDate(date) {
       const dateParts = date.slice(0, 10).split('-'); 
@@ -160,7 +160,7 @@ const GitActivity = () => {
     },[commitsToDisplay])
 
     const handleGitAuth = async ()=>{
-      navigate(`/git/auth?code=&state=${userId}`)
+      navigate(`/git/auth?code=&state=${accessToken}`)
     }
 
     if (isReposLoading){
@@ -197,7 +197,7 @@ const GitActivity = () => {
         </div>
       )
     }
-    if (!userId){
+    if (!accessToken){
       return (
         <div className="commits-container">
           <h2>{`Общая активность на GitHub`}</h2>

@@ -13,7 +13,7 @@ export function WebSocketProvider({ children }) {
   const ws = useRef(null);
   const [iswsConnected, setIswsConnected] = useState(null);
   const [isSWRegistered, setIsSWRegistered] = useState(false);
-  const { userId } = useAuth()
+  const { accessToken } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export function WebSocketProvider({ children }) {
           setIsSWRegistered(true);
         } else if (message.type === 'RECEIVE_MESSAGE' && message.data.type ==="entities.Action.Unauthorized"){
          //возможны множественные перезагрузки
-            if (userId){
+            if (accessToken){
               navigator.serviceWorker.controller.postMessage({ type: 'UNAUTHORIZE'}); 
               window.location.reload()
             }
@@ -93,7 +93,6 @@ export function WebSocketProvider({ children }) {
       return ()=>{
         navigator.serviceWorker.removeEventListener('message', messageHandler)
         navigator.serviceWorker.controller.postMessage({ type: 'close'});
-        navigator.serviceWorker.controller.postMessage({ type: 'CLIENT_CLOSED'});
       }
 
     } else {
@@ -104,13 +103,12 @@ export function WebSocketProvider({ children }) {
   }, []);
 
   useEffect (()=>{
-    console.log("try start", isSWRegistered, userId, navigator.serviceWorker)
     if (!isSWRegistered) return
     if (!navigator.serviceWorker.controller) {
       return
     }
     
-    if (userId){
+    if (accessToken){
       navigator.serviceWorker.controller.postMessage({ type: 'start', url: MessengerSocket});
       return
     }
@@ -119,7 +117,7 @@ export function WebSocketProvider({ children }) {
       navigate("/login/")
     }
     // eslint-disable-next-line 
-  },[userId, isSWRegistered])
+  },[accessToken, isSWRegistered])
 
   const sendAction = (actionType, params) => {
     navigator.serviceWorker.controller.postMessage({

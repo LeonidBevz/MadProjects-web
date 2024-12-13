@@ -8,36 +8,38 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [userId, setUserId] = useState(localStorage.getItem("userid") || null);
   const [accessToken, setAccessToken] = useState(localStorage.getItem("access") || null);
+  const [role, setRole] = useState(localStorage.getItem("role") || null);
+  const [tokenExpTime, setTokenExpTime] = useState(localStorage.getItem("tokenTime") || null);
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const saveAccessToken = (token) => {
     localStorage.setItem("access", token);
+    setAccessToken(token)
+  };
+
+  const saveRole = (role) =>{
+    localStorage.setItem("role", role)
+    setRole(role)
+  }
+
+  const saveTokenTime = (tokenTime) => {
+    localStorage.setItem("tokenTime", tokenTime);
+    setTokenExpTime(tokenTime)
   };
 
   /*const saveRefreshToken = (token) => {
     localStorage.setItem("refresh", token);
   };*/
 
-  const saveUserData = (data) => {
-    if (!data.id) {
-      console.log("wrong user data");
-      return;
-    }
-    localStorage.setItem("userid", data.id);
-    setUserId(data.id);
-    setAccessToken(data.token)
-  };
-
   const onLogout = () => {
     localStorage.removeItem("access");
     setAccessToken(null)
-    //localStorage.removeItem("refresh");
-    localStorage.removeItem("userdata");
-    setUserId(null);
-    localStorage.removeItem("userid");
+    localStorage.removeItem("role");
+    setRole(null)
+    localStorage.removeItem("tokenTime");
+    setTokenExpTime(null)
   };
 
   const handleLogOut = async (navigateToLogin = true) => {
@@ -75,11 +77,9 @@ export function AuthProvider({ children }) {
   };
 
   const value = {
-    saveAccessToken,
-    handleLogOut,
-    userId,
-    accessToken,
-    saveUserData,
+    accessToken, role, tokenExpTime,
+    saveAccessToken, saveRole, saveTokenTime,
+    handleLogOut,   
     isLoggingOut,
   };
 

@@ -1,13 +1,12 @@
-import axios from "axios";
-import { GitBackUrl } from "urls";
+import api from "features/shared/services/apiClient";
 
 export const getReposList = async (userData) => {
-  const response = await axios.get(GitBackUrl + '/getProjectRepoBranches?jwt=' + userData.jwt + "&projectId="+ userData.projectId);
-  return JSON.parse(response.data);
+  const response = await api.get("/github/getProjectRepoBranches?projectId=" + userData.projectId);
+  return response.data;
 };
 
 export const getRepoData = async (data) => {
-  const response = await axios.get(GitBackUrl + '/getRepoBranchContent?jwt=' + data.jwt + "&sha=" + data.sha + "&repoName=" + data.repoName);
+  const response = await api.get('/github/getRepoBranchContent?sha=' + data.sha + "&repoName=" + data.repoName);
   return response.data;
 };
 

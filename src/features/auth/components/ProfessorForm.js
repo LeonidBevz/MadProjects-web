@@ -10,7 +10,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
     const {isNightTheme} = useTheme()
 
     const validatePassword = (password) => ({
-        minLength: password.length >= 12,
+        minLength: password.length >= 10,
         hasUppercase: /[A-Z]/.test(password),
         hasLowercase: /[a-z]/.test(password),
         hasNumber: /\d/.test(password),
@@ -53,7 +53,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
                 name="username"
                 value={professorForm.username}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -65,7 +65,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
                 name="surname"
                 value={professorForm.surname}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -77,7 +77,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
                 name="name"
                 value={professorForm.name}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -89,7 +89,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
                 name="iname"
                 value={professorForm.iname}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -127,6 +127,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
                         onClick={()=>setIsPasswordVisible(prev=>{return !prev})} 
                         color={isNightTheme ? "white" : "black"} 
                         isPasswordVisible={isPasswordVisible}
+                        
                 />
             </div>
             <input
@@ -137,7 +138,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
                 name="password"
                 value={professorForm.password}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={32}
                 onFocus={() => setShowTooltip(true)}
                 onBlur={() => setShowTooltip(false)}
                 required
@@ -147,7 +148,7 @@ const ProfessorForm = ({errorMessage, onSubmit, professorForm, setProfessorForm,
             <div className="password-tooltip">
               <ul>
                 <li style={{ color: validation.minLength ? 'green' : 'red' }}>
-                  Длина не менее 12 символов
+                  Длина не менее 10 символов
                 </li>
                 <li style={{ color: validation.hasUppercase ? 'green' : 'red' }}>
                   Содержит строчные и прописные буквы (a-Z)

@@ -15,8 +15,8 @@ const LoginPage = () => {
     useEffect(()=>{
         if (!error) return
         switch (error.status){
-            case 401:
-                setErrorMessage("Пользователь не зарегистрирован.");
+            case 403:
+                setErrorMessage("Неправильный логин или пароль.");
                 break;
             default:
                 setErrorMessage("Что-то пошло не так. Код ошибки " + error.status );

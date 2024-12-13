@@ -1,8 +1,7 @@
-import axios from "axios";
-import { GitBackUrl } from "urls";
+import api from "features/shared/services/apiClient";
 
-export const getUserGitData = async (userData) => {
-  const response = await axios.get(GitBackUrl + '/getUserMeta?jwt=' + userData.jwt + "&userId=" + userData.userId);
+export const getStudentProfile = async () => {
+  const response = await api.get('/commonProfile');
   return response.data;
 };
 

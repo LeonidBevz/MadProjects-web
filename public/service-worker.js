@@ -10,8 +10,6 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('Service Worker активирован...');
   event.waitUntil(self.clients.claim());
-  console.log("Clients: ", self.clients.matchAll())
-
   self.clients.matchAll().then(clients => {
     clients.forEach(client => {
       client.postMessage({ type: 'SW_registered' });
@@ -73,22 +71,6 @@ self.addEventListener('message', (event) => {
     });
     return
   }
-  if (message.type === 'CLIENT_CLOSED'){
-    //sus
-    const clientId = event.clientId
-    if (!clientId) {
-      return;
-    }
-    console.log("Client dead: ", clientId )
-    const remainingClients = allClients.filter((client) => {
-      return client.id !== clientId
-    })
-
-      if (remainingClients.length === 0) {
-        self.registration.unregister()
-      }
-    return
-    }
 });
 
 function createWebSocket(url){

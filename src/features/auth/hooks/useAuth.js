@@ -4,28 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'features/shared/contexts/AuthContext';
 
 export const useRegister = () => {
-  const {saveAccessToken, saveUserData} = useAuth()
+  const {saveAccessToken, saveRole, saveTokenTime} = useAuth()
   
   return useMutation(registerUser,{
     onSuccess: (data) => {
         saveAccessToken(data.token)
-        saveUserData(data)
+        saveRole(data.userType)
+        saveTokenTime(data.expiresAt)
       }
   });
 };
 
 export const useLogin = () => {
-  const {saveAccessToken, saveUserData} = useAuth()
+  const {saveAccessToken, saveRole, saveTokenTime} = useAuth()
   const navigate = useNavigate();
 
   return useMutation(loginUser,{
     onSuccess: (data) => {
         saveAccessToken(data.token)
-        saveUserData(data)
+        saveRole(data.userType)
+        saveTokenTime(data.expiresAt)
         navigate("/profile/")
-      },    
-      onError: (error) => {
-        console.error('Login error:', error);
-      },
+      }
   });
 };

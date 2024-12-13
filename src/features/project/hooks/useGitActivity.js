@@ -3,7 +3,7 @@ import { getReposList, getRepoData } from '../services/GitActivityService';
 
 export const useGetRepos = (userData) => {
     return useQuery(['reposList', userData], () => getReposList(userData), {
-      enabled: !!userData.projectId && !!userData.jwt,
+      enabled: !!userData.projectId,
       retry: false, 
       refetchOnWindowFocus: false,
     });
@@ -11,7 +11,7 @@ export const useGetRepos = (userData) => {
 
 export const useGetRepoData = (data) => {
     return useQuery(['repo', data], () =>getRepoData(data),{
-      enabled: !!data.jwt && !!data.sha && !!data.repoName,
+      enabled: !!data.sha && !!data.repoName,
       retry: false, 
       refetchOnWindowFocus: false,
       cacheTime: 1000 * 60 * 10, 

@@ -44,22 +44,25 @@ const RegisterPage = () => {
         if (isProfessor){
             mutate({
                 username: professorForm.username,
-                firstname: professorForm.name,
-                secondname: professorForm.surname,
+                firstName: professorForm.name,
+                secondName: professorForm.surname,
                 lastName: professorForm.iname,
                 email: professorForm.email,
-                password: professorForm.password
+                password: professorForm.password,
+                data: professorForm.rank,
+                userType: "Curator"
             })
         }
         else{
             mutate({
                 username: studentForm.username,
-                firstname: studentForm.name,
-                secondname: studentForm.surname,
+                firstName: studentForm.name,
+                secondName: studentForm.surname,
                 lastName: studentForm.iname,
-                group: studentForm.group,
                 email: studentForm.email,
-                password: studentForm.password
+                password: studentForm.password,
+                data: studentForm.group,
+                userType: "Common"
             })
         }
        
@@ -67,6 +70,15 @@ const RegisterPage = () => {
     useEffect(()=>{
         if (!error) return
         switch (error.status){
+            case 403:
+                setErrorMessage("Слабый пароль!")
+                return
+            case 409:
+                setErrorMessage("Пользователь с таким email уже зарегистрирован!")
+                return
+            case 406:
+                setErrorMessage("Такой username уже занят!")
+                return
             default:
                 setErrorMessage("Что-то пошло не так. Код ошибки " + error.status );
         }
@@ -74,7 +86,9 @@ const RegisterPage = () => {
     
     useEffect(()=>{
         if (!isSuccess) return
-        setIsEmailConfirm(true)
+        navigate(`/git/auth?code=&state=${data.token}`)
+        //подтверждение почты
+        //setIsEmailConfirm(true)
     },[isSuccess])
 
     useEffect(()=>{
@@ -84,13 +98,6 @@ const RegisterPage = () => {
     const handleEmailSubmit = (event) =>{
         event.preventDefault();
         setIsEmailConfirm(false)
-        if (!data.id){
-            setErrorMessage("Что-то пошло сильно не так")
-        }
-        else{
-            navigate(`/git/auth?code=&state=${data.id}`)
-        }
-        
     } 
   
 

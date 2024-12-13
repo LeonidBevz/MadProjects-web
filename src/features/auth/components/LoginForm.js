@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import LogoIco from 'images/logoico';
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import Loading from "features/shared/components/Loading";
 
 const LoginForm = ({onSubmit, errorMessage, isLoading}) =>{
     const [email, setEmail] = useState('');
@@ -57,13 +58,14 @@ const LoginForm = ({onSubmit, errorMessage, isLoading}) =>{
                                     name="password"
                                     value={password}
                                     onChange={handlePasswordChange}
-                                    maxLength={64}
-                                    minLength={8}
+                                    maxLength={32}
+                                    minLength={10}
                                     required
                                 />
                             </div>
                             {errorMessage && (<p className="error-message">{errorMessage}</p>)}
-                            <button className= "login-but" type="submit">Войти</button>
+                            {!isLoading && (<button className= "login-but" type="submit">Войти</button>)}
+                            {isLoading && (<Loading/>)}
                             <p className="new-user">Новый пользователь? <a href="/register/">Регистрация</a></p>
                         </form>
                     </div>

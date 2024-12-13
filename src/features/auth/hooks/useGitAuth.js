@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
+import { BackURL } from "urls";
 import axios from "axios";
-import { GitBackUrl } from "urls";
 
 const fetchAuthData = async (code, state) => {
-  const data = await axios.get(`${GitBackUrl}/githubCallbackUrl?code=${code}&state=${state}`);
+  const data = await axios.get(`${BackURL}/github/githubCallbackUrl?code=${code}&state=${state}`);
   return data;
 };
 

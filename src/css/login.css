@@ -201,6 +201,13 @@
 .policy-modal span{
     font-weight: 500;
 }
+.loading-page{
+    width: 100vw;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
  
 @media (width < 25rem) {
     .welcome-container {

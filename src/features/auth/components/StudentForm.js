@@ -12,7 +12,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
     const [isPolicyChecked, setIsPolicyChecked] = useState(false);
 
     const validatePassword = (password) => ({
-        minLength: password.length >= 12,
+        minLength: password.length >= 10,
         hasUppercase: /[A-Z]/.test(password),
         hasLowercase: /[a-z]/.test(password),
         hasNumber: /\d/.test(password),
@@ -55,7 +55,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 name="username"
                 value={studentForm.username}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -67,7 +67,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 name="surname"
                 value={studentForm.surname}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -79,7 +79,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 name="name"
                 value={studentForm.name}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -91,7 +91,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 name="iname"
                 value={studentForm.iname}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -103,7 +103,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 name="group"
                 value={studentForm.group}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={24}
                 required
             />
         </div>
@@ -140,7 +140,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 name="password"
                 value={studentForm.password}
                 onChange={handleChange}
-                maxLength={64}
+                maxLength={32}
                 onFocus={() => setShowTooltip(true)}
                 onBlur={() => setShowTooltip(false)}
                 required
@@ -149,7 +149,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
             <div className="password-tooltip">
               <ul>
                 <li style={{ color: validation.minLength ? 'green' : 'red' }}>
-                  Длина не менее 12 символов
+                  Длина не менее 10 символов
                 </li>
                 <li style={{ color: validation.hasUppercase ? 'green' : 'red' }}>
                   Содержит строчные и прописные буквы (a-Z)
