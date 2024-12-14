@@ -7,8 +7,7 @@ const ProjectsRatePage = () => {
         {name: "Название", key: "name", type: "link"},
         {name: "Группа проектов", key: "group",type: "text"},
         {name: "Число участников", key: "teamcount",type: "text"}, 
-        {name: "Дата создания", key: "formateddate",type: "text"},
-        {name: "Вердикт", type: "rate"}
+        {name: "Дата создания", key: "formateddate",type: "text"}
     ]
 
     const table = [
@@ -17,14 +16,14 @@ const ProjectsRatePage = () => {
             group: "Технологии программирования", 
             teamcount: 4,
             createdate: "2024-03-29T10:00:00Z",
-            linkto: '/1/activity', 
+            linkto: '/1/analitics', 
             formateddate: "29.03.2024"
         },{
             name: "MadProjects", 
             group: "Технологии программирования", 
             teamcount: 2,
             createdate: "2024-03-29T10:00:00Z",
-            linkto: '/2/activity', 
+            linkto: '/2/analitics', 
             formateddate: "29.03.2024"
         }
     ]

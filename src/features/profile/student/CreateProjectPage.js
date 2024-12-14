@@ -25,7 +25,7 @@ const CreateProjectPage = () => {
       if (!professorsData) return
       
       const newProfessors = professorsData.map(professor => ({
-        name: professor.secondName +" " + professor.firstName + " " + professor.lastName,
+        name: professor.lastName + " " + professor.firstName + " " + professor.secondName,
         id: professor.id, 
         username: professor.username    
       }))

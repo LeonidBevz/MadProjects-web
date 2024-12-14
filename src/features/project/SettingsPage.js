@@ -1,37 +1,42 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import RightArrowIco from "images/arrowrightico";
 import CrossIco from "images/cross";
-import { useNavigate } from "react-router-dom";
 import EditProjectModal from "./components/EditProject";
 import DeleteProjectModal from "./components/DeleteProject";
 import NewRepoModal from "features/shared/components/NewRepo";
 import ReposTile from "../shared/components/ReposTile";
 import "css/settingspage.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import { useProjectContext } from "./contexts/ProjectContext";
 
 const SettingsPage = () => {
-    const navigate = useNavigate()
     const {isNightTheme} = useTheme()
     const [modalWindow, setModalWindow] = useState(0)
     const [newTitle, setNewTitle] = useState("")
     const [newDescription, setNewDescription] = useState("")
     const [newRepo,setNewRepo] = useState("")
-    const [repos, setRepos] = useState([ "audionautica-web", "audionautica-android", "audionautica-neuro"])
-
-    const [data, setData] = useState({
-        name: "Audionautica",
-        description: "Audionautica - это платформа для стриминга и прослушивания музыки. Оно позволяет пользователям создавать плейлисты, искать треки по жанрам, исполнителям или альбомам, и сохранять любимые песни для оффлайн-прослушивания. Встроенные алгоритмы подбирают персональные рекомендации на основе музыкальных предпочтений, а также доступен режим караоке и создание совместных плейлистов с друзьями. Простое управление, качественное аудио и возможность делиться любимой музыкой делают это приложение идеальным для меломанов.",
-        team: [{name: "Leonid"},{name: "Kalesty"}],
-        repos: [{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}],
-        readmeurl: "a",
+    const { projectData, members, repos: prRepos } = useProjectContext()
+    const [data, setData] = useState({ 
+      title: "",
+      description: "",
+      team: [],
     })
+    const [repos, setRepos] = useState([])
+
+    useEffect(()=>{
+      if(!projectData) return
   
-    const deleteMember = (index) =>{
-      const newMembers = data.team.filter((_, i) => i !== index);
-      setData((prevData) => ({
-          ...prevData,
-          team: newMembers,
-      }));
+      setData({
+        name: projectData.title,
+        description: projectData.desc,
+        team: members
+      })
+      setRepos(prRepos.map(item => item.link))
+      // eslint-disable-next-line 
+    },[projectData])
+  
+    const deleteMember = (id) =>{
+     
     }
 
     const handleEditProject = () =>{
@@ -44,7 +49,6 @@ const SettingsPage = () => {
       setModalWindow(3)
     }
     const editProject = () =>{
-      console.log("onEdit")
       setModalWindow(0)
     }
     const deleteProject = () =>{
@@ -67,8 +71,8 @@ const SettingsPage = () => {
             {data.team.map((member, index)=>(
               <div className="sprint" key={index}>
                 <div className="settings-flex">
-                  <p onClick={()=>navigate(`/profile/${member.name}`)}>{member.name}</p>
-                  <CrossIco className="settings-cross" onClick={()=>deleteMember(index)} color={isNightTheme ? "#d4d3cf" : "black"}/>
+                  <p>{member.lastName + " " + member.firstName+ " " + member.secondName  }</p>
+                  <CrossIco className="settings-cross" onClick={()=>deleteMember(member.id)} color={isNightTheme ? "#d4d3cf" : "black"}/>
                 </div>
                 <div className="grad-separator"></div>
               </div>

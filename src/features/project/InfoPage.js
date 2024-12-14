@@ -1,24 +1,36 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import RightArrowIco from "images/arrowrightico";
 import "css/infopage.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import { useProjectContext } from "./contexts/ProjectContext";
 
 const InfoPage = () => {
-    const {projectId} = useParams()
     const navigate = useNavigate()
     const {isNightTheme} = useTheme()
-    const [data, setData] = useState({
-        description: "Audionautica - это платформа для стриминга и прослушивания музыки. Оно позволяет пользователям создавать плейлисты, искать треки по жанрам, исполнителям или альбомам, и сохранять любимые песни для оффлайн-прослушивания. Встроенные алгоритмы подбирают персональные рекомендации на основе музыкальных предпочтений, а также доступен режим караоке и создание совместных плейлистов с друзьями. Простое управление, качественное аудио и возможность делиться любимой музыкой делают это приложение идеальным для меломанов.",
-        team: [{name: "Leonid"},{name: "Kalesty"}],
-        repos: [{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}],
-        readmeurl: "a",
+    const { projectData, members, repos } = useProjectContext()
+    const [data, setData] = useState({ 
+      title: "",
+      description: "",
+      team: [],
+      repos: []
     })
+
+    useEffect(()=>{
+      if(!projectData) return
+
+      setData({
+        title: projectData.title,
+        description: projectData.desc,
+        team: members,
+        repos: repos,
+    })
+    },[projectData])
   
     return (
       <div className="info-page page">          
          <div className="info-container">
-            <h1>{`${projectId}`} </h1>
+            <h1>{data.title} </h1>
             <div className="info-tile">
                 <p>{data.description}</p>
             </div>
@@ -29,7 +41,7 @@ const InfoPage = () => {
                 {data.team.map((member, index)=>(
                   <div className="sprint" key={index}>
                     <div className="sprints-flex" onClick={()=>navigate(`/profile/${member.name}`)}>
-                      <p>{member.name}</p>
+                      <p>{member.lastName + " " + member.firstName+ " " + member.secondName  }</p>
                       <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="grad-separator"></div>
@@ -43,7 +55,7 @@ const InfoPage = () => {
                 {data.repos.map((repo, index)=>(
                   <div className="sprint" key={index}>
                     <div className="sprints-flex" onClick={()=>navigate(`repolink`)}>
-                      <p>{repo.name}</p>
+                      <p>{repo.title}</p>
                       <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="grad-separator"></div>

@@ -15,6 +15,9 @@ const NewRepoModal = ({onConfirm, onCancel}) => {
         case 404: 
           setErrorMessage("Репозиторий не найден, проверьте приватность")
           return
+        case 425:
+          setErrorMessage("Не авторизован GitHub!")
+          return
         default:
           setErrorMessage("Что-то пошло не так")
           return

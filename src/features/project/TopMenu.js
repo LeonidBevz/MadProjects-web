@@ -11,21 +11,22 @@ import "css/topmenu.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
 import { useAuth } from "features/shared/contexts/AuthContext";
 import Loading from "features/shared/components/Loading";
+import { useProjectContext } from "./contexts/ProjectContext";
+import NotFoundPage from "features/shared/notfound";
 
 const TopMenuPage = () => {
-  const {isNightTheme, onThemeChange, setIsSideBarPinned} = useTheme()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const [isWide, setIsWide] = useState(window.innerWidth > 1100)
   const isWideRef = useRef(window.innerWidth > 1100)
-  const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
-  const username = "Бевз Леонид Александрович"
-  const {projectId} = useParams()
+  const { projectId } = useParams()
   const navigate = useNavigate()
   
   const sideMenuRef = useRef()
   const buttonRef = useRef()
 
-  const { handleLogOut, isLoggingOut } = useAuth()
+  const {isNightTheme, onThemeChange, setIsSideBarPinned} = useTheme()
+  const { handleLogOut, isLoggingOut, profileImage, fullName } = useAuth()
+  const { isMetaLoading, projectMetaError, isCreator } = useProjectContext() 
 
   const handleResize = () => {
     setIsWide(window.innerWidth > 1100);
@@ -77,8 +78,34 @@ const TopMenuPage = () => {
     isWideRef.current=isWide
   },[isWide])
   
+  if (isMetaLoading) {
+    return (
+      <div className="loading-page">
+        <Loading/>
+      </div>
+    )
+  }
+
+  if (projectMetaError){
+    if (projectMetaError.status===404){
+      return (
+        <NotFoundPage/>
+      )
+    }
+    else{
+      <div>
+        {`Error ${projectMetaError.status}`}
+      </div>
+    }
+    
+  }
+
   if (isLoggingOut){
-    return (<Loading/>)
+    return (
+      <div className="loading-page">
+        <Loading/>
+      </div>
+    )
   }
   
 
@@ -113,8 +140,8 @@ const TopMenuPage = () => {
           <div className={isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"}/>
           <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWideRef.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
             <div className="sidebar-user-info">
-              <img src={profilepic} alt="profilepic" onClick={()=>{navigate("/profile")}}/>
-              <p>{username}</p>
+              <img src={profileImage} alt="profilepic" onClick={()=>{navigate("/profile")}}/>
+              <p>{fullName}</p>
             </div>
             <div className="sidemenu-buttons">
               <div className="sidebar-separator"/>
@@ -133,10 +160,18 @@ const TopMenuPage = () => {
               <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/kanban/`)}>
                 Канбан
               </div>
-              <div className="sidebar-separator"/>
-              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/settings/`)}>
-                Настройки
-              </div>
+              {isCreator && (
+                <div>
+                  <div className="sidebar-separator"/>
+                  <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/settings/`)}>
+                    Настройки
+                  </div>
+                </div>
+              )}
+              
+              {
+
+              }
             <div className="sidebar-separator-end"/>
             </div>
           </div>

@@ -36,7 +36,7 @@ const Commit = ({name,date,username,link,profilepic}) => {
       } else if (hours < 24) {
         return `${hours} час${getWordEnding(hours, '', 'а', 'ов')} назад`;
       } else if (days < 7) {
-        return `${days} день${getWordEnding(days, '', 'я', 'ей')} назад`;
+        return `${days} д${getWordEnding(days, 'ень', 'ня', 'ней')} назад`;
       } else if (days < 30) {
         const weeks = Math.floor(days / 7);
         return `${weeks} недел${getWordEnding(weeks, 'ю', 'и', 'ь')} назад`;
@@ -45,7 +45,7 @@ const Commit = ({name,date,username,link,profilepic}) => {
         return `${months} месяц${getWordEnding(months, '', 'а', 'ев')} назад`;
       } else {
         const years = Math.floor(days / 365);
-        return `${years} год${getWordEnding(years, '', 'а', 'лет')} назад`;
+        return `${years} ${getWordEnding(years, 'год', 'года', 'лет')} назад`;
       }
     };
 

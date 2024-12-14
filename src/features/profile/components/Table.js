@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import "css/table.css"
 import { Link } from "react-router-dom";
+/*
 import SearchDropDown from "features/shared/components/SearchDropDown";
 import ConfirmIco from "images/conf";
+*/
 
-const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}, onRate = ()=>{}}) => {
+const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}}) => {
+    /*
     const [ratings, setRatings] = useState(data.map(() => null))
 
     const updateRating = (index, newRating) => {
@@ -12,6 +15,7 @@ const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}, onRate = ()=>
         updatedRatings[index] = newRating; 
         setRatings(updatedRatings); 
     };
+    */
 
     return (
       <div className="table-tile">  
@@ -32,14 +36,14 @@ const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}, onRate = ()=>
                     <button className="approve-butt" onClick={onApprove}>Одобрить</button>    
                     <button className="deny-butt" onClick={onDeny}>Отклонить</button> 
                 </div>}
-                {titles[j].type === "rate" && <div className="table-rate-flex"> 
+                {/*titles[j].type === "rate" && <div className="table-rate-flex"> 
                     <div className="flex1">
                         <SearchDropDown values={["Отлично","Хорошо","Удовл.","Неуд."]} chosenOption={ratings[i]} setChosenOption={(newRating) => updateRating(i, newRating)} emptyMessage={"Оценка"}/> 
                     </div>
                     <button className="conf-butt" onClick={onRate}>
                         <ConfirmIco/>    
                     </button>
-                </div>}
+                </div>*/}
               </td>))}
             </tr>))}
           </tbody>

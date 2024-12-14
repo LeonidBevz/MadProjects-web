@@ -45,8 +45,8 @@ const RegisterPage = () => {
             mutate({
                 username: professorForm.username,
                 firstName: professorForm.name,
-                secondName: professorForm.surname,
-                lastName: professorForm.iname,
+                secondName: professorForm.iname, 
+                lastName: professorForm.surname,
                 email: professorForm.email,
                 password: professorForm.password,
                 data: professorForm.rank,
@@ -57,8 +57,8 @@ const RegisterPage = () => {
             mutate({
                 username: studentForm.username,
                 firstName: studentForm.name,
-                secondName: studentForm.surname,
-                lastName: studentForm.iname,
+                secondName: studentForm.iname,
+                lastName: studentForm.surname,
                 email: studentForm.email,
                 password: studentForm.password,
                 data: studentForm.group,

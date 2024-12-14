@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -30,4 +30,16 @@ export const useVerifyRepo = () => {
 
 export const useCreateProject = () => {
   return useMutation(createProject);
+}
+
+export const useGetSharedUser = (access) =>{
+  return useQuery(
+    ["fetchSharedUser", access],
+    () => getSharedUser(),
+    {
+      enabled: !!access,
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 }

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGetSharedUser } from "features/profile/hooks/useProfile";
 
 const AuthContext = createContext();
 
@@ -11,8 +12,23 @@ export function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(localStorage.getItem("access") || null);
   const [role, setRole] = useState(localStorage.getItem("role") || null);
   const [tokenExpTime, setTokenExpTime] = useState(localStorage.getItem("tokenTime") || null);
+  const [profileImage, setProfileImage] = useState("")
+  const [fullName, setFullName] = useState("")
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const {data} = useGetSharedUser(accessToken)
+
+  useEffect(()=>{
+    if (!data) return
+    if (data.avatar){
+      setProfileImage(data.avatar)
+    }
+    else{
+      setProfileImage("/baseProfilePic.png")
+    }
+    setFullName(data.lastName+" "+data.firstName+" " + data.secondName)
+  },[data])
 
   const saveAccessToken = (token) => {
     localStorage.setItem("access", token);
@@ -81,6 +97,8 @@ export function AuthProvider({ children }) {
     saveAccessToken, saveRole, saveTokenTime,
     handleLogOut,   
     isLoggingOut,
+    fullName,
+    profileImage
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

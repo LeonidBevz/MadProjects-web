@@ -20,5 +20,10 @@ export const createProject = async (data) =>{
   return response.data;
 }
 
+export const getSharedUser = async () =>{
+  const response = await api.get("/sharedProfile")
+  return response.data;
+} 
+
 
 

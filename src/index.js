@@ -6,6 +6,8 @@ import { Navigate} from 'react-router-dom'
 import { AuthProvider } from "features/shared/contexts/AuthContext";
 import { ThemeProvider } from "features/shared/contexts/ThemeContext";
 import { WebSocketProvider } from "features/shared/contexts/WebSocketContext";
+import { NotificationProvider } from "features/shared/contexts/NotificationsContext";
+import { ProjectProvider } from "features/project/contexts/ProjectContext";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -38,6 +40,7 @@ import StudentProfileEditPage from "features/profile/student/EditProfilePage";
 import ProfessorProfileEditPage from "features/profile/teacher/EditProfile";
 import AnaliticsPage from "features/project/AnaliticsPage";
 import GitAuthPage from "features/auth/GitAuthPage";
+import NotificationContainer from "features/shared/components/Notifications";
 
 const App = () => {  
   const queryClient = new QueryClient();
@@ -47,10 +50,18 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ThemeProvider>
+            <NotificationProvider>
+              <NotificationContainer/>
                 <Routes> 
                   <Route index element={<Navigate to="/profile" />} />
                   {/*Навигация внутри проекта*/}
-                  <Route path="/" element={ <WebSocketProvider>   <TopMenuPage/>  </WebSocketProvider>}>
+                  <Route path="/" element={ 
+                    <WebSocketProvider> 
+                      <ProjectProvider>
+                        <TopMenuPage/>  
+                      </ProjectProvider>
+                    </WebSocketProvider>
+                  }>
                     <Route path=":projectId/activity/" element={<ActivityPage/>}/>
                     <Route path=":projectId/info/" element={<InfoPage/>}/>
                     <Route path=":projectId/kanban/" element={<KanbanPage/>}/>
@@ -90,6 +101,7 @@ const App = () => {
 
                   <Route path='*' element={<NotFoundPage/>}/>
                 </Routes>
+            </NotificationProvider>
           </ThemeProvider>
         </AuthProvider>
       </QueryClientProvider>

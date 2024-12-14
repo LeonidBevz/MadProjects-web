@@ -133,7 +133,7 @@
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9;
+    z-index: 10;
     opacity: 1;
     visibility: visible;
     transition: all 0.4s ease;
@@ -142,7 +142,7 @@
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9;
+    z-index: 10;
     visibility: hidden;
     opacity: 0;
     transition: all 0.4s ease;
