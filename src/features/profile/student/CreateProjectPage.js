@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SearchDropDown from "features/shared/components/SearchDropDown";
 import ReposTile from "features/shared/components/ReposTile";
 import NewRepoModal from "features/shared/components/NewRepo";
+import { useGetProfessors, useCreateProject } from "../hooks/useProfile";
+import ObjectSearchDropDown from "features/shared/components/ObjectSearchDropDown";
+import Loading from "features/shared/components/Loading";
+import ProjectCreated from "../components/ProjectCreated";
 
 const CreateProjectPage = () => {
     const [newName,setNewName] = useState("")
@@ -10,13 +13,47 @@ const CreateProjectPage = () => {
     const [memberCount, setMemberCount] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [chosenProfessor, setChosenProfessor] = useState("")
-    const [repos, setRepos] = useState([{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}])
-    const [newRepo, setNewRepo] = useState([])
+    const [repos, setRepos] = useState([])
     const [modalWindow, setModalWindow] = useState(0)
+    const [professorsList, setProfessorsList] = useState([])
     const navigate = useNavigate()
+
+    const {data: professorsData, error: professorsError } = useGetProfessors()
+    const { mutate, isLoading, error, isSuccess } = useCreateProject()
     
+    useEffect(()=>{
+      if (!professorsData) return
+      
+      const newProfessors = professorsData.map(professor => ({
+        name: professor.secondName +" " + professor.firstName + " " + professor.lastName,
+        id: professor.id, 
+        username: professor.username    
+      }))
+
+      setProfessorsList(newProfessors)
+    },[professorsData])
+
+    useEffect(()=>{
+      if (!error)return
+      switch (error.status){
+        default: 
+          setErrorMessage("Что-то пошло не так!")
+      }
+    },[error])
+
     const handleSubmit = (event)=>{
       event.preventDefault()
+      if (!chosenProfessor){
+        setErrorMessage('Не выбран преподаватель!')
+        return
+      }
+      mutate({
+        title: newName,
+        desc: newDescription,
+        maxMembersCount: memberCount,
+        curatorId: chosenProfessor.id,
+        repoLinks: repos
+      })     
     }
     const handleNameChange = (event) => {
       setNewName(event.target.value);
@@ -28,18 +65,23 @@ const CreateProjectPage = () => {
       setNewDescription(event.target.value);
     }
     const handleAddRepo = () =>{
-        setNewRepo("")
         setModalWindow(1)
     }
-    const addRepo = () =>{
-        console.log("onAddRepo")
-        setModalWindow(0)
+    const addRepo = (newRepo) =>{
+      setRepos([...repos, newRepo])
+      setModalWindow(0)
+    }
+
+    if (isSuccess){
+      return (
+        <ProjectCreated/>
+      )
     }
 
     return (
       <div className="sprint-page">   
         <div className={modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
-        {modalWindow === 1 && (<NewRepoModal onConfirm={addRepo} onCancel={()=>setModalWindow(0)} newRepo={newRepo} setNewRepo={setNewRepo}/>)}         
+        {modalWindow === 1 && (<NewRepoModal onConfirm={addRepo} onCancel={()=>setModalWindow(0)}/>)}         
         <h2>Создать проект</h2>
         <div className="edit-container">
           <form onSubmit={handleSubmit}>
@@ -51,7 +93,7 @@ const CreateProjectPage = () => {
                     placeholder="Укажите название"
                     value={newName}
                     onChange={handleNameChange}
-                    maxLength={64}
+                    maxLength={25}
                     required
                   />
               </div>
@@ -75,24 +117,37 @@ const CreateProjectPage = () => {
                   placeholder="Укажите описание"
                   value={newDescription}
                   onChange={handleDescriptionChange}
+                  maxLength={1000}
                   required
                 />
             </div>
             <div className="">
                 <p>Преподаватель</p>
-                <div className="flex1">
-                  <SearchDropDown values={["Смэрть"]} chosenOption={chosenProfessor} setChosenOption={setChosenProfessor} emptyMessage={"Выберите преподавателя"}/>
-                </div>
+                {professorsError && (
+                  <div>
+                    {`Ошибка получения профессоров ${professorsError.status}`}
+                  </div>
+                )}
+                {!professorsError && (
+                  <div className="flex1">
+                    <ObjectSearchDropDown values={professorsList} displayKey={"name"} altFilterKey={["username"]} chosenOption={chosenProfessor} setChosenOption={setChosenProfessor} emptyMessage={"Выберите преподавателя"}/>
+                  </div>
+                )}
+               
             </div>
             <div className="info-container">
                <p>Укажите репозитории</p>
                <ReposTile repos={repos} setRepos={setRepos} handleAddRepo={handleAddRepo} noBS={true}/>
             </div>
             {errorMessage && (<p className="error-message">{errorMessage}</p>)}
-            <div className="flex-buttons">
-              <button className= "login-but" type="submit">Создать</button>
-              <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
-            </div>
+            {isLoading && (<Loading/>)}
+            {!isLoading && (
+              <div className="flex-buttons">
+                <button className= "login-but" type="submit">Создать</button>
+                <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
+              </div>
+            )}
+            
           </form>
         </div>
       </div>

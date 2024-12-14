@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Commit from "./Commit"
 import Activity from "./Activity"
 import SearchDropDown from "features/shared/components/SearchDropDown"
@@ -11,7 +11,7 @@ import GitLogo from "images/gitlogo.svg"
 const GitActivity = () => {
     const {accessToken} = useAuth()
     const navigate = useNavigate()
-    const projectId = 3
+    const {projectId} = useParams()
 
     const [year,setYear] = useState()
     const [chosenRepo, setChosenRepo] = useState()

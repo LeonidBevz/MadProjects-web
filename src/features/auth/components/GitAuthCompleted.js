@@ -11,7 +11,7 @@ const GitAuthSuccessful = ({onSkip}) =>{
         <div className="welcome-page">          
         <div className="welcome-container">
             <div className="welcome-image">
-                <p>Регистрация</p>
+                <p>Авторизация GitHub</p>
             </div>
             <div className='welcome-right'>
                 <LogoIco color={isNightTheme ? "white" : "black"} className="welcome-logo"/>

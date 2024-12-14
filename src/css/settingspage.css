@@ -1,5 +1,6 @@
 .settings-cross{
-    width: 1rem;
+    width: 2rem;
+    height: 1rem;
     cursor: pointer;
 }
 .settings-arrow{
@@ -63,8 +64,8 @@
     color: var(--main-text-color);
 }
 .settings-modal h2{
-    margin-left: 0;
-    margin-top: 0;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
 }
 .settings-modal input{
     width: 100%;

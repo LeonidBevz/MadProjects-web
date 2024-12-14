@@ -1,7 +1,32 @@
-import React, {useRef, useEffect}  from "react";
+import React, {useRef, useEffect, useState}  from "react";
+import { useVerifyRepo } from "features/profile/hooks/useProfile";
+import Loading from "./Loading";
 
-const NewRepoModal = ({onConfirm, onCancel, newRepo, setNewRepo}) => {
+const NewRepoModal = ({onConfirm, onCancel}) => {
     const container = useRef(null)
+    const [newRepo, setNewRepo] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
+
+    const {mutate, isLoading, error, isSuccess} = useVerifyRepo()
+
+    useEffect(()=>{
+      if (!error) return
+      switch (error.status){
+        case 404: 
+          setErrorMessage("Репозиторий не найден, проверьте приватность")
+          return
+        default:
+          setErrorMessage("Что-то пошло не так")
+          return
+      }
+    },[error])
+
+    useEffect(()=>{
+      if (!isSuccess) return
+
+      onConfirm(newRepo)
+       // eslint-disable-next-line
+    },[isSuccess])
 
     useEffect(() => {
       const handleEsc = (event) => {
@@ -29,25 +54,36 @@ const NewRepoModal = ({onConfirm, onCancel, newRepo, setNewRepo}) => {
       setNewRepo(event.target.value);
     }
 
-    const handleSubmit = (event)=>{
+    const handleSubmit = async (event)=>{
       event.preventDefault()
-      onConfirm()
+      if (newRepo.trim()===""){
+        setErrorMessage("Пустая строка")
+        return
+      }
+      mutate(newRepo.trim())
     }
     return (
       <div className="settings-modal" ref={container}>
         <form onSubmit={handleSubmit}>
-        <h2 className="modal-edit-text">Добавить репозиторий</h2>
-        <input
-          value={newRepo}
-          onChange={handleValueChange}
-          maxLength={16}
-          placeholder="user/abobagame"
-          required
-        />
-        <div className="settings-flex-butt">
-          <button type="submit">Создать</button>
-          <button type="button" onClick={onCancel}>Отмана</button>
-        </div>
+        <h2 className="modal-edit-text" style={{padding: "0"}}>Добавить репозиторий</h2>
+        {isLoading && (<Loading/>)}
+        {!isLoading && (<>
+          <input
+            value={newRepo}
+            onChange={handleValueChange}
+            maxLength={128}
+            placeholder="https://github.com/userName/MyBestProject"
+            style={{marginBottom: "15px"}}
+            required
+          />
+          {errorMessage && (<p className="error-message">{errorMessage}</p>)}
+         
+          <div className="settings-flex-butt">
+            <button type="submit">Создать</button>
+            <button type="button" onClick={onCancel}>Отмана</button>
+          </div>
+        </>)}
+        
         </form>
       </div>
     )

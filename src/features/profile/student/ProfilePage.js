@@ -55,7 +55,7 @@ const ProfilePage = () => {
                           <button className="profile-edit-but"/>
                         </Link>
                     </div>
-                    <p className="profile-username">{`${data.firstName} ${data.secondName} ${data.lastName}`}</p>
+                    <p className="profile-username">{`${data.secondName} ${data.firstName} ${data.lastName}`}</p>
                     <p>Группа {data.group}</p>
                 </div>
                 <div>

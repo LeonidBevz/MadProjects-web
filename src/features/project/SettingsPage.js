@@ -16,7 +16,7 @@ const SettingsPage = () => {
     const [newTitle, setNewTitle] = useState("")
     const [newDescription, setNewDescription] = useState("")
     const [newRepo,setNewRepo] = useState("")
-    const [repos, setRepos] = useState([{name: "audionautica-web"},{name: "audionautica-android"},{name: "audionautica-neuro"}])
+    const [repos, setRepos] = useState([ "audionautica-web", "audionautica-android", "audionautica-neuro"])
 
     const [data, setData] = useState({
         name: "Audionautica",

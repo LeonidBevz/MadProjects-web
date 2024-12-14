@@ -1,15 +1,33 @@
-import { useQuery } from "react-query";
-import { getStudentProfile } from "../services/profileService";
+import { useQuery, useMutation } from "react-query";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject } from "../services/profileService";
+import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
+  const { accessToken } = useAuth()
   return useQuery(
-    ["fetchStudentProfile"],
+    ["fetchStudentProfile", accessToken],
     () => getStudentProfile(),
     {
       retry: false,
       refetchOnWindowFocus: false,
-      cacheTime: 1000 * 60 * 15, 
-      staleTime: 1000 * 60 * 10,  
     }
   );
 };
+
+export const useGetProfessors = () => {
+  return useQuery(
+    ["fetchProfessors"],
+    () => getProfessorsList(),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
+export const useVerifyRepo = () => {
+  return useMutation(verifyRepoLink);
+}
+
+export const useCreateProject = () => {
+  return useMutation(createProject);
+}

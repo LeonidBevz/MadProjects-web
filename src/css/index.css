@@ -32,6 +32,9 @@ body p{
   color: var(--main-text-color);
   /*transition: color 1s ease;*/
 } 
+body span{
+  color: var(--main-text-color);
+}
 
 body h2{
   font-weight: 600;
@@ -39,7 +42,15 @@ body h2{
   margin: 20px 0 10px 2rem;
   color: var(--main-text-color)
 }
-
+.main-button{
+  background-color: var(--main-blue-color);
+  color: var(--alt-text-color);
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
