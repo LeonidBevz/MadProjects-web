@@ -81,6 +81,7 @@ const KanbanPage = () => {
     setCards(refactoredData)
   } 
   
+  //sw logic
   useEffect(()=>{
     if (!navigator.serviceWorker.controller) return
     if (!iswsConnected) return
@@ -99,11 +100,19 @@ const KanbanPage = () => {
         }
       }
     }
+
+    const unsubscribe = ()=>{
+      sendAction('Kanban.Stop', {projectId: projectIdInt});
+    }
+
     navigator.serviceWorker.addEventListener('message', onmessage)
+  
+    window.addEventListener('beforeunload', unsubscribe);
 
     return () => {
+      unsubscribe()
       navigator.serviceWorker.removeEventListener("message", onmessage)
-      sendAction('Kanban.Stop', {projectId: projectIdInt});
+      window.removeEventListener('beforeunload', unsubscribe)
       console.log("Kanban ws unsubscribed");
     };
   // eslint-disable-next-line   

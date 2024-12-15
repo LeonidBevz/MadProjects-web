@@ -13,13 +13,13 @@ export const ProjectProvider = ({ children }) => {
   const [isCreator, setIsCreator] = useState(false)
 
   useEffect(()=>{
-    if (!isSuccess) return
+    if (!data) return
     setProjectData(data.meta)
     setMembers(data.members)
     setRepos(data.repos)
     setIsCreator(data.isCreator)
     // eslint-disable-next-line
-  },[isSuccess])
+  },[data])
 
   const value = {
     projectData,

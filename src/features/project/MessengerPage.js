@@ -113,14 +113,17 @@ const MessengerPage = () => {
           };
         }
       }
+      const unsubscribe = () =>{
+        sendAction('Messenger.Stop',{projectId: projectIdInt});
+      }
       navigator.serviceWorker.addEventListener('message', onmessage)
+      window.addEventListener('beforeunload', unsubscribe);
 
       return () => {
         window.removeEventListener('resize', handleResize);
         navigator.serviceWorker.removeEventListener('message', onmessage)
-        sendAction('Messenger.Stop',{
-          projectId: projectIdInt
-        });
+        window.removeEventListener('beforeunload', unsubscribe)
+        unsubscribe()
         console.log("Messages ws unsubscribed")
         
       };
