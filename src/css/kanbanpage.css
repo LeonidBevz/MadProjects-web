@@ -170,7 +170,6 @@
     top: calc(50% - 9rem);
     left: calc(50% - 9.375rem);
     padding: 1.5rem;
-    z-index: 9;
     border-radius: 10px;
     background-color: var(--card-color);
 }

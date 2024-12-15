@@ -2,6 +2,8 @@ let socket = null;
 let authorized = false
 let socketURL = null
 
+const subscriptions = {};
+
 function sendMessageToAllClients(message) {
   self.clients.matchAll().then(clients => {
     clients.forEach(client => {
@@ -65,11 +67,54 @@ self.addEventListener('message', (event) => {
     
     return
   }
+
   if (message.type === 'AUTHORIZE' && socket && !authorized) {
     socket.send(message.data);
     authorized=true
     return
-  }  
+  }
+
+  if (message.type === 'SUBSCRIBE' && socket){
+    const { channel, projectId, clientId } = message.data;
+    if (!subscriptions[channel]){
+      subscriptions[channel] = {};
+    }
+
+    if (!subscriptions[channel][projectId]) {
+      subscriptions[channel][projectId] = { count: 0, clients: new Set() };
+    }
+
+    const project = subscriptions[channel][projectId];
+    console.log("try sub", subscriptions )
+
+    if (!project.clients.has(clientId)) {
+      project.clients.add(clientId);
+      project.count++;
+      
+      if (project.count === 1) {
+        console.log({type: `entities.Intent.${channel}.Start`, projectId: projectId})
+        socket.send(JSON.stringify({type: `entities.Intent.${channel}.Start`, projectId: projectId}))
+      }
+    } 
+    return
+  }
+
+  if (message.type === 'UNSUBSCRIBE' && socket){
+     
+    const { channel, projectId, clientId } = message.data;
+    console.log("try unsub", subscriptions, clientId)
+    const project = subscriptions[channel][projectId];
+    if (project && project.clients.has(clientId)) {
+      project.clients.delete(clientId);
+      project.count--;  
+     
+      if (project.count === 0) {
+        console.log({type: `entities.Intent.${channel}.Stop`, projectId: projectId})
+        socket.send(JSON.stringify({type: `entities.Intent.${channel}.Stop`, projectId: projectId}))
+      }
+    }
+    return
+  }
 });
 
 function createWebSocket(url){

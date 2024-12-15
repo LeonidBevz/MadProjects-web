@@ -61,7 +61,7 @@ const SettingsPage = () => {
     }
     return (
       <div className="info-page page">
-        <div className={modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
+        <div className={`${modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
         {modalWindow === 1 && (<EditProjectModal onConfirm={editProject} onCancel={()=>setModalWindow(0)} newTitle={newTitle} newDescription={newDescription} setNewTitle={setNewTitle} setNewDescription={setNewDescription}/>)}  
         {modalWindow === 2 && (<DeleteProjectModal onConfirm={deleteProject} onCancel={()=>setModalWindow(0)}/>)}   
         {modalWindow === 3 && (<NewRepoModal onConfirm={addRepo} onCancel={()=>setModalWindow(0)} newRepo={newRepo} setNewRepo={setNewRepo}/>)}        

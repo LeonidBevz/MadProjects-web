@@ -14,6 +14,7 @@ export function WebSocketProvider({ children }) {
   const [isSWRegistered, setIsSWRegistered] = useState(false);
   const { accessToken } = useAuth()
   const navigate = useNavigate()
+  const clientId = crypto.randomUUID();
   
   const startServiceWorker = () =>{
     if ('serviceWorker' in navigator) { 
@@ -110,10 +111,23 @@ export function WebSocketProvider({ children }) {
     });
   };
 
+  const subscribeSocket = (channel, projectId) => {
+    navigator.serviceWorker.controller.postMessage({
+      type: "SUBSCRIBE",
+      data: { channel: channel, projectId: projectId, clientId: clientId },
+    });
+  }
+
+  const unsubscribeSocket = (channel, projectId) => {
+    navigator.serviceWorker.controller.postMessage({
+      type: "UNSUBSCRIBE",
+      data: { channel: channel, projectId: projectId, clientId: clientId },
+    });
+  }
   
 
   return (
-    <WebSocketContext.Provider value={{ sendAction, iswsConnected, isSWRegistered }}>
+    <WebSocketContext.Provider value={{ sendAction, iswsConnected, isSWRegistered, subscribeSocket, unsubscribeSocket }}>
       {children}
     </WebSocketContext.Provider>
   );

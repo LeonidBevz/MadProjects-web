@@ -70,7 +70,7 @@ const EditProjectModal = ({onConfirm, onCancel, newTitle, newDescription, setNew
     
 
     return (
-      <div className="settings-modal" ref={container}>
+      <div className="settings-modal z15-level" ref={container}>
         <form onSubmit={handleSubmit}>
           <h2 className="modal-edit-text">Название</h2>
           <input

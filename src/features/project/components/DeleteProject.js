@@ -40,7 +40,7 @@ const DeleteProjectModal = ({onConfirm, onCancel}) => {
       onConfirm()
     }
     return (
-      <div className="settings-modal" ref={container}>
+      <div className="settings-modal z15-level" ref={container}>
         <form onSubmit={handleSubmit}>
         <h2 className="modal-edit-text">Внимание!</h2>
         <p>Данное действие удалит проект и все его данные! <br/> Для продолжения введите "Подтверждаю"</p>

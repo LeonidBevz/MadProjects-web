@@ -54,7 +54,7 @@ function formatDate(milliseconds) {
 
 const KanbanPage = () => {
   const {isNightTheme } = useTheme();
-  const {sendAction, iswsConnected} = useWebSocket()
+  const {sendAction, iswsConnected, subscribeSocket, unsubscribeSocket} = useWebSocket()
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
   const [cardToEdit, setCardToEdit] = useState(null)
@@ -86,7 +86,7 @@ const KanbanPage = () => {
     if (!navigator.serviceWorker.controller) return
     if (!iswsConnected) return
 
-    sendAction('Kanban.Start', {projectId: projectIdInt});
+    subscribeSocket("Kanban", projectIdInt)
     sendAction("Kanban.GetKanban", {projectId: projectIdInt})
     console.log('Kanban ws subscribed');
 
@@ -102,7 +102,7 @@ const KanbanPage = () => {
     }
 
     const unsubscribe = ()=>{
-      sendAction('Kanban.Stop', {projectId: projectIdInt});
+      unsubscribeSocket("Kanban", projectIdInt)
     }
 
     navigator.serviceWorker.addEventListener('message', onmessage)
@@ -325,7 +325,7 @@ const KanbanPage = () => {
 
   return (
     <div className="kanban-page page">
-      <div className={isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
+      <div className={`${isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
       {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 3 && (<EditModal onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} isRowEdit={true} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}

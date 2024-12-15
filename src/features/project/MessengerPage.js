@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 
 const MessengerPage = () => {
     const { isSideBarPinned} = useTheme();
-    const { sendAction, iswsConnected } = useWebSocket()
+    const { sendAction, iswsConnected, subscribeSocket,  unsubscribeSocket } = useWebSocket()
     const { projectId } = useParams()
     const projectIdInt = parseInt(projectId)
 
@@ -83,9 +83,7 @@ const MessengerPage = () => {
       if (!navigator.serviceWorker.controller) return
       if (!iswsConnected) return
 
-      sendAction('Messenger.Start', {
-        projectId: projectIdInt
-      });
+      subscribeSocket("Messenger", projectIdInt)
       sendAction("Messenger.RequestChatsList",{
         projectId: projectIdInt
       })
@@ -114,7 +112,7 @@ const MessengerPage = () => {
         }
       }
       const unsubscribe = () =>{
-        sendAction('Messenger.Stop',{projectId: projectIdInt});
+        unsubscribeSocket("Messenger", projectIdInt)
       }
       navigator.serviceWorker.addEventListener('message', onmessage)
       window.addEventListener('beforeunload', unsubscribe);

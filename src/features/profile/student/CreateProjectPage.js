@@ -80,7 +80,7 @@ const CreateProjectPage = () => {
 
     return (
       <div className="sprint-page">   
-        <div className={modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
+        <div className={`${modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
         {modalWindow === 1 && (<NewRepoModal onConfirm={addRepo} onCancel={()=>setModalWindow(0)}/>)}         
         <h2>Создать проект</h2>
         <div className="edit-container">

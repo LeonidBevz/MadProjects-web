@@ -66,7 +66,7 @@ const NewRepoModal = ({onConfirm, onCancel}) => {
       mutate(newRepo.trim())
     }
     return (
-      <div className="settings-modal" ref={container}>
+      <div className="settings-modal z15-level" ref={container}>
         <form onSubmit={handleSubmit}>
         <h2 className="modal-edit-text" style={{padding: "0"}}>Добавить репозиторий</h2>
         {isLoading && (<Loading/>)}

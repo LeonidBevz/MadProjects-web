@@ -25,7 +25,7 @@ const DeleteModal = ({text, onDelete, onCancel}) => {
     }, []); 
   
     return (
-      <div className="delete-modal" ref={container}>
+      <div className="delete-modal z15-level" ref={container}>
         <p>{text}</p>
         <div className="flex-butt">
           <button className="deletem-button" onClick={onDelete}>Подтвердить</button>

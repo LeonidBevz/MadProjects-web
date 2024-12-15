@@ -36,7 +36,7 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue, isRowEdit}
       onConfirm()
     }
     return (
-      <div className="delete-modal" ref={container}>
+      <div className="delete-modal z15-level" ref={container}>
         <form onSubmit={handleSubmit}>
         <p className="modal-edit-text">{text}</p>
         <textarea 
