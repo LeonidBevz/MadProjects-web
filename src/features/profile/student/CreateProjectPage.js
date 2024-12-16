@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReposTile from "features/shared/components/ReposTile";
 import NewRepoModal from "features/shared/components/NewRepo";
-import { useGetProfessors, useCreateProject } from "../hooks/useProfile";
+import { useGetProfessors, useCreateProject, useGetCuratorGroups } from "../hooks/useProfile";
 import ObjectSearchDropDown from "features/shared/components/ObjectSearchDropDown";
 import Loading from "features/shared/components/Loading";
 import ProjectCreated from "../components/ProjectCreated";
@@ -12,13 +12,15 @@ const CreateProjectPage = () => {
     const [newDescription,setNewDescription] = useState("")
     const [memberCount, setMemberCount] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
-    const [chosenProfessor, setChosenProfessor] = useState("")
+    const [chosenProfessor, setChosenProfessor] = useState()
+    const [chosenGroup, setChosenGroup] = useState()
     const [repos, setRepos] = useState([])
     const [modalWindow, setModalWindow] = useState(0)
     const [professorsList, setProfessorsList] = useState([])
     const navigate = useNavigate()
-
+  
     const {data: professorsData, error: professorsError } = useGetProfessors()
+    const {data: professorsGroups, error: pGroupsError} = useGetCuratorGroups(chosenProfessor?.id)
     const { mutate, isLoading, error, isSuccess } = useCreateProject()
     
     useEffect(()=>{
@@ -47,12 +49,17 @@ const CreateProjectPage = () => {
         setErrorMessage('Не выбран преподаватель!')
         return
       }
+      if (!chosenGroup){
+        setErrorMessage('Не выбрана группа проектов!')
+        return
+      }
       mutate({
         title: newName,
         desc: newDescription,
         maxMembersCount: memberCount,
         curatorId: chosenProfessor.id,
-        repoLinks: repos
+        repoLinks: repos,
+        projectGroupId: chosenGroup.id
       })     
     }
     const handleNameChange = (event) => {
@@ -121,7 +128,7 @@ const CreateProjectPage = () => {
                   required
                 />
             </div>
-            <div className="">
+            <div>
                 <p>Преподаватель</p>
                 {professorsError && (
                   <div>
@@ -130,11 +137,24 @@ const CreateProjectPage = () => {
                 )}
                 {!professorsError && (
                   <div className="flex1">
-                    <ObjectSearchDropDown values={professorsList} displayKey={"name"} altFilterKey={["username"]} chosenOption={chosenProfessor} setChosenOption={setChosenProfessor} emptyMessage={"Выберите преподавателя"}/>
+                    <ObjectSearchDropDown values={professorsList} displayKey={"name"} altFilterKey={"username"} chosenOption={chosenProfessor} setChosenOption={setChosenProfessor} emptyMessage={"Выберите преподавателя"}/>
                   </div>
                 )}
-               
             </div>
+            { professorsGroups && ( <div>
+              <p>Группа проектов</p>
+              {pGroupsError && (
+                <div>
+                  {`Ошибка получения групп ${pGroupsError.status}`}
+                </div>
+              )}
+              {!pGroupsError && (
+                <div className="flex1">
+                  <ObjectSearchDropDown values={professorsGroups} displayKey={"title"} chosenOption={chosenGroup} setChosenOption={setChosenGroup} emptyMessage={"Выберите группу проектов"}/>
+                </div>
+              )}
+            </div>)}
+
             <div className="info-container">
                <p>Укажите репозитории</p>
                <ReposTile repos={repos} setRepos={setRepos} handleAddRepo={handleAddRepo} noBS={true}/>

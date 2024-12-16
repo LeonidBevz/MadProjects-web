@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom';
 import { Navigate} from 'react-router-dom'
 
 import { AuthProvider } from "features/shared/contexts/AuthContext";
@@ -41,6 +41,7 @@ import ProfessorProfileEditPage from "features/profile/teacher/EditProfile";
 import AnaliticsPage from "features/project/AnaliticsPage";
 import GitAuthPage from "features/auth/GitAuthPage";
 import NotificationContainer from "features/shared/components/Notifications";
+import ProfileRouting from "features/profile/ProfileRouting";
 
 const App = () => {  
   const queryClient = new QueryClient();
@@ -48,62 +49,68 @@ const App = () => {
   return (
     <Router> 
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
           <ThemeProvider>
             <NotificationProvider>
               <NotificationContainer/>
                 <Routes> 
-                  <Route index element={<Navigate to="/profile" />} />
-                  {/*Навигация внутри проекта*/}
-                  <Route path="/" element={ 
-                    <WebSocketProvider> 
-                      <ProjectProvider>
-                        <TopMenuPage/>  
-                      </ProjectProvider>
-                    </WebSocketProvider>
+                  <Route path="/" element={
+                    <AuthProvider>
+                      <WebSocketProvider>
+                        <Outlet/>
+                      </WebSocketProvider>
+                    </AuthProvider> 
                   }>
-                    <Route path=":projectId/activity/" element={<ActivityPage/>}/>
-                    <Route path=":projectId/info/" element={<InfoPage/>}/>
-                    <Route path=":projectId/kanban/" element={<KanbanPage/>}/>
-                    <Route path=":projectId/messenger/" element={<MessengerPage/>}/>
-                    <Route path=":projectId/sprints/:sprint" element={<SprintPage/>}/>
-                    <Route path=":projectId/sprints/:sprint/edit" element={<SprintEditPage/>}/>
-                    <Route path=":projectId/sprints/create" element={<SprintCreatePage/>}/>
-                    <Route path=":projectId/settings/" element={<SettingsPage/>}/>
-                    <Route path=':projectId/analitics/' element={<AnaliticsPage/>}/>
-                  </Route>
-                  {/*Навигация вне проекта для студента*/}
-                  <Route path="/" element={ <WebSocketProvider> <StudentTopMenuPage/> </WebSocketProvider>}>
-                    <Route path='profile/' element={<ProfilePage/>}/>
-                    <Route path='createProject/' element={<CreateProjectPage/>}/>
-                    <Route path="profile/edit" element={<StudentProfileEditPage/>}/>
-                  </Route>
-                  {/*Навигация вне проекта для преподавателя*/}
-                  <Route path="/teacher/" element={<WebSocketProvider> <TeacherTopMenuPage/> </WebSocketProvider>}>
-                    <Route index element={<Navigate to="/teacher/profile" />}/>
-                    <Route path='profile/' element={<TeacherProfilePage/>}/>
-                    <Route path="current/" element={<CurrentProjectsPage/>}/>
-                    <Route path="approve/" element={<ProjectsApprovePage/>}/>
-                    <Route path="rate/" element={<ProjectsRatePage/>}/>
-                    <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
-                    <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
-                  </Route>
+                    <Route index element={<Navigate to="/profile" />} />
+                    {/*Навигация внутри проекта*/}
+                    <Route path=":projectId/" element={<ProjectProvider> <TopMenuPage/> </ProjectProvider> }>
+                      <Route path="activity/" element={<ActivityPage/>}/>
+                      <Route path="info/" element={<InfoPage/>}/>
+                      <Route path="kanban/" element={<KanbanPage/>}/>
+                      <Route path="messenger/" element={<MessengerPage/>}/>
+                      <Route path="sprints/:sprint" element={<SprintPage/>}/>
+                      <Route path="sprints/:sprint/edit" element={<SprintEditPage/>}/>
+                      <Route path="sprints/create" element={<SprintCreatePage/>}/>
+                      <Route path="settings/" element={<SettingsPage/>}/>
+                      <Route path='analitics/' element={<AnaliticsPage/>}/>
+                    </Route>
 
+                    {/*Маршрутизация профиля*/}
+                    <Route path="profile/" element={<ProfileRouting/>}></Route>
+                    {/*Навигация вне проекта для студента*/}
+                    <Route path="student/" element={ <StudentTopMenuPage/> }>
+                      <Route index element={<Navigate to="/student/profile" />}/>
+                      <Route path='profile/' element={<ProfilePage/>}/>
+                      <Route path='profile/createProject/' element={<CreateProjectPage/>}/>
+                      <Route path="profile/edit" element={<StudentProfileEditPage/>}/>
+                    </Route>
+                    {/*Навигация вне проекта для преподавателя*/}
+                    <Route path="teacher/" element={<TeacherTopMenuPage/> }>
+                      <Route index element={<Navigate to="/teacher/profile" />}/>
+                      <Route path='profile/' element={<TeacherProfilePage/>}/>
+                      <Route path="current/" element={<CurrentProjectsPage/>}/>
+                      <Route path="approve/" element={<ProjectsApprovePage/>}/>
+                      <Route path="rate/" element={<ProjectsRatePage/>}/>
+                      <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
+                      <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
+                    </Route>
+
+                    <Route path='git/auth/' element={<GitAuthPage/> }/>
+
+                  </Route>
                    {/*Навигация авторизации*/}
                   <Route path='/welcome/' element={<WelcomePage/>}/>
                   <Route path='/login/' element={<LoginPage/>}/>
                   <Route path='/register/' element={<RegisterPage/>}/>
-                  <Route path='/git/auth/' element={<WebSocketProvider> <GitAuthPage/> </WebSocketProvider>}></Route>
+
+                 
+               
 
                   <Route path='/loading/' element={<Loading/>}/>
              
-
-
                   <Route path='*' element={<NotFoundPage/>}/>
                 </Routes>
             </NotificationProvider>
           </ThemeProvider>
-        </AuthProvider>
       </QueryClientProvider>
     </Router>
   );

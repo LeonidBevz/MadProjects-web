@@ -75,9 +75,6 @@
     .table-tile{
         overflow: auto;
     }
-    .table-tile table {
-        margin-bottom: 160px;
-    }
 }
 @media (width >= 47rem) {
     .table-tile{

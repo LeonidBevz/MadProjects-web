@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import SunIMG from "images/sun.svg"
 import NightIMG from "images/night.svg"
 import LogoutIMG from "images/logout.svg"
@@ -12,8 +12,15 @@ import Loading from "features/shared/components/Loading";
 
 const StudentTopMenuPage = () => {
   const {isNightTheme, onThemeChange} = useTheme()
-  const { handleLogOut, isLoggingOut } = useAuth()
+  const { handleLogOut, isLoggingOut, role } = useAuth()
   const navigate = useNavigate()
+
+   useEffect(()=>{
+    if (role === "Curator"){
+      navigate("/teacher/profile/")
+    }
+    // eslint-disable-next-line
+   },[role])
 
   if (isLoggingOut){
     return (<Loading/>)

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { MessengerSocket } from "urls";
-import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useNotifications } from "./NotificationsContext";
 
 const WebSocketContext = createContext();
 
@@ -12,9 +12,10 @@ export function useWebSocket() {
 export function WebSocketProvider({ children }) {
   const [iswsConnected, setIswsConnected] = useState(null);
   const [isSWRegistered, setIsSWRegistered] = useState(false);
-  const { accessToken } = useAuth()
+  const tokenExpTime  = localStorage.getItem("tokenTime")
   const navigate = useNavigate()
   const clientId = crypto.randomUUID();
+  const { addNotification } = useNotifications()
   
   const startServiceWorker = () =>{
     if ('serviceWorker' in navigator) { 
@@ -44,14 +45,14 @@ export function WebSocketProvider({ children }) {
       startServiceWorker()
 
       //sus
-      window.addEventListener('focus', () => {
+      /*window.addEventListener('focus', () => {
         console.log("focus", navigator.serviceWorker.controller)
         if (!navigator.serviceWorker.controller) {
           setIsSWRegistered(false)
           setIswsConnected(false)
           startServiceWorker()
         }
-      });
+      });*/
 
       // Прослушивание сообщений от Service Worker
       const messageHandler = (event) => {
@@ -75,6 +76,7 @@ export function WebSocketProvider({ children }) {
 
       return ()=>{
         navigator.serviceWorker.removeEventListener('message', messageHandler)
+        console.log("Socket context unbuild")
         navigator.serviceWorker.controller.postMessage({ type: 'close'});
       }
 
@@ -85,24 +87,22 @@ export function WebSocketProvider({ children }) {
     // eslint-disable-next-line 
   }, []);
 
-
-
-
   useEffect (()=>{
     if (!isSWRegistered) return
     if (!navigator.serviceWorker.controller) {
       return
     }
-    
-    if (accessToken){
+
+    if ((tokenExpTime - 1000) > Date.now()){
       navigator.serviceWorker.controller.postMessage({ type: 'start', url: MessengerSocket});
       return
     }
-    else {        
-      alert("unauthorized socket")
+    else {
+      addNotification("Сессия истекла, пожалуйста войдите снова", "info")
+      navigate("/login/")
     }
     // eslint-disable-next-line 
-  },[accessToken, isSWRegistered])
+  },[isSWRegistered])
 
   const sendAction = (actionType, params) => {
     navigator.serviceWorker.controller.postMessage({

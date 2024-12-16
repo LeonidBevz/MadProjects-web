@@ -137,7 +137,7 @@ const TopMenuPage = () => {
           </div>
         </div>
         <div className="page-content">
-          <div className={isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"}/>
+          <div className={`${isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"} sidemenu-level`}/>
           <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWideRef.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
             <div className="sidebar-user-info">
               <img src={profileImage} alt="profilepic" onClick={()=>{navigate("/profile")}}/>

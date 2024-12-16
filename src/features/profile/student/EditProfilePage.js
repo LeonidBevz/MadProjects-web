@@ -1,23 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEditCommonProfile } from "../hooks/useProfile";
+import Loading from "features/shared/components/Loading";
+import { useAuth } from "features/shared/contexts/AuthContext";
+import { useNotifications } from "features/shared/contexts/NotificationsContext";
+
 
 const StudentProfileEditPage = () => {
-    //можно будет использовать useLocation
+    const location = useLocation();
+    const { group, firstName, secondName, lastName } = location.state || {};
+    const { refetchSharedUser }= useAuth()
+    const { addNotification } = useNotifications()
+
     const [studentForm, setStudentForm] = useState({
-        surname: "",
-        name: "",
-        iname: "",
-        group: "",
-        gitlink: ""
+        surname: lastName,
+        name: firstName,
+        iname: secondName,
+        group: group,
     })
+    
     const [errorMessage, setErrorMessage] = useState("")
 
-    const navigate = useNavigate()
+    const {mutate, isLoading, error, isSuccess} = useEditCommonProfile()
 
     useEffect(()=>{
-      console.log("fetch-server-for-data")      
-      // eslint-disable-next-line
-    },[])
+      if (!error)return
+      setErrorMessage("Что-то пошло не так ", error.status)
+    },[error])
+
+    useEffect(()=>{
+      if (!isSuccess) return
+      refetchSharedUser()
+      addNotification("Данные успешно изменены","success")
+      navigate(-1)
+      // eslint-disable-next-line 
+    },[isSuccess])
+
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,6 +48,22 @@ const StudentProfileEditPage = () => {
 
     const handleSubmit = (event)=>{
       event.preventDefault()
+      const isNameChanged = studentForm.name !== firstName 
+      const isSurnameChanged = studentForm.surname !== lastName
+      const isInameChanged = studentForm.iname !== secondName 
+      const isGroupChanged = studentForm.group !== group
+
+      if (!(isNameChanged || isGroupChanged || isInameChanged || isSurnameChanged)){
+          setErrorMessage("Изменений нет")
+          return
+      }
+      mutate({
+        firstName: isNameChanged ? studentForm.name : null,
+        secondName: isInameChanged ? studentForm.iname : null,
+        lastName: isSurnameChanged ? studentForm.surname : null,
+        group: isGroupChanged ? studentForm.group : null
+      })     
+
     }
     
     return (
@@ -88,24 +123,16 @@ const StudentProfileEditPage = () => {
                   required
                 />
             </div>
-            <div>
-                <label htmlFor="gitlink">Ссылка на GitHub</label>
-                <input
-                  className="edit-container-input"
-                  placeholder="Ссылка на GitHub"
-                  id="gitlink"
-                  name="gitlink"
-                  value={studentForm.gitlink}
-                  onChange={handleChange}
-                  required
-                />
-            </div>
-            
+
             {errorMessage && (<p className="error-message">{errorMessage}</p>)}
-            <div className="flex-buttons">
-              <button className= "login-but" type="submit">Сохранить</button>
-              <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
-            </div>
+            {isLoading && (<Loading/>)}
+            {!isLoading && (
+              <div className="flex-buttons">
+               <button className= "login-but" type="submit">Сохранить</button>
+               <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
+              </div>
+            )}
+            
           </form>
         </div>
       </div>

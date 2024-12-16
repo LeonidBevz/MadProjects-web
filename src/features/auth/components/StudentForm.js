@@ -151,7 +151,7 @@ const StudentForm = ({errorMessage, setErrorMessage, onSubmit, studentForm, setS
                 <li style={{ color: validation.minLength ? 'green' : 'red' }}>
                   Длина не менее 10 символов
                 </li>
-                <li style={{ color: validation.hasUppercase ? 'green' : 'red' }}>
+                <li style={{ color: validation.hasUppercase && validation.hasLowercase ? 'green' : 'red' }}>
                   Содержит строчные и прописные буквы (a-Z)
                 </li>
                 <li style={{ color: validation.hasNumber ? 'green' : 'red' }}>

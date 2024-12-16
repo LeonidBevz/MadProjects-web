@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const {data} = useGetSharedUser(accessToken)
+  const { data, refetch: refetchSharedUser } = useGetSharedUser(accessToken)
 
   useEffect(()=>{
     if (!data) return
@@ -30,20 +30,7 @@ export function AuthProvider({ children }) {
     setFullName(data.lastName+" "+data.firstName+" " + data.secondName)
   },[data])
 
-  const saveAccessToken = (token) => {
-    localStorage.setItem("access", token);
-    setAccessToken(token)
-  };
 
-  const saveRole = (role) =>{
-    localStorage.setItem("role", role)
-    setRole(role)
-  }
-
-  const saveTokenTime = (tokenTime) => {
-    localStorage.setItem("tokenTime", tokenTime);
-    setTokenExpTime(tokenTime)
-  };
 
   /*const saveRefreshToken = (token) => {
     localStorage.setItem("refresh", token);
@@ -94,11 +81,11 @@ export function AuthProvider({ children }) {
 
   const value = {
     accessToken, role, tokenExpTime,
-    saveAccessToken, saveRole, saveTokenTime,
     handleLogOut,   
     isLoggingOut,
     fullName,
-    profileImage
+    profileImage,
+    refetchSharedUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

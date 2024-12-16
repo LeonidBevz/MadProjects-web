@@ -14,14 +14,19 @@ import Loading from "features/shared/components/Loading";
 const TeacherTopMenuPage = () => {
   const {isNightTheme, onThemeChange} = useTheme()
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
-  const profilepic = "https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg"
-  const username = "Бевз Леонид Александрович"
   const navigate = useNavigate()
   const sideMenuRef = useRef()
   const buttonRef = useRef()
   const isWide = useRef(window.innerWidth>1100)
 
-  const { handleLogOut, isLoggingOut } = useAuth()
+  const { handleLogOut, isLoggingOut, role, profileImage, fullName } = useAuth()
+
+  useEffect(()=>{
+    if (role === "Common"){
+      navigate("/student/profile/")
+    }
+    // eslint-disable-next-line
+  },[role])
 
   const handleResize = () => {
     isWide.current = window.innerWidth > 1100;
@@ -62,7 +67,7 @@ const TeacherTopMenuPage = () => {
     if (!isWide.current){
       setIsSideBarOpen(false)    
     }
-    navigate("/teacher/profile")
+    navigate("/profile")
   }
 
   if (isLoggingOut){
@@ -98,11 +103,11 @@ const TeacherTopMenuPage = () => {
           </div>
         </div>
         <div className="page-content">
-        <div className={isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"}/>
+        <div className={`${isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"} sidemenu-level`}/>
         <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWide.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
             <div className="sidebar-user-info">
-              <img src={profilepic} alt="profilepic" onClick={onProfileClick}/>
-              <p>{username}</p>
+              <img src={profileImage} alt="profilepic" onClick={onProfileClick}/>
+              <p>{fullName}</p>
             </div>
             <div className="sidemenu-buttons">
               <div className="sidebar-separator"/>

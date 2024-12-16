@@ -53,11 +53,7 @@ self.addEventListener('message', (event) => {
       return
     }
     authorized=false
-    self.clients.matchAll().then(clients => {
-      clients.forEach(client => {
-        client.postMessage({ type: 'socket_closed' });
-      });
-    });
+    sendMessageToAllClients({ type: 'socket_closed' })
     self.registration.unregister()
     return
   }  
@@ -85,14 +81,12 @@ self.addEventListener('message', (event) => {
     }
 
     const project = subscriptions[channel][projectId];
-    console.log("try sub", subscriptions )
 
     if (!project.clients.has(clientId)) {
       project.clients.add(clientId);
       project.count++;
       
       if (project.count === 1) {
-        console.log({type: `entities.Intent.${channel}.Start`, projectId: projectId})
         socket.send(JSON.stringify({type: `entities.Intent.${channel}.Start`, projectId: projectId}))
       }
     } 
@@ -102,14 +96,12 @@ self.addEventListener('message', (event) => {
   if (message.type === 'UNSUBSCRIBE' && socket){
      
     const { channel, projectId, clientId } = message.data;
-    console.log("try unsub", subscriptions, clientId)
     const project = subscriptions[channel][projectId];
     if (project && project.clients.has(clientId)) {
       project.clients.delete(clientId);
       project.count--;  
      
       if (project.count === 0) {
-        console.log({type: `entities.Intent.${channel}.Stop`, projectId: projectId})
         socket.send(JSON.stringify({type: `entities.Intent.${channel}.Stop`, projectId: projectId}))
       }
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RightArrowIco from "images/arrowrightico";
 import "css/profilepage.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
@@ -51,9 +51,7 @@ const ProfilePage = () => {
                 <div className="profile-pic-container">
                         <div className="prifile-image">
                         <img className="profile-pic" src={isGitAuth ? data.githubMeta.githubAvatar : "/baseProfilePic.png"} alt="profile"/>
-                        <Link to="/profile/edit/" >
-                          <button className="profile-edit-but"/>
-                        </Link>
+                        <button onClick={()=>{navigate("edit", {state: {group: data.group, firstName: data.firstName, secondName:data.secondName, lastName: data.lastName}})}} className="profile-edit-but"/>
                     </div>
                     <p className="profile-username">{` ${data.lastName} ${data.firstName} ${data.secondName}`}</p>
                     <p>Группа {data.group}</p>
@@ -74,7 +72,7 @@ const ProfilePage = () => {
             <h2>Мои проекты</h2>
             <div className="profile-projects">
                 <div className="profile-projects-item">
-                    <div className="profile-projects-content" onClick={()=>navigate("/createProject/")}>
+                    <div className="profile-projects-content" onClick={()=>navigate("createProject/")}>
                         <p>Создать проект...</p>
                         <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLogin } from './hooks/useAuth';
-
 import "css/login.css"
 import LoginForm from './components/LoginForm';
 
@@ -22,6 +21,7 @@ const LoginPage = () => {
                 setErrorMessage("Что-то пошло не так. Код ошибки " + error.status );
         }
     },[error])
+    
   
     return (
         <LoginForm onSubmit={handleSubmit} isLoading={isLoading} errorMessage={errorMessage}/>

@@ -5,6 +5,11 @@ export const getStudentProfile = async () => {
   return response.data;
 };
 
+export const getTeacherProfile = async () => {
+  const response = await api.get('/curatorProfile');
+  return response.data;
+};
+
 export const getProfessorsList = async () => {
   const response = await api.get('/project/curators')
   return response.data;
@@ -25,5 +30,22 @@ export const getSharedUser = async () =>{
   return response.data;
 } 
 
+export const editCommonProfile = async (data) =>{
+  const response = await api.post("/commonProfile/update", data)
+  return response.data;
+}
+export const createProjectsGroup = async (data) =>{
+  const response = await api.post('/projectgroup/create', data)
+  return response.data;
+}
 
+export const getGroupProjects = async (id) =>{
+  const response = await api.get("/projectgroup/getGroupProjects?groupId=" + id)
+  return response.data;
+} 
+
+export const getCouratorGroups = async (id) =>{
+  const response = await api.get("projectgroup/getCuratorGroups?curatorId=" + id)
+  return response.data;
+} 
 
