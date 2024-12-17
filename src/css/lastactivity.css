@@ -2,12 +2,33 @@
     display: flex;
 }
 .last-activity hr{
-    margin: 0 30px;
+    margin: 0 20px;
     border: none; 
     border-left: 2px solid var(--main-blue-color); 
 }
+
 .act-flex{
     display: flex;
     align-items: center;
     gap:5px
+}
+.last-activity-date{
+    width: 100px;
+    flex: 0.2
+}
+
+@media (width < 400px) {
+    .last-activity-date{
+        display: none;
+    }
+    .last-activity hr{
+        display: none;
+    }
+    .last-activity{
+        display: block;
+    }
+    .last-activity-tile{
+        padding-block: 5px !important;
+    }
+    
 }

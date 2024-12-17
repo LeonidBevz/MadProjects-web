@@ -53,6 +53,7 @@ self.addEventListener('message', (event) => {
       return
     }
     authorized=false
+    subscriptions={}
     sendMessageToAllClients({ type: 'socket_closed' })
     self.registration.unregister()
     return
@@ -135,7 +136,7 @@ function createWebSocket(url){
       console.error('WebSocket ошибка:', error);
       socket = null;
       authorized = false
-
+      subscriptions={}
       sendMessageToAllClients({ type: 'socket_closed' })
       self.registration.unregister()
     };
@@ -144,9 +145,8 @@ function createWebSocket(url){
       console.log('WebSocket закрыт');
       socket = null;
       authorized = false
-
+      subscriptions={}
       sendMessageToAllClients({ type: 'socket_closed' })
-
       self.registration.unregister()
     };
   }

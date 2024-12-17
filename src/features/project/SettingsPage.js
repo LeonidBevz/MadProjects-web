@@ -8,9 +8,10 @@ import ReposTile from "../shared/components/ReposTile";
 import "css/settingspage.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
 import { useProjectContext } from "./contexts/ProjectContext";
-import { useAddRepo, useDeleteMemeber, useDeleteRepo } from "./hooks/useProject";
+import { useAddRepo, useDeleteMemeber, useDeleteProject, useDeleteRepo } from "./hooks/useProject";
 import { useNotifications } from "features/shared/contexts/NotificationsContext";
 import InviteModal from "./components/InviteModal";
+import { useNavigate } from "react-router-dom";
 
 const SettingsPage = () => {
     const {isNightTheme} = useTheme()
@@ -20,6 +21,7 @@ const SettingsPage = () => {
     const [newRepo,setNewRepo] = useState("")
     const { projectData, members, repos: prRepos, refetch } = useProjectContext()
     const { addNotification } = useNotifications()
+    const navigate = useNavigate()
 
     const [data, setData] = useState({ 
       title: "",
@@ -70,6 +72,21 @@ const SettingsPage = () => {
     },[deleteMemberError])
 
 
+    const {mutate: mutateDeleteProject, error: deleteProjectError, isSuccess: isDeleteProjectSuccess} = useDeleteProject()
+    useEffect(()=>{
+      if (!isDeleteProjectSuccess) return
+      addNotification("Проект успешно удален", "success")
+      navigate("/profile/")
+      // eslint-disable-next-line
+    },[isDeleteProjectSuccess])
+
+    useEffect(()=>{
+      if (!deleteProjectError) return
+      addNotification("Ошибка удаления " + deleteProjectError.status,"error")
+      // eslint-disable-next-line
+    },[deleteProjectError])
+    
+
     useEffect(()=>{
       if(!projectData) return
   
@@ -111,7 +128,7 @@ const SettingsPage = () => {
       setModalWindow(0)
     }
     const deleteProject = () =>{
-      console.log("onDelete")
+      mutateDeleteProject({projectId: projectData.id})
       setModalWindow(0)
     }
     const addRepo = (newRepo) =>{

@@ -1,8 +1,8 @@
 import React from "react";
 import "css/lastactivity.css"
 
-const LastActivity = ({date, link, text, linkTo}) => {
-    const getTimeAgo = (date) => {
+const LastActivity = ({date, link, text, linkTo}) => {  
+  const getTimeAgo = (date) => {
         const now = new Date();
         const diff = now - new Date(date);
         const seconds = Math.floor(diff / 1000);
@@ -28,15 +28,17 @@ const LastActivity = ({date, link, text, linkTo}) => {
         }else if (years < 5){
           return `${years} г. назад`;
         }else {
-            return `${years} лет назад`;
+          return `${years} лет назад`;
         }
-      };
+    };
+
+
   
     return (
       <div className="last-activity">          
-        <p>{getTimeAgo(date)}</p>
+        <p  className="last-activity-date">{getTimeAgo(date)}</p>
         <hr/>    
-        <p>{text}<a href={linkTo}>{link}</a></p>
+        <p style={{flex: '1'}}>{text}<a href={linkTo}>{link}</a></p>
       </div>
       
     );

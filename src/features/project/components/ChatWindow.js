@@ -13,10 +13,9 @@ const formatLinuxTime = (timestamp) =>{
     return formattedTime
 }
 
-const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef,sendersList}) => {
+const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, onSendMessage, onReadUntil, containerRef,sendersList, userId}) => {
     const {isNightTheme} = useTheme()
     const [message, setMessage] = useState('');
-    const [userId, setUserId] = useState(3)
     const [lastVisibleItem, setLastVisibleItem] = useState(null);
     const lastVisibleRef = useRef(null);
     const textareaRef = useRef(null);
@@ -34,6 +33,8 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
         const handleScroll = () => {
           findLastVisibleElement();
         };
+
+        findLastVisibleElement();
         
         container.addEventListener('scroll', handleScroll);
     
@@ -152,10 +153,10 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
                 {messagesADay.messages.map((messageGroup,i)=>(
                     <div className={(messageGroup.senderId === userId && !isSuperWide)? "message-group-r" :"message-group-l"} key={i}>
                         {(messageGroup.senderId !== userId || isSuperWide) && (<div className="userpic-container">
-                            <img className="user-pic" src="https://i.pinimg.com/736x/e0/88/aa/e088aa7320f0e3f6e4d6b3c3ce1f2811.jpg" alt="pic"/>
+                            <img className="user-pic" src={sendersList[messageGroup.senderId]?.avatar || "/baseProfilePic.png"} alt="pic"/>
                         </div>)}
                         <div className="messages-container">
-                            <p className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>{messageGroup.senderId}</p>
+                            <p className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>{sendersList[messageGroup.senderId] ? sendersList[messageGroup.senderId].lastName + " "+sendersList[messageGroup.senderId].firstName + " "+sendersList[messageGroup.senderId].secondName : "Неизвестный хацкер"}</p>
                             {messageGroup.messages.map((message,j)=>(<div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-container-r" : "message-container-l"} key={j}>
                                 <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message unread" : "message-l message unread"} index={message.id}>
                                     <pre className="message-text">{message.text}</pre>

@@ -61,7 +61,7 @@ const StudentProfileEditPage = () => {
         firstName: isNameChanged ? studentForm.name : null,
         secondName: isInameChanged ? studentForm.iname : null,
         lastName: isSurnameChanged ? studentForm.surname : null,
-        group: isGroupChanged ? studentForm.group : null
+        data: isGroupChanged ? studentForm.group : null
       })     
 
     }

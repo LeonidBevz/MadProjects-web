@@ -101,7 +101,6 @@
     height: 2px;
     background: var(--main-gradient);
 }
-
 @media (width < 730px) {
     .commits-controls-container{
         display: block;

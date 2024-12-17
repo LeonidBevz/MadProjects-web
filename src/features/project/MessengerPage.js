@@ -12,6 +12,7 @@ const MessengerPage = () => {
     const { sendAction, iswsConnected, subscribeSocket,  unsubscribeSocket } = useWebSocket()
     const { projectId } = useParams()
     const projectIdInt = parseInt(projectId)
+    const [currentUserId, setCurrentUser] = useState("0")
 
     const [isLoading, setIsLoading] = useState(true)
 
@@ -101,6 +102,7 @@ const MessengerPage = () => {
           }
           else if (message.projectId===projectIdInt && message.type === "entities.Action.Messenger.SendChatMessages"){
             setInitialMessages(prevChatMessages => [...prevChatMessages, message]);
+            setCurrentUser(message.userId)
           }
           else if(message.projectId===projectIdInt && message.type === "entities.Action.Messenger.NewMessage") {
             if (groupedMessagesRef.current && groupedMessagesRef.current.some(chat => chat.chatId === message.chatId)){
@@ -333,7 +335,7 @@ const MessengerPage = () => {
     })
   }
 
-  if (!'serviceWorker' in navigator) {
+  if (!('serviceWorker' in navigator)) {
     return(
       <div className="no-chat-text page">В вашем браузере не поддерживается serviceWorker</div>
     )
@@ -366,6 +368,7 @@ const MessengerPage = () => {
         onReadUntil={onReadUntil}
         containerRef={chatContainer}
         sendersList={sendersList}
+        userId={currentUserId}
       /> : !(isMobile) ? <div className="no-chat-text">Выберите чат</div>:<></>}
     </div>
   );

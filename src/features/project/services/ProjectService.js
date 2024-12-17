@@ -30,3 +30,12 @@ export const deleteMember = async (data) =>{
   return response.data;
 }
 
+export const deleteProject = async (data) =>{
+  const response = await api.post("/project/delete?projectId=" + data.projectId);
+  return response.data;
+}
+
+export const getLastActivities = async (projectId, count) =>{
+  const response = await api.get("/project/activity/get?projectId=" + projectId + "&count=" +count );
+  return response.data;
+}

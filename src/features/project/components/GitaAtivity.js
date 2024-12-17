@@ -82,16 +82,17 @@ const GitActivity = () => {
     
       if (!repoData) return
       const users = repoData.authors
+      console.log(users)
       
       const formattedData = repoData.commits.map(commit => {
-        const user = users.find(user => user.githubId === commit.authorGithubId);
+        const user = users.find(user => user.githubMeta.githubId === commit.authorGithubId);
         return {
           name: (commit.message && commit.message.split("\n")[0]) || 'Unknown', 
           date: commit.date,
-          username: user ? user.id : 'Unknown User',
+          username: user ? user.profile.lastName +" "+ user.profile.firstName.slice(0,1)+"."+ user.profile.secondName.slice(0,1)+".": 'Unknown User',
           link: `https://github.com/${chosenRepo}/commit/${commit.sha}`,
-          profilepic: user ? user.githubAvatar : 'No Profile Pic',
-          profilelink: user ? user.profileLink : "no link" 
+          profilepic: user ? user.githubMeta.githubAvatar : 'No Profile Pic',
+          profilelink: user ? user.githubMeta.profileLink : "no link" 
         };
       });
       setAllCommits(formattedData)
