@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -85,4 +85,8 @@ export const useGetCuratorGroups = (id) =>{
       refetchOnWindowFocus: false,
     }
   );
+}
+
+export const useJoinProject = () => {
+  return useMutation(joinProject);
 }

@@ -43,6 +43,10 @@ const CreateProjectPage = () => {
       }
     },[error])
 
+    useEffect(()=>{
+      setChosenGroup()
+    },[chosenProfessor])
+
     const handleSubmit = (event)=>{
       event.preventDefault()
       if (!chosenProfessor){

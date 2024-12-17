@@ -39,7 +39,7 @@ function getTimeAgo(date) {
 }
 
   
-const ChatsList = ({chats, onChatSelect, activeChat}) => {
+const ChatsList = ({chats, onChatSelect, activeChat, sendersList}) => {
     const {isNightTheme} = useTheme()
   
     return (     
@@ -53,7 +53,7 @@ const ChatsList = ({chats, onChatSelect, activeChat}) => {
                   <h2>{chat.title}</h2>
                   {chat.lastMessage !== null && (<div className="chat-list-tile-lastmess"> 
                       <span className="chat-list-tile-lastmess-combined no-trans">
-                        <span className="chat-list-tile-lastmess-user">{chat.lastMessage.senderId}</span>
+                        <span className="chat-list-tile-lastmess-user">{ sendersList[chat.lastMessage.senderId] ? sendersList[chat.lastMessage.senderId].lastName + " " + sendersList[chat.lastMessage.senderId].firstName.slice(0,1) + "." + sendersList[chat.lastMessage.senderId].secondName.slice(0,1) + "." : "Неизвестный"}</span>
                         <span className="chat-list-tile-lastmess-mess">{chat.lastMessage.text}</span>
                       </span>
                       <p className="chat-list-tile-lastmess-date">{getTimeAgo(chat.lastMessage.time)}</p>

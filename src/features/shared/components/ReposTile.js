@@ -3,7 +3,7 @@ import CrossIco from "images/cross";
 import RightArrowIco from "images/arrowrightico";
 import { useTheme } from "../contexts/ThemeContext";
 
-const ReposTile = ({repos, setRepos, handleAddRepo, noBS}) => {
+const ReposTile = ({repos, setRepos, handleAddRepo, noBS, onDelete = ()=>{}}) => {
     const {isNightTheme} = useTheme()
     
     /* 
@@ -25,6 +25,7 @@ const ReposTile = ({repos, setRepos, handleAddRepo, noBS}) => {
     */
       
     const deleteRepo = (index) => {
+        onDelete(repos[index])
         const newRepos = repos.filter((_, i) => i !== index);
         setRepos(newRepos); 
     };

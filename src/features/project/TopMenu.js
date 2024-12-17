@@ -145,25 +145,25 @@ const TopMenuPage = () => {
             </div>
             <div className="sidemenu-buttons">
               <div className="sidebar-separator"/>
-              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/activity/`)}>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/${projectId}/activity/`)}>
                 Активность
               </div>
               <div className="sidebar-separator"/>
-              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/messenger/`)}>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/${projectId}/messenger/`)}>
                 Мессенджер
               </div>
               <div className="sidebar-separator"/>
-              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/info/`)}>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/${projectId}/info/`)}>
                 Информация
               </div>
               <div className="sidebar-separator"/>
-              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/kanban/`)}>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/${projectId}/kanban/`)}>
                 Канбан
               </div>
               {isCreator && (
                 <div>
                   <div className="sidebar-separator"/>
-                  <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`${projectId}/settings/`)}>
+                  <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/${projectId}/settings/`)}>
                     Настройки
                   </div>
                 </div>

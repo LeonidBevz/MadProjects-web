@@ -7,10 +7,12 @@ import { useGetStudentProfile } from "../hooks/useProfile";
 import { useAuth } from "features/shared/contexts/AuthContext";
 import Loading from "features/shared/components/Loading";
 import GitLink from "../components/GitLink";
+import JoinModal from "../components/JoinModal";
 
 const ProfilePage = () => {
     const { isNightTheme } = useTheme()
     const [isGitAuth, setIsGitAuth] = useState(false)
+    const [modalWindow, setModalWindow] = useState(0)
 
     const navigate = useNavigate()
 
@@ -45,7 +47,10 @@ const ProfilePage = () => {
     }
     
     return (
-      <div className="profile-page">          
+      <div className="profile-page">     
+        <div className={`${modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
+        {modalWindow === 1 && (<JoinModal onCancel={()=>setModalWindow(0)}/>)}  
+             
         <div className="profile-page-content">
             <div className="profile-info">
                 <div className="profile-pic-container">
@@ -79,7 +84,7 @@ const ProfilePage = () => {
                     <div className="profile-projects-separator"></div>
                 </div>
                 <div className="profile-projects-item">
-                    <div className="profile-projects-content">
+                    <div className="profile-projects-content" onClick={()=>setModalWindow(1)}>
                         <p>Присоединиться к проекту...</p>
                         <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>

@@ -12,7 +12,8 @@ export function useWebSocket() {
 export function WebSocketProvider({ children }) {
   const [iswsConnected, setIswsConnected] = useState(null);
   const [isSWRegistered, setIsSWRegistered] = useState(false);
-  const tokenExpTime  = localStorage.getItem("tokenTime")
+  const tokenExpTime = localStorage.getItem("tokenTime")
+  const accessToken = localStorage.getItem("access")
   const navigate = useNavigate()
   const clientId = crypto.randomUUID();
   const { addNotification } = useNotifications()
@@ -59,7 +60,7 @@ export function WebSocketProvider({ children }) {
         const message = event.data;
         console.log(message);
         if (message.type === 'socket_opened') {
-          navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: '3'})});
+          navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: accessToken })});
           setIswsConnected(true);
         } else if (message.type === 'socket_already_opened') {
           setIswsConnected(true);

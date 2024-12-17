@@ -10,7 +10,8 @@ const ProjectsGroupPage = () => {
     const titles = [
         {name: "Название", key: "name", type: "link"},
         {name: "Команда", key: "formatedteam",type: "text"}, 
-        {name: "Дата создания", key: "formateddate",type: "text"}
+        {name: "Дата создания", key: "formateddate", type: "text"},
+        {name: "Статус", key: "status", type: "text"}
     ]
 
     const {data, isLoading, error } = useGetGroupProjects(parseInt(group))
@@ -19,11 +20,17 @@ const ProjectsGroupPage = () => {
 
     useEffect(()=>{
         if (!data) return
-        const newTable = data.map(project=>({
+        const statusMapping = {
+            Pending: "Ожидает одобрения",
+            Approved: "Одобрен",
+            Unapproved: "Отклонен",
+          };
+        const newTable = data.projects.map(project=>({
             name: project.title,
             formatedteam: project.members.map(member => (member.lastName + " "+ member.firstName + " " + member.secondName +" (" + member.group + ")")).join('\n'),
             formateddate: project.createDate,
-            linkto: `${project.id}/activity`
+            linkto: `/${project.id}/activity`,
+            status: statusMapping[project.status]
         }))
         setTable(newTable)
     },[data])
@@ -47,7 +54,7 @@ const ProjectsGroupPage = () => {
     return (
       <div className="info-page page">  
         <div className="info-container">
-            <h2>{group}</h2>
+            <h2>{data.title}</h2>
             {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, одобрите их "} linktext={"тут"} linkto={"/teacher/approve"}/> : <Table titles={titles} data={table}/>}       
             
         </div>

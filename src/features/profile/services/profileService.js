@@ -49,3 +49,7 @@ export const getCouratorGroups = async (id) =>{
   return response.data;
 } 
 
+export const joinProject = async (data) =>{
+  const response = await api.post('/invites/use?invite=' + data.code)
+  return response.data;
+}

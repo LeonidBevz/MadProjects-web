@@ -6,7 +6,7 @@ const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const {projectId} = useParams()
-  const {data, isLoading: isMetaLoading, error: projectMetaError, isSuccess, refetch} = useGetProjectMeta(projectId)  
+  const {data, isLoading: isMetaLoading, error: projectMetaError, refetch} = useGetProjectMeta(projectId)  
   const [projectData, setProjectData] = useState()
   const [members, setMembers] = useState()
   const [repos, setRepos] = useState()

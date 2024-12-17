@@ -22,6 +22,7 @@ const MessengerPage = () => {
     const [chatsList,setChatList] = useState([])
     const chatsListRef = useRef(chatsList)
     const [isChatListVisible, setChatListVisible] = useState(true);
+    const [sendersList, setSendersList] = useState([])
 
     const [initialMessages, setInitialMessages] = useState([])
     const [groupedMessages, setGroupedMessages] = useState([])
@@ -95,6 +96,7 @@ const MessengerPage = () => {
           const message = SWmessage.data
           if (message.projectId===projectIdInt && message.type ==="entities.Action.Messenger.SendChatsList"){
             setChatList(message.chats)
+            setSendersList(Object.fromEntries(message.senders.map(item => [item.id, item])))
             setIsLoading(false)
           }
           else if (message.projectId===projectIdInt && message.type === "entities.Action.Messenger.SendChatMessages"){
@@ -353,7 +355,7 @@ const MessengerPage = () => {
 
   return (
     <div className="messenger-page page"> 
-      {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect} activeChat={activeChat}/>)}
+      {isChatListVisible && ( <ChatsList chats={chatsList} onChatSelect={handleChatSelect} activeChat={activeChat} sendersList={sendersList}/>)}
       {activeChat ? <ChatWindow 
         chat={activeChat} 
         groupedMessages={groupedMessages.find(message => message.chatId === activeChat.id) || { read: [], unread: [] }} 
@@ -363,6 +365,7 @@ const MessengerPage = () => {
         onBackClick={handleBackClick}
         onReadUntil={onReadUntil}
         containerRef={chatContainer}
+        sendersList={sendersList}
       /> : !(isMobile) ? <div className="no-chat-text">Выберите чат</div>:<></>}
     </div>
   );
