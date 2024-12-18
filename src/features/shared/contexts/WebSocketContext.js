@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { MessengerSocket } from "urls";
+import {  MessengerSocket } from "urls";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "./NotificationsContext";
 
@@ -22,7 +22,6 @@ export function WebSocketProvider({ children }) {
     if ('serviceWorker' in navigator) { 
       navigator.serviceWorker.register('/service-worker.js').then((registration) => {     
         
-        
         navigator.serviceWorker.ready.then(() => {
           if (navigator.serviceWorker.controller){
             setIsSWRegistered(true)
@@ -33,13 +32,25 @@ export function WebSocketProvider({ children }) {
             }
           }
         });
-      
-      
+
       }).catch((error) => {
         console.error('Ошибка регистрации Service Worker:', error);
       });
     }
   }
+
+  useEffect(()=>{
+    if ( navigator.serviceWorker.controller){
+      const handleFocus = () =>{
+        checkSocket()
+      }
+      window.addEventListener('focus', handleFocus)
+
+      return ()=>{
+        window.removeEventListener("focus", handleFocus)
+      }
+    }
+  },[])
 
   useEffect(() => {
     if ('serviceWorker' in navigator) { 
@@ -66,10 +77,12 @@ export function WebSocketProvider({ children }) {
           setIswsConnected(true);
         } else if (message.type === 'socket_closed') {
           setIswsConnected(false);
-          navigate("/login/")
+          addNotification("Сокет закрылся")
         } else if (message.type === 'SW_registered') {
           setIsSWRegistered(true);
-        } 
+        } else if (message.type === 'socket_error') {
+          addNotification("Ошибка подключения ", message.data)
+        }
       };
 
       navigator.serviceWorker.addEventListener('message', messageHandler)
@@ -117,6 +130,13 @@ export function WebSocketProvider({ children }) {
       type: "SUBSCRIBE",
       data: { channel: channel, projectId: projectId, clientId: clientId },
     });
+  }
+
+  const checkSocket = () =>{
+    navigator.serviceWorker.controller.postMessage({
+      type: "reconnect",
+      data: {jwt: accessToken, url: MessengerSocket}
+    })
   }
 
   const unsubscribeSocket = (channel, projectId) => {

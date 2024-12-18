@@ -2,7 +2,7 @@ let socket = null;
 let authorized = false
 let socketURL = null
 
-const subscriptions = {};
+let subscriptions = {};
 
 function sendMessageToAllClients(message) {
   self.clients.matchAll().then(clients => {
@@ -32,10 +32,17 @@ self.addEventListener('destroy', () => {
 });
 
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', async (event) => {
   const message = event.data;
   console.log("Client message ", message)
 
+  if (message.type === 'reconnect') {
+    if (socket) return
+    console.log("try reconnect ", socket)
+    await createWebSocket(message.data.url)
+    sendMessageToAllClients({type: "RECONNECTED"})
+    return
+  }
   if (message.type === 'claim_clients') {
     self.clients.claim().then(() => {
       sendMessageToAllClients({ type: 'SW_registered' })
@@ -110,49 +117,55 @@ self.addEventListener('message', (event) => {
   }
 });
 
-function createWebSocket(url){
-  if (!socket) {
-    socket = new WebSocket(url);
-    socketURL = url
-    
-    socket.onopen = () => {
-      console.log('WebSocket открыт');
-      sendMessageToAllClients({ type: 'socket_opened' })
-    }; 
-
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-
-        console.log("Socket message: ", data)
-
-        sendMessageToAllClients({ type: 'RECEIVE_MESSAGE', data: data })
-      } catch (error) {
-        console.error('Ошибка парсинга:', error);
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error('WebSocket ошибка:', error);
-      socket = null;
-      authorized = false
-      subscriptions={}
-      sendMessageToAllClients({ type: 'socket_closed' })
-      self.registration.unregister()
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket закрыт');
-      socket = null;
-      authorized = false
-      subscriptions={}
-      sendMessageToAllClients({ type: 'socket_closed' })
-      self.registration.unregister()
-    };
-  }
-  else{
-    sendMessageToAllClients({ type: 'socket_already_opened' })
-    console.log("Socket already started ", socket) 
-  }
+async function createWebSocket(url){
+  return new Promise((resolve, reject) => {
+    if (!socket) { 
+      socket = new WebSocket(url);
+      socketURL = url
+      
+      socket.onopen = () => {
+        console.log('WebSocket открыт');
+        sendMessageToAllClients({ type: 'socket_opened' })
+        resolve()        
+      }; 
+  
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+  
+          console.log("Socket message: ", data)
+  
+          sendMessageToAllClients({ type: 'RECEIVE_MESSAGE', data: data })
+        } catch (error) {
+          console.error('Ошибка парсинга:', error);
+        }
+      };
+  
+      socket.onerror = (error) => {
+        console.error('WebSocket ошибка:', error);
+        socket = null;
+        authorized = false
+        subscriptions={}
+        sendMessageToAllClients({ type: 'socket_closed' })
+        sendMessageToAllClients({ type: 'socket_error', data: error })
+        reject()  
+      };
+  
+      socket.onclose = () => {
+        console.log('WebSocket закрыт');
+        socket = null;
+        authorized = false
+        subscriptions={}
+        sendMessageToAllClients({ type: 'socket_closed' })
+        reject()  
+      };
+    }
+    else{
+      sendMessageToAllClients({ type: 'socket_already_opened' })
+      console.log("Socket already started ", socket) 
+      resolve()
+    }
+  })
+  
 }
 

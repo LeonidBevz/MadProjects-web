@@ -80,7 +80,7 @@ const KanbanPage = () => {
       }))
     setCards(refactoredData)
   } 
-  
+    
   //sw logic
   useEffect(()=>{
     if (!navigator.serviceWorker.controller) return
@@ -92,6 +92,19 @@ const KanbanPage = () => {
 
     onmessage = (event) =>{
       const SWmessage = event.data;
+      if (SWmessage.type === 'RECONNECTED'){
+        setIsLoading(true)
+        setCards([])
+        setIsDeleteWindowShown(0)
+        setNewName("")
+        setRowToEdit(null)
+        setCardToEdit(null)
+        subscribeSocket("Kanban", projectIdInt)
+        sendAction("Kanban.GetKanban", {projectId: projectIdInt})
+    
+        console.log('Kanban ws subscribed reconnect');
+        return
+      }
       if (SWmessage.type === 'RECEIVE_MESSAGE') {
         const message = SWmessage.data
         if (message.projectId === projectIdInt && message.type === "entities.Action.Kanban.SetState") {

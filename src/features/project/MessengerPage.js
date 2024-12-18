@@ -39,12 +39,17 @@ const MessengerPage = () => {
       setChatListVisible(true)
     } 
 
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-
     useEffect(() => {
+      const handleResize = () => {
+        setWidth(window.innerWidth);
+      };
+  
       window.addEventListener('resize', handleResize);
+
+      return ()=>{
+        window.removeEventListener('resize', handleResize);
+      }
+      
     }, []);
 
     useEffect(()=>{
@@ -93,6 +98,20 @@ const MessengerPage = () => {
 
       const onmessage = (event )=>{
         const SWmessage = event.data;
+        if (SWmessage.type === 'RECONNECTED'){
+          setIsLoading(true)
+          setActiveChat(null)
+          setChatList([])
+          setGroupedMessages([])
+          setInitialMessages([])
+          
+          subscribeSocket("Messenger", projectIdInt)
+          sendAction("Messenger.RequestChatsList",{
+            projectId: projectIdInt
+          })
+          console.log('Messages ws subscribed reconnect');
+          return
+        }
         if (SWmessage.type === 'RECEIVE_MESSAGE') {
           const message = SWmessage.data
           if (message.projectId===projectIdInt && message.type ==="entities.Action.Messenger.SendChatsList"){
@@ -122,7 +141,6 @@ const MessengerPage = () => {
       window.addEventListener('beforeunload', unsubscribe);
 
       return () => {
-        window.removeEventListener('resize', handleResize);
         navigator.serviceWorker.removeEventListener('message', onmessage)
         window.removeEventListener('beforeunload', unsubscribe)
         unsubscribe()

@@ -18,7 +18,7 @@ const ActivityPage = () => {
     const sprints = [{name: "Последние правки (текущий)", linkTo: "/bomba/"},{name: "Плейлисты & Поиск (25.08.24)",linkTo: "/bomba/"},{name:"Пилим MVP (28.04.24)",linkTo: "/bomba/"}]
     const {addNotification} = useNotifications()
 
-    const {data: lastActivityData, isLoading: isActivityLoading, error: activityError } = useGetLastActivities(projectId, 3)
+    const {data: lastActivityData, isLoading: isActivityLoading, error: activityError } = useGetLastActivities(projectId, 7)
     useEffect(()=>{
       if(!activityError) return
       addNotification("Ошибка загрузки активностей", "error")
@@ -79,12 +79,17 @@ const ActivityPage = () => {
              text: `${user.lastName + " " +user.firstName} выгнал ${activity.targetTitle} из проекта`,
           }
           break
+          case "KardMove":
+           formatted = {
+             date: activity.timeMillis, 
+             text: `${user.lastName + " " +user.firstName} передвинул карточку ${activity.targetTitle} в столбец ${activity.secondaryTargetTitle}`,
+          }
+          break
             
           default:
             formatted = {};
             break
         }
-        console.log(formatted)
         return formatted
         
       })
