@@ -39,3 +39,19 @@ export const getLastActivities = async (projectId, count) =>{
   const response = await api.get("/project/activity/get?projectId=" + projectId + "&count=" +count );
   return response.data;
 }
+
+export const getProjectSprints = async (projectId) =>{
+  const response = await api.get("/sprint/getListByProject?projectId=" + projectId);
+  return response.data;
+}
+
+export const createSprint = async (data) =>{
+  const response = await api.post("/sprint/create/", data);
+  return response.data;
+}
+
+export const getProjectKards = async (projectId) =>{
+  const response = await api.get("/project/kards?projectId=" + projectId);
+  return response.data;
+}
+

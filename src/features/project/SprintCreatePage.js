@@ -1,8 +1,17 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import ChoseManyDropDown from "./components/ChoseManydd";
+import { useCreateSprint, useGetProjectKards } from "./hooks/useProject";
+import { useNotifications } from "features/shared/contexts/NotificationsContext";
+import Loading from "features/shared/components/Loading";
 
 const SprintCreatePage = () => {
+  function formatDate(inputDate) {
+    const [year, month, day] = inputDate.split("-");
+    return `${day}.${month}.${year}`;
+  }
+
+    const {projectId} = useParams()
     const [newName,setNewName] = useState("")
     const [newDescription,setNewDescription] = useState("")
     const [newEndDate, setNewEndDate] = useState("")
@@ -10,30 +19,48 @@ const SprintCreatePage = () => {
     const today = new Date().toISOString().split('T')[0];
     const [chosenCards, setChosenCards] = useState([])
     const navigate = useNavigate()
-    const [cards, setCards] = useState([
-      {
-        rowName: "В работе",
-        id: "row1",
-        cards: [
-          { name: "Фикс поиска", id: "card1", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
-          { name: "Фикс поиска2", id: "card2", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
-        ],
-      },
-      {
-        rowName: "Завершено",
-        id: "row2",
-        cards: [
-          
-          { name: "Фикс поиска4", id: "card4", author: "Ilya Bundelev", created: "2024-09-28T12:30:00Z", updated: "2024-09-28T12:30:00Z" },
-        ],
-      },
-    ])
-    const formattedCards = cards.flatMap(row =>
-      row.cards.map(card => (`${card.name} (${row.rowName})`))
-    );
+    const {addNotification} = useNotifications()
+
+    const {mutate, isLoading: isCreateLoading, error: createError, isSuccess: isCreateSuccess} = useCreateSprint()
+
+    useEffect(()=>{
+      if (!isCreateSuccess) return
+      addNotification("Спринт успешно создан!","success")
+      navigate(-1)
+      // eslint-disable-next-line 
+    },[isCreateSuccess])
+
+    useEffect(()=>{
+      if (!createError) return
+      setErrorMessage("Ошибка отправки", createError.status)
+      addNotification("Ошибка отправки","error")
+      // eslint-disable-next-line 
+    },[createError])
+
+    const {data: kards, error} = useGetProjectKards(projectId) 
+
+    useEffect(()=>{
+      if (!error) return
+      setErrorMessage("Ошибка загрузки задач", error.status)
+      addNotification("Ошибка загрузки задач","error")
+      // eslint-disable-next-line 
+    },[error])
 
     const handleSubmit = (event)=>{
       event.preventDefault()
+      if (chosenCards.length === 0){
+        setErrorMessage("Не выбраны задачи!")
+        return
+      }
+
+      const data = {
+        projectId: projectId,
+        title: newName,
+        desc: newDescription,
+        endDate: formatDate(newEndDate),
+        kardsIds: chosenCards.map(kard => kard.id)
+      }
+      mutate(data)
     }
     const handleNameChange = (event) => {
       setNewName(event.target.value);
@@ -86,13 +113,19 @@ const SprintCreatePage = () => {
             </div>
             <div>
               <label>Задачи</label>
-              <ChoseManyDropDown values={formattedCards} selectedValues={chosenCards} setSelectedValues={setChosenCards} emptyMessage={"Выберите задачи"}/>
+              <ChoseManyDropDown values={kards} displayKey={"title"} selectedValues={chosenCards} setSelectedValues={setChosenCards} emptyMessage={"Выберите задачи"}/>
             </div>
-            {errorMessage && (<p className="error-message">{errorMessage}</p>)}
-            <div className="flex-buttons">
-              <button className= "login-but" type="submit">Создать</button>
-              <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
-            </div>
+            {errorMessage && (<p className="error-message" style={{marginTop: "10px"}}>{errorMessage}</p>)}
+            {isCreateLoading && (
+              <Loading/>
+            )}
+            {!isCreateLoading && (
+              <div className="flex-buttons">
+                <button className= "login-but" type="submit">Создать</button>
+                <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
+              </div>
+            )}
+            
           </form>
         </div>
       </div>

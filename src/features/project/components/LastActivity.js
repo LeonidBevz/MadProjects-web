@@ -38,7 +38,7 @@ const LastActivity = ({date, link, text, linkTo}) => {
       <div className="last-activity">          
         <p  className="last-activity-date">{getTimeAgo(date)}</p>
         <hr/>    
-        <p style={{flex: '1'}}>{text}<a href={linkTo}>{link}</a></p>
+        <p style={{flex: '1', textWrap: "balance" }}>{text}<a href={linkTo}>{link}</a></p>
       </div>
       
     );

@@ -1,5 +1,5 @@
 import {  useMutation, useQuery } from 'react-query';
-import { addRepo, deleteMember, deleteProject, deleteRepo, getInviteCode, getLastActivities, getProjectMeta, postUpdateProject } from '../services/ProjectService';
+import { addRepo, createSprint, deleteMember, deleteProject, deleteRepo, getInviteCode, getLastActivities, getProjectKards, getProjectMeta, getProjectSprints, postUpdateProject } from '../services/ProjectService';
 
 export const useGetProjectMeta = (projectId) => {
     return useQuery(['GetProject', projectId], () => getProjectMeta(projectId), {
@@ -39,6 +39,26 @@ export const useDeleteProject = () =>{
 
 export const useGetLastActivities = (projectId, count = null) =>{
   return useQuery(['GetLastActivities', projectId, count], () => getLastActivities(projectId, count), {
+    enabled: !!projectId,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export const useGetProjectSprints = (projectId) =>{
+  return useQuery(['GetProjectSprints', projectId], () => getProjectSprints(projectId), {
+    enabled: !!projectId,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export const useCreateSprint = () =>{
+  return useMutation( createSprint);
+}
+
+export const useGetProjectKards = (projectId) =>{
+  return useQuery(['GetProjectKards', projectId], () => getProjectKards(projectId), {
     enabled: !!projectId,
     retry: false,
     refetchOnWindowFocus: false,

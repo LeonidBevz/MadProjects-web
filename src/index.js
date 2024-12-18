@@ -42,6 +42,7 @@ import AnaliticsPage from "features/project/AnaliticsPage";
 import GitAuthPage from "features/auth/GitAuthPage";
 import NotificationContainer from "features/shared/components/Notifications";
 import ProfileRouting from "features/profile/ProfileRouting";
+import LastActivitiesPage from "features/project/LastActivitiesPage";
 
 const App = () => {  
   const queryClient = new QueryClient();
@@ -72,6 +73,7 @@ const App = () => {
                       <Route path="sprints/create" element={<SprintCreatePage/>}/>
                       <Route path="settings/" element={<SettingsPage/>}/>
                       <Route path='analitics/' element={<AnaliticsPage/>}/>
+                      <Route path="lastactivities/" element={<LastActivitiesPage/>}/>
                     </Route>
 
                     {/*Маршрутизация профиля*/}

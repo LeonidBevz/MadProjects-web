@@ -13,6 +13,7 @@ import { useAuth } from "features/shared/contexts/AuthContext";
 import Loading from "features/shared/components/Loading";
 import { useProjectContext } from "./contexts/ProjectContext";
 import NotFoundPage from "features/shared/notfound";
+import StatusBar from "./components/StatusBar";
 
 const TopMenuPage = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
@@ -27,7 +28,7 @@ const TopMenuPage = () => {
   const {isNightTheme, onThemeChange, setIsSideBarPinned} = useTheme()
   const { handleLogOut, isLoggingOut, profileImage, fullName } = useAuth()
   const { isMetaLoading, projectMetaError, isCreator } = useProjectContext() 
-
+  
   const handleResize = () => {
     setIsWide(window.innerWidth > 1100);
   };
@@ -110,7 +111,8 @@ const TopMenuPage = () => {
   
 
     return (
-      <div className="main-container">          
+      <div className="main-container">      
+        <StatusBar/>    
         <div className="top-menu">
           <div className="sepline"></div>
           <div className="top-menu-content">
@@ -169,9 +171,6 @@ const TopMenuPage = () => {
                 </div>
               )}
               
-              {
-
-              }
             <div className="sidebar-separator-end"/>
             </div>
           </div>

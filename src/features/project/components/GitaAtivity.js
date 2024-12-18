@@ -7,6 +7,7 @@ import { useGetRepoData, useGetRepos } from "../hooks/useGitActivity"
 import Loading from "features/shared/components/Loading"
 import { useAuth } from "features/shared/contexts/AuthContext"
 import GitLogo from "images/gitlogo.svg"
+import ObjectSearchDropDown from "features/shared/components/ObjectSearchDropDown"
 
 const GitActivity = () => {
     const {accessToken} = useAuth()
@@ -80,29 +81,87 @@ const GitActivity = () => {
 
     useEffect(()=>{
     
-      if (!repoData) return
-      const users = repoData.authors
-      console.log(users)
+      if (!repoData) return     
+      const usersObject = [];
+      let unknownCount = 0;
+
+      let uniqueGithubIds = new Set()
+      let animals = []
+      if (repoData.authors.some(author => author.githubMeta === null)){
+        uniqueGithubIds = new Set(repoData.commits.map(commit => commit.authorGithubId));
+        animals = [
+          "Неизвестный носорог",
+          "Неизвестная кошка",
+          "Неизвестный тигр",
+          "Неизвестный кенгуру",
+          "Неизвестная панда",
+          "Неизвестный ёж",
+          "Неизвестная лягушка",
+          "Неизвестный барсук",
+          "Неизвестная обезьяна",
+          "Неизвестный лемур",
+          "Неизвестная сова",
+          "Неизвестный морж",
+          "Неизвестная зебра",
+          "Неизвестный медведь",
+          "Неизвестная черепаха"
+        ];
+      }
+     
+      repoData.authors.forEach(user => {
+        let name;
       
+        if (user.profile) {
+          const initials = user.profile.firstName.slice(0, 1) + "." + (user.profile.secondName?.slice(0, 1) || "") + ".";
+          name = `${user.profile.lastName} ${initials}`;
+      
+          usersObject.push({
+            id: user.githubMeta.githubId,
+            name: name,
+            githubAvatar: user.githubMeta.githubAvatar,
+            profileLink: user.githubMeta.profileLink
+          });
+        } else {
+          unknownCount++;
+          if (unknownCount > 15){
+            name = animals[unknownCount - 1] + unknownCount - 1;
+          }
+          else {
+            name = animals[unknownCount - 1];
+          }
+      
+          const unknownGithubId = Array.from(uniqueGithubIds)[unknownCount - 1]; 
+          usersObject.push({
+            id: unknownGithubId, 
+            name: name,
+            githubAvatar: "/baseProfilePic.png",
+            profileLink: "unknown"
+          });
+        }
+      });
+
+      usersObject.unshift({ name: "Все" });
+
       const formattedData = repoData.commits.map(commit => {
-        const user = users.find(user => user.githubMeta.githubId === commit.authorGithubId);
+        const user = usersObject.find(user => user.id === commit.authorGithubId);
         return {
           name: (commit.message && commit.message.split("\n")[0]) || 'Unknown', 
           date: commit.date,
-          username: user ? user.profile.lastName +" "+ user.profile.firstName.slice(0,1)+"."+ user.profile.secondName.slice(0,1)+".": 'Unknown User',
+          username: user.name,
           link: `https://github.com/${chosenRepo}/commit/${commit.sha}`,
-          profilepic: user ? user.githubMeta.githubAvatar : 'No Profile Pic',
-          profilelink: user ? user.githubMeta.profileLink : "no link" 
-        };
+          profilepic: user.githubAvatar,
+          profilelink: user.profileLink
+        };        
       });
       setAllCommits(formattedData)
 
-      const userSet = new Set();
-      repoData.authors.forEach(user => userSet.add(user.id));
-      userSet.add("Все")
-      setMembersList(Array.from(userSet))
-      setChosenMember("Все")
+      setChosenMember({name: "Все"})
+      setMembersList(usersObject)
 
+ 
+      if (formattedData.length === 0){
+        return
+      }
       const maxDate = new Date(formattedData[0].date)
       const minDate  = new Date(formattedData[formattedData.length-1].date);
 
@@ -125,7 +184,7 @@ const GitActivity = () => {
       const filteredCommits = allCommits.filter(commit => {
         const commitDate = new Date(commit.date);
         const commitYear = commitDate.getFullYear();
-        return ((commit.username === chosenMember) || (chosenMember=== "Все")) && commitYear === parseInt(year);
+        return ((commit.username === chosenMember.name) || (chosenMember.name === "Все")) && commitYear === parseInt(year);
       });
       
 
@@ -227,7 +286,7 @@ const GitActivity = () => {
               <div className="controls-block member">
                 <p>Участник</p>
                 <div className="flex1">
-                  <SearchDropDown values={membersList} chosenOption={chosenMember} setChosenOption={setChosenMember} emptyMessage={"Выберите участника"}/>
+                  <ObjectSearchDropDown values={membersList} displayKey={"name"} chosenOption={chosenMember} setChosenOption={setChosenMember} emptyMessage={"Выберите участника"}/>
                 </div>
               </div>
             )}

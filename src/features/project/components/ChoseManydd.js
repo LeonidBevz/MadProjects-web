@@ -3,7 +3,7 @@ import "css/dropdown.css"
 import crossIMG from "images/cross.svg"
 
 
-const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMessage}) => {
+const ChoseManyDropDown = ({ values, displayKey, selectedValues, setSelectedValues, emptyMessage}) => {
     const [isDropdownOpen,setIsDropdownOpen] = useState(false);
     const [searchValue,setSearchValue]= useState("")
     const [filteredValues, setFilteredValues] = useState(values)
@@ -43,14 +43,16 @@ const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMes
         setFilteredValues(values);
         return;
       }
-  
+      
       const searchTimer = setTimeout(async() => {
-        setFilteredValues(values.filter(item => item.toLowerCase().includes(searchValue.toLowerCase())));
+        const searchLower = searchValue.toLowerCase()
+        
+        setFilteredValues(values.filter(item => item[displayKey].toLowerCase().includes(searchLower)));
       }, 250); // Ждем пока пользователь закончит ввод
   
       return () => clearTimeout(searchTimer);
       // eslint-disable-next-line
-    }, [searchValue]);
+    }, [searchValue, values]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -62,9 +64,7 @@ const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMes
         if (isDropdownOpen) {
           document.addEventListener('mousedown', handleClickOutside);
         } else {
-          if (!values.includes(searchValue)){
-            setSearchValue("")
-          }
+          setSearchValue("")
           document.removeEventListener('mousedown', handleClickOutside);
         }
     
@@ -79,7 +79,7 @@ const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMes
         <div className="values-container">
           {selectedValues.map((value, index) => (
             <span key={index} className="item ">
-              {value}
+              {value[displayKey]}
               <img type="button" onClick={() => handleRemoveTag(value)} src={crossIMG} alt="close"/>
             </span>
           ))}
@@ -95,6 +95,7 @@ const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMes
                   onClick={handleDropdownClick }
                   maxLength="64"
                   ref={input}
+                  style={{color: "var(--main-text-color)"}}
                 />
             </div>         
           </div>
@@ -107,7 +108,7 @@ const ChoseManyDropDown = ({ values, selectedValues, setSelectedValues, emptyMes
                 <p className="ddsearch-note">Ничего не найдено</p>
               )}
               {filteredValues.map((item, index) => (
-                <li className={selectedValues.includes(item) ? "liactive":""} key={index} onClick={()=>handleLiClicked(item)}>{item}</li>
+                <li className={selectedValues.includes(item) ? "liactive":""} key={index} onClick={()=>handleLiClicked(item)}>{item[displayKey]}</li>
               ))}
             </ul>
           </div>
