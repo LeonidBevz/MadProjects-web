@@ -46,7 +46,7 @@ export const getProjectSprints = async (projectId) =>{
 }
 
 export const createSprint = async (data) =>{
-  const response = await api.post("/sprint/create/", data);
+  const response = await api.post("/sprint/create", data);
   return response.data;
 }
 
@@ -55,3 +55,7 @@ export const getProjectKards = async (projectId) =>{
   return response.data;
 }
 
+export const getSprint = async (sprintId) =>{
+  const response = await api.get("/sprint/get?sprintId=" + sprintId);
+  return response.data;
+}

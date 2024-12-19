@@ -58,7 +58,7 @@ const SprintCreatePage = () => {
         title: newName,
         desc: newDescription,
         endDate: formatDate(newEndDate),
-        kardsIds: chosenCards.map(kard => kard.id)
+        kardIds: chosenCards.map(kard => kard.id)
       }
       mutate(data)
     }

@@ -10,50 +10,9 @@ import { useWebSocket } from "features/shared/contexts/WebSocketContext";
 import { useTheme } from "features/shared/contexts/ThemeContext";
 import { useParams } from "react-router-dom";
 
-function formatDate(milliseconds) {
-    const getWordEnding = (number, one, two, five) => {
-        number = Math.abs(number) % 100;
-        const n1 = number % 10;
-        if (number > 10 && number < 20) {
-          return five;
-        }
-        if (n1 > 1 && n1 < 5) {
-          return two;
-        }
-        if (n1 === 1) {
-          return one;
-        }
-        return five;
-    };
-    const now = new Date();
-    const diff = now - new Date(milliseconds);
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-  
-    if (seconds < 60) {
-      return "только что";
-    } else if (minutes < 60) {
-      return `${minutes} минут${getWordEnding(minutes, 'у', 'ы', '')} назад`;
-    } else if (hours < 24) {
-      return `${hours} час${getWordEnding(hours, '', 'а', 'ов')} назад`;
-    } else if (days < 7) {
-      return `${days} д${getWordEnding(days, 'ень', 'ня', 'ней')} назад`;
-    } else if (days < 30) {
-      const weeks = Math.floor(days / 7);
-      return `${weeks} недел${getWordEnding(weeks, 'ю', 'и', 'ь')} назад`;
-    } else if (days < 365) {
-      const months = Math.floor(days / 30);
-      return `${months} месяц${getWordEnding(months, '', 'а', 'ев')} назад`;
-    } else {
-      const years = Math.floor(days / 365);
-      return `${years} ${getWordEnding(years, 'год', 'года', 'лет')} назад`;
-    }
-}
 
 const KanbanPage = () => {
-  const {isNightTheme } = useTheme();
+  const {isNightTheme, isSideBarPinned } = useTheme();
   const {sendAction, iswsConnected, subscribeSocket, unsubscribeSocket} = useWebSocket()
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
@@ -318,6 +277,90 @@ const KanbanPage = () => {
 
   };
 
+  function formatDate(milliseconds) {
+    const getWordEnding = (number, one, two, five) => {
+        number = Math.abs(number) % 100;
+        const n1 = number % 10;
+        if (number > 10 && number < 20) {
+          return five;
+        }
+        if (n1 > 1 && n1 < 5) {
+          return two;
+        }
+        if (n1 === 1) {
+          return one;
+        }
+        return five;
+    };
+    const now = new Date();
+    const diff = now - new Date(milliseconds);
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+  
+    if (seconds < 60) {
+      return "только что";
+    } else if (minutes < 60) {
+      return `${minutes} минут${getWordEnding(minutes, 'у', 'ы', '')} назад`;
+    } else if (hours < 24) {
+      return `${hours} час${getWordEnding(hours, '', 'а', 'ов')} назад`;
+    } else if (days < 7) {
+      return `${days} д${getWordEnding(days, 'ень', 'ня', 'ней')} назад`;
+    } else if (days < 30) {
+      const weeks = Math.floor(days / 7);
+      return `${weeks} недел${getWordEnding(weeks, 'ю', 'и', 'ь')} назад`;
+    } else if (days < 365) {
+      const months = Math.floor(days / 30);
+      return `${months} месяц${getWordEnding(months, '', 'а', 'ев')} назад`;
+    } else {
+      const years = Math.floor(days / 365);
+      return `${years} ${getWordEnding(years, 'год', 'года', 'лет')} назад`;
+    }
+  }
+  function formatDate(milliseconds) {
+      const getWordEnding = (number, one, two, five) => {
+          number = Math.abs(number) % 100;
+          const n1 = number % 10;
+          if (number > 10 && number < 20) {
+            return five;
+          }
+          if (n1 > 1 && n1 < 5) {
+            return two;
+          }
+          if (n1 === 1) {
+            return one;
+          }
+          return five;
+      };
+      const now = new Date();
+      const diff = now - new Date(milliseconds);
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+    
+      if (seconds < 60) {
+        return "только что";
+      } else if (minutes < 60) {
+        return `${minutes} минут${getWordEnding(minutes, 'у', 'ы', '')} назад`;
+      } else if (hours < 24) {
+        return `${hours} час${getWordEnding(hours, '', 'а', 'ов')} назад`;
+      } else if (days < 7) {
+        return `${days} д${getWordEnding(days, 'ень', 'ня', 'ней')} назад`;
+      } else if (days < 30) {
+        const weeks = Math.floor(days / 7);
+        return `${weeks} недел${getWordEnding(weeks, 'ю', 'и', 'ь')} назад`;
+      } else if (days < 365) {
+        const months = Math.floor(days / 30);
+        return `${months} месяц${getWordEnding(months, '', 'а', 'ев')} назад`;
+      } else {
+        const years = Math.floor(days / 365);
+        return `${years} ${getWordEnding(years, 'год', 'года', 'лет')} назад`;
+      }
+  }
+
+
   if (!('serviceWorker' in navigator)) {
     return(
       <div className="no-chat-text page">В вашем браузере не поддерживается serviceWorker</div>
@@ -337,7 +380,7 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="kanban-page page">
+    <div className={`kanban-page page ${isSideBarPinned ? "kanban-pinned":""}`}>
       <div className={`${isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
       {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}

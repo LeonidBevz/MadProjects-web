@@ -64,7 +64,7 @@ const CreateGroupModal = ({ onConfirm, onCancel}) => {
         <input
           value={newGroup}
           onChange={handleValueChange}
-          maxLength= {25}
+          maxLength= {64}
           ref={inputRef}
           placeholder="Технологии программирования 2024"
           required

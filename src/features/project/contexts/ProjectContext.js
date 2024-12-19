@@ -11,6 +11,7 @@ export const ProjectProvider = ({ children }) => {
   const [members, setMembers] = useState()
   const [repos, setRepos] = useState()
   const [isCreator, setIsCreator] = useState(false)
+  const [projectStatus, setProjectStatus] = useState("")
 
   useEffect(()=>{
     if (!data) return
@@ -18,11 +19,13 @@ export const ProjectProvider = ({ children }) => {
     setMembers(data.members)
     setRepos(data.repos)
     setIsCreator(data.isCreator)
+    setProjectStatus(data.status)
     // eslint-disable-next-line
   },[data])
 
   const value = {
     projectData,
+    projectStatus,
     members,
     repos,
     isCreator,

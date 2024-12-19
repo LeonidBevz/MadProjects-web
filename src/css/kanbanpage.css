@@ -13,7 +13,7 @@
    max-height: calc(100vh - 34px);
    max-height: calc(100dvh - 34px);
    width: max-content;
-   max-width: 100vw;  
+   max-width: 100%;  
 }
 .kanban-main-container::-webkit-scrollbar{
     height: 11px;
@@ -215,4 +215,7 @@
 }
 .drag{
     cursor:grab !important;
+}
+.normal-cursor{
+    cursor: default !important;
 }

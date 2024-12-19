@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ChoseManyDropDown from "./components/ChoseManydd";
+import { useNotifications } from "features/shared/contexts/NotificationsContext";
+import { useGetProjectKards } from "./hooks/useProject";
 
 const SprintEditPage = () => {
     const location = useLocation();
@@ -11,8 +13,20 @@ const SprintEditPage = () => {
     const [errorMessage,setErrorMessage] = useState("")
     const today = new Date().toISOString().split('T')[0];
     const [chosenCards,setChosenCards] = useState([])
+    const { addNotification } = useNotifications()
+    const { projectId } = useParams()
     const navigate = useNavigate()
-    const [cards,setCards] = useState([
+
+    const {data: kards, error} = useGetProjectKards(projectId) 
+    
+        useEffect(()=>{
+          if (!error) return
+          setErrorMessage("Ошибка загрузки задач", error.status)
+          addNotification("Ошибка загрузки задач","error")
+          // eslint-disable-next-line 
+        },[error])
+    
+    const [cards, setCards] = useState([
       {
         rowName: "В работе",
         id: "row1",

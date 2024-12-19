@@ -1,11 +1,11 @@
 import {  useMutation, useQuery } from 'react-query';
-import { addRepo, createSprint, deleteMember, deleteProject, deleteRepo, getInviteCode, getLastActivities, getProjectKards, getProjectMeta, getProjectSprints, postUpdateProject } from '../services/ProjectService';
+import { addRepo, createSprint, deleteMember, deleteProject, deleteRepo, getInviteCode, getLastActivities, getProjectKards, getProjectMeta, getProjectSprints, getSprint, postUpdateProject } from '../services/ProjectService';
 
 export const useGetProjectMeta = (projectId) => {
     return useQuery(['GetProject', projectId], () => getProjectMeta(projectId), {
       enabled: !!projectId,
       retry: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     });
 };
 
@@ -62,5 +62,13 @@ export const useGetProjectKards = (projectId) =>{
     enabled: !!projectId,
     retry: false,
     refetchOnWindowFocus: false,
+  });
+}
+
+export const useGetSprint = (sprintId) =>{
+  return useQuery(['GetSprint', sprintId], () => getSprint(sprintId), {
+    enabled: !!sprintId,
+    retry: false,
+    refetchOnWindowFocus: true,
   });
 }

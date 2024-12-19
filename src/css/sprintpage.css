@@ -43,6 +43,7 @@
 .goals-h2{
     margin: 0 !important;
     margin-bottom: -10px !important;
+    padding-left: 0 !important;
 }
 .edit{
     width: 2rem;
