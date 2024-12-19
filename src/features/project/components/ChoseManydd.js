@@ -11,13 +11,14 @@ const ChoseManyDropDown = ({ values, displayKey, selectedValues, setSelectedValu
     const dropdown = useRef()
     const scrollContainer = useRef()
     const input = useRef()
+    const [initialSelected, setInitialSelected] = useState(selectedValues)
 
     const handleDropdownClick = ()=>{
         setIsDropdownOpen(true)
     }
 
     const handleLiClicked = (item)=>{
-        if (!selectedValues.includes(item)) {
+        if (!selectedValues.some(value => value.id === item.id)) {
             setSelectedValues([...selectedValues, item]);
             setTimeout(() => {
                 if (scrollContainer.current) {
@@ -80,7 +81,9 @@ const ChoseManyDropDown = ({ values, displayKey, selectedValues, setSelectedValu
           {selectedValues.map((value, index) => (
             <span key={index} className="item ">
               {value[displayKey]}
-              <img type="button" onClick={() => handleRemoveTag(value)} src={crossIMG} alt="close"/>
+              {!initialSelected.some(item=>item.id === value.id) && (
+                <img type="button" onClick={() => handleRemoveTag(value)} src={crossIMG} alt="close"/>
+              )}
             </span>
           ))}
         </div>
@@ -108,7 +111,7 @@ const ChoseManyDropDown = ({ values, displayKey, selectedValues, setSelectedValu
                 <p className="ddsearch-note">Ничего не найдено</p>
               )}
               {filteredValues.map((item, index) => (
-                <li className={selectedValues.includes(item) ? "liactive":""} key={index} onClick={()=>handleLiClicked(item)}>{item[displayKey]}</li>
+                <li className={selectedValues.some(value => value.id === item.id) ? "liactive":""} key={index} onClick={()=>handleLiClicked(item)}>{item[displayKey]}</li>
               ))}
             </ul>
           </div>

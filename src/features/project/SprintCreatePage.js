@@ -84,7 +84,7 @@ const SprintCreatePage = () => {
                     placeholder="Укажите название"
                     value={newName}
                     onChange={handleNameChange}
-                    maxLength={64}
+                    maxLength={25}
                     required
                   />
               </div>
@@ -108,6 +108,7 @@ const SprintCreatePage = () => {
                   placeholder="Укажите описание"
                   value={newDescription}
                   onChange={handleDescriptionChange}
+                  maxLength={1000}
                   required
                 />
             </div>
@@ -125,7 +126,6 @@ const SprintCreatePage = () => {
                 <button className= "login-but" type="button" onClick={()=>{navigate(-1)}}>Отмена</button>
               </div>
             )}
-            
           </form>
         </div>
       </div>

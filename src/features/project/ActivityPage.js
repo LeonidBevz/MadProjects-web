@@ -8,7 +8,7 @@ import { useTheme } from "features/shared/contexts/ThemeContext";
 import { useGetLastActivities, useGetProjectSprints } from "./hooks/useProject";
 import Loading from "features/shared/components/Loading";
 import { useNotifications } from "features/shared/contexts/NotificationsContext";
-
+import SprintStatusSpan from "./components/SprintStatusSpan";
 
 const ActivityPage = () => {
     const {projectId} = useParams()
@@ -99,6 +99,7 @@ const ActivityPage = () => {
       // eslint-disable-next-line
     },[lastActivityData])
 
+   
     if (isActivityLoading || isSprintsLoading){
       return (
       <div className="loading-page">
@@ -143,7 +144,10 @@ const ActivityPage = () => {
                 {!sprintsError && sprintsData.map((sprint, index)=>(
                   <div className="sprint" key={index}>
                     <div className="sprints-flex" onClick={()=>navigate(`/${projectId}/sprints/${sprint.id}`)}>
-                      <p>{sprint.title + " (" +sprint.supposedEndDate + ")"}</p>
+                      <p>
+                        {sprint.title + " (" +sprint.supposedEndDate + ") " }
+                        <SprintStatusSpan sprint={sprint}/>
+                      </p>
                       <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="grad-separator"></div>

@@ -59,3 +59,13 @@ export const getSprint = async (sprintId) =>{
   const response = await api.get("/sprint/get?sprintId=" + sprintId);
   return response.data;
 }
+
+export const updateSprint = async (data) =>{
+  const response = await api.post("/sprint/update", data);
+  return response.data;
+}
+
+export const finishSprint = async (sprintId) =>{
+  const response = await api.post("/sprint/finish?sprintId=" +  sprintId);
+  return response.data;
+}
