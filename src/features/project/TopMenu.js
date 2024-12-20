@@ -11,9 +11,9 @@ import "css/topmenu.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
 import { useAuth } from "features/shared/contexts/AuthContext";
 import Loading from "features/shared/components/Loading";
-import { useProjectContext } from "./contexts/ProjectContext";
 import NotFoundPage from "features/shared/notfound";
 import StatusBar from "./components/StatusBar";
+import { useProjectContext } from "./contexts/ProjectContext";
 
 const TopMenuPage = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
@@ -21,12 +21,11 @@ const TopMenuPage = () => {
   const isWideRef = useRef(window.innerWidth > 1100)
   const { projectId } = useParams()
   const navigate = useNavigate()
-  
   const sideMenuRef = useRef()
   const buttonRef = useRef()
 
   const {isNightTheme, onThemeChange, setIsSideBarPinned} = useTheme()
-  const { handleLogOut, isLoggingOut, profileImage, fullName } = useAuth()
+  const { handleLogOut, isLoggingOut, profileImage, fullName, role } = useAuth()
   const { isMetaLoading, projectMetaError, isCreator } = useProjectContext() 
   
   const handleResize = () => {
@@ -169,6 +168,14 @@ const TopMenuPage = () => {
                     Настройки
                   </div>
                 </div>
+              )}
+              {role === "Curator" && (
+                <div>
+                <div className="sidebar-separator"/>
+                <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/${projectId}/analitics/`)}>
+                  Оценивание
+                </div>
+              </div>
               )}
               
             <div className="sidebar-separator-end"/>

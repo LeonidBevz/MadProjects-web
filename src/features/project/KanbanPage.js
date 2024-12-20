@@ -108,7 +108,7 @@ const KanbanPage = () => {
 
   const handleAddCardClick = (rowId) =>{
     setRowToEditId(rowId)
-    setNewName("Новая карточка")
+    setNewName("")
     setIsDeleteWindowShown(5)
   }
 
@@ -118,7 +118,7 @@ const KanbanPage = () => {
     sendAction("Kanban.CreateKard",{
       projectId: projectIdInt,
       name: newName,
-      desc: "Создано на огрызке сайта без описания",
+      desc: "",
       columnId: rowId
     })
     setIsDeleteWindowShown(0)
@@ -384,10 +384,10 @@ const KanbanPage = () => {
       <div className={`${isDeleteWindowShown !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
       {isDeleteWindowShown === 1 && (<DeleteModal onDelete={()=>deleteRow(rowToEditId)} text={cards[rowToEdit].kards.length === 0 ? `Вы уверены что хотите удалить пустой столбец ${cards[rowToEdit].name}?`: `Вы уверены что хотите удалить столбец ${cards[rowToEdit].name} с ${cards[rowToEdit].kards.length} карточками?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 2 && (<DeleteModal onDelete={()=>deleteCard(cardToEditId)} text={`Вы уверены что хотите удалить карточку ${cards[rowToEdit].kards[cardToEdit].title}?`} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 3 && (<EditModal onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} isRowEdit={true} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 4 && (<EditModal onConfirm={()=>setCardName(cardToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 5 && (<EditModal onConfirm={()=>addCard(rowToEditId)} newValue={newName} setNewValue={setNewName} text={`Введите название новой карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 6 && (<EditModal onConfirm={()=>addColumn()} newValue={newName} setNewValue={setNewName} text={`Введите название новой колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 3 && (<EditModal emptyText="Название столбца" onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} isRowEdit={true} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 4 && (<EditModal emptyText="Название карточки"onConfirm={()=>setCardName(cardToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 5 && (<EditModal emptyText="Название карточки" onConfirm={()=>addCard(rowToEditId)} newValue={newName} setNewValue={setNewName} text={`Введите название новой карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 6 && (<EditModal emptyText="Название столбца" onConfirm={()=>addColumn()} newValue={newName} setNewValue={setNewName} text={`Введите название новой колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
           {(provided) => (

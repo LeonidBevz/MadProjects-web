@@ -69,3 +69,8 @@ export const finishSprint = async (sprintId) =>{
   const response = await api.post("/sprint/finish?sprintId=" +  sprintId);
   return response.data;
 }
+
+export const rateProject = async (data) =>{
+  const response = await api.post("/project/mark/set?projectId=" + data.projectId + "&mark=" + data.mark);
+  return response.data;
+}

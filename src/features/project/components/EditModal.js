@@ -1,6 +1,6 @@
 import React, {useRef, useEffect}  from "react";
 
-const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue, isRowEdit}) => {
+const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue, isRowEdit, emptyText}) => {
     const inputRef = useRef()
     const container = useRef(null)
     useEffect(() => {
@@ -44,6 +44,7 @@ const EditModal = ({text, onConfirm, onCancel, newValue, setNewValue, isRowEdit}
           onChange={handleValueChange}
           maxLength={isRowEdit ? 25 : 50}
           ref={inputRef}
+          placeholder={emptyText}
           required
         />
         <div className="flex-butt">

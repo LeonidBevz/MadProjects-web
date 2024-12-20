@@ -28,9 +28,8 @@ export function AuthProvider({ children }) {
       setProfileImage("/baseProfilePic.png")
     }
     setFullName(data.lastName+" "+data.firstName+" " + data.secondName)
+    setRole(data.role)
   },[data])
-
-
 
   /*const saveRefreshToken = (token) => {
     localStorage.setItem("refresh", token);
