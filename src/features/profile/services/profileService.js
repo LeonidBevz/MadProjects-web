@@ -53,3 +53,28 @@ export const joinProject = async (data) =>{
   const response = await api.post('/invites/use?invite=' + data.code)
   return response.data;
 }
+
+export const getPendingProjects = async () =>{
+  const response = await api.get("/curatorship/getPendingProjects" )
+  return response.data;
+} 
+
+export const approveProject = async (projectId) =>{
+  const response = await api.post("/curatorship/approve?projectId="+ projectId )
+  return response.data;
+} 
+
+export const disapproveProject = async (data) =>{
+  const response = await api.post("/curatorship/disapprove",data )
+  return response.data;
+} 
+
+export const getUnmarkedProjects = async () =>{
+  const response = await api.get("/curatorship/getUnmarkedProjects" )
+  return response.data;
+} 
+
+export const editTeacherProfile = async (data) =>{
+  const response = await api.post("/curatorProfile/update",data )
+  return response.data;
+} 

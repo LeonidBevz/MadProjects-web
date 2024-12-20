@@ -95,7 +95,7 @@ const ActivityPage = () => {
         
       })
 
-      setLastActivityFormatted(newFormatedData)
+      setLastActivityFormatted(newFormatedData.reverse())
       // eslint-disable-next-line
     },[lastActivityData])
 

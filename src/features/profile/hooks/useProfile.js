@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -89,4 +89,39 @@ export const useGetCuratorGroups = (id) =>{
 
 export const useJoinProject = () => {
   return useMutation(joinProject);
+}
+
+
+export const useGetPendingProjects = () =>{
+  return useQuery(
+    ["fetchPendingProjects"],
+    () => getPendingProjects(),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
+export const useApproveProject = () => {
+  return useMutation(approveProject);
+}
+
+export const useDisapproveProject = () => {
+  return useMutation(disapproveProject);
+}
+
+export const useGetUnmarkedProjects = () =>{
+  return useQuery(
+    ["fetchUnmarkedProjects"],
+    () => getUnmarkedProjects(),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
+export const useEditTeacher = () => {
+  return useMutation(editTeacherProfile);
 }

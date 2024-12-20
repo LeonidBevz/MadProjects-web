@@ -112,11 +112,24 @@
 .active-del-butt{
     background-color: var(--main-red-color) !important;
 }
+.invite-code {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 1.5rem;
+}
+.code-container{
+    margin-bottom: 20px;
+}
 @media (width < 18.75rem){
     .settings-flex-butt{
         flex-direction: column;
         gap: 0.5rem;
     }
+
 }
 @media (width < 47rem) {
     .buttons-tile{
@@ -125,5 +138,17 @@
     .settings-modal{
         width: calc(100vw - 2rem);
         left: calc(50% - 50vw + 1rem);
+    }
+    .invite-code{
+        font-size: 1rem;
+    }
+    .invite-code, .copied-text {
+        display: block;
+    }
+    .invite-code{
+        margin-bottom: 5px;
+    }
+    .code-container{
+        overflow: hidden;
     }
 }

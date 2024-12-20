@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RightArrowIco from "images/arrowrightico";
 import CreateGroupModal from "features/profile/components/CreateGroupModal";
 import "css/profilepage.css"
@@ -63,9 +63,9 @@ const TeacherProfilePage = () => {
                 <div className="profile-pic-container">
                     <div className="prifile-image">
                         <img className="profile-pic" src={isGitAuth && data.githubMeta.githubAvatar ? data.githubMeta.githubAvatar : "/baseProfilePic.png"} alt="profile"/>
-                        <Link to="edit/" >
-                          <button className="profile-edit-but"/>
-                        </Link>
+                       
+                          <button onClick={()=>{navigate("edit", {state: {rank: data.grade, firstName: data.firstName, secondName:data.secondName, lastName: data.lastName}})}} className="profile-edit-but"/>
+                  
                     </div>
                     <p className="profile-username">{`${data.lastName} ${data.firstName} ${data.secondName}`}</p>
                     <p>{data.grade}</p>

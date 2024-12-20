@@ -79,7 +79,7 @@ const StudentProfileEditPage = () => {
                     placeholder="Имя"
                     value={studentForm.name}
                     onChange={handleChange}
-                    maxLength={64}
+                    maxLength={24}
                     id="name"
                     name="name"
                     required
@@ -92,7 +92,7 @@ const StudentProfileEditPage = () => {
                     placeholder="Группа"
                     value={studentForm.group}
                     onChange={handleChange}
-                    maxLength={12}
+                    maxLength={24}
                     id="group"
                     name="group"
                     required
@@ -108,6 +108,7 @@ const StudentProfileEditPage = () => {
                   onChange={handleChange}
                   id="surname"
                   name="surname"
+                  maxLength={24}
                   required
                 />
             </div>
@@ -120,6 +121,7 @@ const StudentProfileEditPage = () => {
                   name="iname"
                   value={studentForm.iname}
                   onChange={handleChange}
+                  maxLength={24}
                   required
                 />
             </div>

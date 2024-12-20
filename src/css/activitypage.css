@@ -56,14 +56,16 @@
 }
 
 .last-activity-tile{
-    padding: 0px 15px;
+    padding-left: 1rem;
+    padding-right: 1.5rem;
     background-color: var(--card-color);
     border-radius: 10px;
     margin: 0;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 .sprints-tile{
-    padding: 15px;
+    width: 720px;
+    padding: 1rem;
     background-color: var(--card-color);
     border-radius: 10px;
     margin: 0;
@@ -107,6 +109,12 @@
     }
     .commits-tile{
         display: block;
+        width: 100%;
+    }
+    .last-activity-tile{
+        width: 100%;
+    }
+    .sprints-tile{
         width: 100%;
     }
     .controls-block{

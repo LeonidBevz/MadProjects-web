@@ -2,7 +2,7 @@
     display: flex;
 }
 .last-activity hr{
-    margin: 0 20px;
+    margin: 0 1rem;
     border: none; 
     border-left: 2px solid var(--main-blue-color); 
 }

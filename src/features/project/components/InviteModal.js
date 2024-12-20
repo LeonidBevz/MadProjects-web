@@ -55,7 +55,7 @@ const InviteModal = ({ onCancel, projectId}) => {
             <div>
                 <h2>Пригласить участников</h2>
                 <p>Для приглашения участника отправьте ему многоразовый код, указанный ниже:</p>
-                <div style={{marginBottom: "20px"}}>
+                <div className="code-container">
                     <span onClick={handleCopy} className="invite-code">
                       {data.invite}
                     </span>

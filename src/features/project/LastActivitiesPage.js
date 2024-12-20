@@ -86,13 +86,13 @@ const LastActivitiesPage = () => {
         
       })
 
-      setLastActivityFormatted(newFormatedData)
+      setLastActivityFormatted(newFormatedData.reverse())
       // eslint-disable-next-line
     },[lastActivityData])
 
     if (isActivityLoading){
         return (
-            <div>
+            <div className="loading-page"> 
                 <Loading/>
             </div>
         )
