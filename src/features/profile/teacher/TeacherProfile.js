@@ -40,7 +40,7 @@ const TeacherProfilePage = () => {
 
     if (isLoading) {
         return(
-            <div className="loading-page">
+            <div className="loading-page page">
                 <Loading/>
             </div>
         )

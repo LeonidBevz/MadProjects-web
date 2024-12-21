@@ -8,6 +8,7 @@ import { useAuth } from "features/shared/contexts/AuthContext";
 import Loading from "features/shared/components/Loading";
 import GitLink from "../components/GitLink";
 import JoinModal from "../components/JoinModal";
+import ProjectStatusSpan from "../components/ProjectStateSpan";
 
 const ProfilePage = () => {
     const { isNightTheme } = useTheme()
@@ -32,7 +33,7 @@ const ProfilePage = () => {
 
     if (isLoading) {
         return(
-            <div className="loading-page">
+            <div className="loading-page page">
                 <Loading/>
             </div>
         )
@@ -93,7 +94,9 @@ const ProfilePage = () => {
                 {data.projects.map((project, index) => (
                     <div className="profile-projects-item" key={index}>
                         <div className="profile-projects-content" onClick={()=>navigate(`/${project.id}/activity/`)}>
-                            <p>{project.title}</p>
+                            <p>{`${project.title} `}
+                                <ProjectStatusSpan project={project}/>
+                            </p>
                             <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                         </div>
                         <div className="profile-projects-separator"></div>

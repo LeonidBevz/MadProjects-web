@@ -19,9 +19,7 @@
     white-space: pre-wrap;
     max-width: 30rem;
 }
-.table-tile td span {
-    color: var(--main-text-color);
-}
+
   
 .table-tile th {
     background-color: var(--card-color);
@@ -69,6 +67,11 @@
     border: none;
     background-color: var(--main-green-color);
     border-radius: 10px;
+    cursor: pointer;
+}
+.link{
+    text-decoration: underline;
+    color: var(--main-blue-color);
     cursor: pointer;
 }
 @media (width < 47rem) {

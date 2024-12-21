@@ -92,7 +92,7 @@ const LastActivitiesPage = () => {
 
     if (isActivityLoading){
         return (
-            <div className="loading-page"> 
+            <div className="loading-page page"> 
                 <Loading/>
             </div>
         )

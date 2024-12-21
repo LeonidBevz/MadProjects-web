@@ -12,12 +12,10 @@ import { useAuth } from "features/shared/contexts/AuthContext";
 import Loading from "features/shared/components/Loading";
 
 const TeacherTopMenuPage = () => {
-  const {isNightTheme, onThemeChange} = useTheme()
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false)
+  const {isNightTheme, onThemeChange, isSideBarOpen, setIsSideBarOpen,isWide, isWideRef } = useTheme()
   const navigate = useNavigate()
   const sideMenuRef = useRef()
   const buttonRef = useRef()
-  const isWide = useRef(window.innerWidth>1100)
 
   const { handleLogOut, isLoggingOut, role, profileImage, fullName } = useAuth()
 
@@ -28,19 +26,9 @@ const TeacherTopMenuPage = () => {
     // eslint-disable-next-line
   },[role])
 
-  const handleResize = () => {
-    isWide.current = window.innerWidth > 1100;
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    
-    return ()=>{window.removeEventListener('resize', handleResize)}
-  }, []);
-
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sideMenuRef.current  && buttonRef.current && !isWide.current &&  !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
+      if (sideMenuRef.current  && buttonRef.current && !isWideRef.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
         setIsSideBarOpen(false);
       }
     };
@@ -58,13 +46,13 @@ const TeacherTopMenuPage = () => {
 
   const onSideMenuClick = (goto)=>{
     navigate(goto)
-    if (!isWide.current){
+    if (!isWide){
       setIsSideBarOpen(false)    
     }
   }
 
   const onProfileClick = () =>{
-    if (!isWide.current){
+    if (!isWide){
       setIsSideBarOpen(false)    
     }
     navigate("/profile")
@@ -104,7 +92,7 @@ const TeacherTopMenuPage = () => {
         </div>
         <div className="page-content">
         <div className={`${isSideBarOpen ? "bg-blur-shown main-bg-blur-shown" :"bg-blur-hidden"} sidemenu-level`}/>
-        <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWide.current && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
+        <div className={`sidebar-container ${isSideBarOpen ? "sidebar-container-shown" : "sidebar-container-hidden"} ${isWide && isSideBarOpen ? "iwWideOpen" :""}`} ref={sideMenuRef}>
             <div className="sidebar-user-info">
               <img src={profileImage} alt="profilepic" onClick={onProfileClick}/>
               <p>{fullName}</p>

@@ -13,7 +13,7 @@ import SprintStatusSpan from "./components/SprintStatusSpan";
 const ActivityPage = () => {
     const {projectId} = useParams()
     const navigate = useNavigate()
-    const {isNightTheme} = useTheme()
+    const {isNightTheme, isSideBarPinned} = useTheme()
     const [lastActivityFormatted,setLastActivityFormatted] = useState([])
     const {addNotification} = useNotifications()
 
@@ -102,13 +102,13 @@ const ActivityPage = () => {
    
     if (isActivityLoading || isSprintsLoading){
       return (
-      <div className="loading-page">
+      <div className="loading-page page">
         <Loading/>
       </div>)
     }
     return (
       <div className="activity-page page">
-        <div className="activity-page-container">
+        <div className={`activity-page-container ${isSideBarPinned ? "activity-pinned":""}`} >
           <div className="activity-right-container">
             {lastActivityFormatted.length !== 0 && !isActivityLoading && (
               <div className="last-activity-container" style={{maxWidth: "720px"}}>

@@ -16,28 +16,17 @@ import StatusBar from "./components/StatusBar";
 import { useProjectContext } from "./contexts/ProjectContext";
 
 const TopMenuPage = () => {
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false)
-  const [isWide, setIsWide] = useState(window.innerWidth > 1100)
-  const isWideRef = useRef(window.innerWidth > 1100)
+  const {isNightTheme, onThemeChange, isSideBarOpen, setIsSideBarOpen, isWide, isWideRef } = useTheme()
+
+
   const { projectId } = useParams()
   const navigate = useNavigate()
   const sideMenuRef = useRef()
   const buttonRef = useRef()
-
-  const {isNightTheme, onThemeChange, setIsSideBarPinned} = useTheme()
+  
   const { handleLogOut, isLoggingOut, profileImage, fullName, role } = useAuth()
   const { isMetaLoading, projectMetaError, isCreator } = useProjectContext() 
   
-  const handleResize = () => {
-    setIsWide(window.innerWidth > 1100);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    
-    return ()=>{window.removeEventListener('resize', handleResize)}
-  }, []);
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sideMenuRef.current  && buttonRef.current && !isWideRef.current && !(sideMenuRef.current.contains(event.target) || buttonRef.current.contains(event.target))) {
@@ -63,24 +52,10 @@ const TopMenuPage = () => {
       setIsSideBarOpen(false)
     }
   }
-
-  useEffect(()=>{
-    if (isWide && isSideBarOpen)
-    {
-      setIsSideBarPinned(true)
-    }
-    else{
-      setIsSideBarPinned(false)
-    }
-  },[isWide, isSideBarOpen])
-
-  useEffect(()=>{
-    isWideRef.current=isWide
-  },[isWide])
   
   if (isMetaLoading) {
     return (
-      <div className="loading-page">
+      <div className="loading-page page">
         <Loading/>
       </div>
     )
@@ -102,7 +77,7 @@ const TopMenuPage = () => {
 
   if (isLoggingOut){
     return (
-      <div className="loading-page">
+      <div className="loading-page page">
         <Loading/>
       </div>
     )

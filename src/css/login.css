@@ -209,6 +209,12 @@
     justify-content: center;
 }
  
+@media (resolution > 100dpi) {
+    .register-page{
+        transform: scale(0.9);
+    }
+}
+ 
 @media (width < 25rem) {
     .welcome-container {
         width: 100vw;

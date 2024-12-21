@@ -11,6 +11,35 @@ export function ThemeProvider({ children }) {
   const [isSideBarPinned, setIsSideBarPinned] = useState(false)
   const timeoutId = useRef(null);
 
+  const [isSideBarOpen, setIsSideBarOpen] = useState(setIsSideBarPinned)
+  const [isWide, setIsWide] = useState(window.innerWidth > 1100)
+  const isWideRef = useRef(window.innerWidth > 1100)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWide(window.innerWidth > 1100);
+      isWideRef.current = window.innerWidth > 1100
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return ()=>{window.removeEventListener('resize', handleResize)}
+  }, []);
+    
+  useEffect(()=>{
+    if (isWide && isSideBarOpen)
+    {
+      setIsSideBarPinned(true)
+    }
+    else{
+      setIsSideBarPinned(false)
+    }
+  },[isWide, isSideBarOpen])
+
+  useEffect(()=>{
+    console.log(isSideBarPinned)
+  },[isSideBarPinned])
+
   useEffect(() => {
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -81,9 +110,17 @@ export function ThemeProvider({ children }) {
       timeoutId.current = null;
     }, 1000);
   };
+  const value = {
+    isNightTheme, setIsNightTheme, 
+    onThemeChange, 
+    isSideBarPinned, setIsSideBarPinned,
+    isSideBarOpen, setIsSideBarOpen,
+    isWide, isWideRef
+    
+  }
 
   return (
-    <ThemeContext.Provider value={{ isNightTheme, setIsNightTheme, onThemeChange, isSideBarPinned, setIsSideBarPinned }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

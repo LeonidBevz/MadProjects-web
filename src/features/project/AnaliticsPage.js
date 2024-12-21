@@ -42,7 +42,7 @@ const AnaliticsPage = ()=>{
    
     
     return(
-        <div className="info-page">
+        <div className="info-page page">
             <div className="indo-container">
             <h2>{`Оценка ${projectMark ? "(Уже оценено)": ""}`}</h2>
                 <div className="info-tile info-tile-center" >
