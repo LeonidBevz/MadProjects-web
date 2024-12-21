@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 
 const KanbanPage = () => {
   const {isNightTheme, isSideBarPinned } = useTheme();
-  const {sendAction, iswsConnected, subscribeSocket, unsubscribeSocket} = useWebSocket()
+  const {sendAction, iswsConnected, subscribeSocket, unsubscribeSocket, checkSocket} = useWebSocket()
   const [isDeleteWindowShown, setIsDeleteWindowShown] = useState(0)
   const [rowToEdit, setRowToEdit] = useState(null)
   const [cardToEdit, setCardToEdit] = useState(null)
@@ -39,7 +39,10 @@ const KanbanPage = () => {
       }))
     setCards(refactoredData)
   } 
-    
+  useEffect(()=>{
+    checkSocket()
+    // eslint-disable-next-line
+  },[])
   //sw logic
   useEffect(()=>{
     if (!navigator.serviceWorker.controller) return

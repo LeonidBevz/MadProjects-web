@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 
 const MessengerPage = () => {
     const { isSideBarPinned} = useTheme();
-    const { sendAction, iswsConnected, subscribeSocket,  unsubscribeSocket } = useWebSocket()
+    const { sendAction, iswsConnected, subscribeSocket,  unsubscribeSocket, checkSocket } = useWebSocket()
     const { projectId } = useParams()
     const projectIdInt = parseInt(projectId)
     const [currentUserId, setCurrentUser] = useState("0")
@@ -32,24 +32,23 @@ const MessengerPage = () => {
     const [width, setWidth] = useState(window.innerWidth);
     const [isMobile, setIsMobile] = useState(((isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)))
 
-
     //resize
     const handleBackClick = () =>{
       setActiveChat(null)
       setChatListVisible(true)
-    } 
+    }
 
     useEffect(() => {
       const handleResize = () => {
         setWidth(window.innerWidth);
       };
-  
+      checkSocket()
       window.addEventListener('resize', handleResize);
 
       return ()=>{
         window.removeEventListener('resize', handleResize);
       }
-      
+      // eslint-disable-next-line
     }, []);
 
     useEffect(()=>{
@@ -104,6 +103,7 @@ const MessengerPage = () => {
           setChatList([])
           setGroupedMessages([])
           setInitialMessages([])
+          setChatListVisible(true)
           
           subscribeSocket("Messenger", projectIdInt)
           sendAction("Messenger.RequestChatsList",{

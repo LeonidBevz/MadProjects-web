@@ -74,7 +74,7 @@ const CreateGroupModal = ({ onConfirm, onCancel}) => {
         {!isLoading && (
           <div className="settings-flex-butt">
             <button onClick={handleConfirm}>Подтвердить</button>
-            <button onClick={onCancel}>Отмана</button>
+            <button onClick={onCancel}>Отмена</button>
           </div>
         )}
         

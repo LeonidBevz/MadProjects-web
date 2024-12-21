@@ -26,6 +26,10 @@ const InfoPage = () => {
         repos: repos,
     })
     },[projectData])
+
+    const goToRepo = (repo) => {
+      window.open(repo, "_blank");
+    };
   
     return (
       <div className="info-page page">          
@@ -54,8 +58,8 @@ const InfoPage = () => {
               <div className="info-tile">
                 {data.repos.map((repo, index)=>(
                   <div className="sprint" key={index}>
-                    <div className="sprints-flex" onClick={()=>navigate(`repolink`)}>
-                      <p>{repo.title}</p>
+                    <div className="sprints-flex" onClick={()=>{goToRepo(repo.link)}}>
+                      <p>{repo.link}</p>
                       <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="grad-separator"></div>

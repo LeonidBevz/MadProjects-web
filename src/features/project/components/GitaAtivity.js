@@ -66,6 +66,7 @@ const GitActivity = () => {
 
     useEffect(()=>{
       if (!chosenBranch) return
+      console.log(branchesData)
       const newChosenRepo = branchesData.flatMap(repo => 
         repo.repoBranches.map(branch => ({
             repoName: repo.name,
@@ -85,17 +86,31 @@ const GitActivity = () => {
       const usersObject = [];
       let unknownCount = 0;
 
-      let uniqueGithubIds = new Set()
+      let unknownGithubIds = []
+
       let animals = []
+
+      const authIds = repoData.authors
+        .filter(author => author.githubMeta !== null)
+        .map(author => author.githubMeta.githubId);
+      console.log(authIds)
+
       if (repoData.authors.some(author => author.githubMeta === null)){
-        uniqueGithubIds = new Set(repoData.commits.map(commit => commit.authorGithubId));
+        unknownGithubIds = Array.from(
+          new Set(
+            repoData.commits
+              .map(commit => commit.authorGithubId) 
+              .filter(githubId => !authIds.includes(githubId)) 
+          )
+        );
+        
         animals = [
-          "Неизвестный носорог",
-          "Неизвестная кошка",
-          "Неизвестный тигр",
-          "Неизвестный кенгуру",
-          "Неизвестная панда",
-          "Неизвестный ёж",
+          "Тупорылый крокодил",
+          "Неизвестный психролют",
+          "Сумасшедший муравей",
+          "Неизвестный Сладкогуб",
+          "Кусака мучитель",
+          "Ежемуха свирепая",
           "Неизвестная лягушка",
           "Неизвестный барсук",
           "Неизвестная обезьяна",
@@ -130,7 +145,8 @@ const GitActivity = () => {
             name = animals[unknownCount - 1];
           }
       
-          const unknownGithubId = Array.from(uniqueGithubIds)[unknownCount - 1]; 
+         const unknownGithubId = unknownGithubIds[unknownCount - 1]; 
+
           usersObject.push({
             id: unknownGithubId, 
             name: name,
@@ -141,9 +157,19 @@ const GitActivity = () => {
       });
 
       usersObject.unshift({ name: "Все" });
+      console.log(usersObject,repoData.commits )
+
 
       const formattedData = repoData.commits.map(commit => {
         const user = usersObject.find(user => user.id === commit.authorGithubId);
+        if (!user) return{
+          name: (commit.message && commit.message.split("\n")[0]) || 'Unknown', 
+          date: commit.date,
+          username: "name",
+          link: `https://github.com/${chosenRepo}/commit/${commit.sha}`,
+          profilepic: "githubAvatar",
+          profilelink: "user.profileLink"
+        }
         return {
           name: (commit.message && commit.message.split("\n")[0]) || 'Unknown', 
           date: commit.date,
@@ -157,7 +183,6 @@ const GitActivity = () => {
 
       setChosenMember({name: "Все"})
       setMembersList(usersObject)
-
  
       if (formattedData.length === 0){
         return
@@ -241,7 +266,7 @@ const GitActivity = () => {
             <div className="commits-tile">
               <div className="git-not-auth-container">
                 <img className="git-logo" src={GitLogo} alt="HitHub"/>
-                <span style={{marginBottom: "10px"}}> GitHub не втроризован.</span> 
+                <span style={{marginBottom: "10px"}}> GitHub не авторизован.</span> 
                 <button onClick={handleGitAuth}>Авторизовать</button>
               </div>
             </div>

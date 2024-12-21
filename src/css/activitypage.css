@@ -122,11 +122,12 @@
     }
 }
 
-@media (width >= 1665px){
+@media (width >= 1725px){
     .activity-page-container{
        display: flex;
        gap: 1rem
     }
 
 }
+
 

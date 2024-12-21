@@ -39,42 +39,26 @@ export function WebSocketProvider({ children }) {
     }
   }
 
-  useEffect(()=>{
-    if ( navigator.serviceWorker.controller){
-      const handleFocus = () =>{
-        checkSocket()
-      }
-      window.addEventListener('focus', handleFocus)
-
-      return ()=>{
-        window.removeEventListener("focus", handleFocus)
-      }
-    }
-  },[])
-
   useEffect(() => {
     if ('serviceWorker' in navigator) { 
       startServiceWorker()
-
-      //sus
-      /*window.addEventListener('focus', () => {
-        console.log("focus", navigator.serviceWorker.controller)
-        if (!navigator.serviceWorker.controller) {
-          setIsSWRegistered(false)
-          setIswsConnected(false)
-          startServiceWorker()
-        }
-      });*/
+      let interval
 
       // Прослушивание сообщений от Service Worker
       const messageHandler = (event) => {
         const message = event.data;
-        console.log(message);
+        console.log("messege in main ",message);
         if (message.type === 'socket_opened') {
           navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: accessToken })});
           setIswsConnected(true);
+          interval = setInterval(()=>{
+            navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
+          },10000)
         } else if (message.type === 'socket_already_opened') {
           setIswsConnected(true);
+          interval = setInterval(()=>{
+            navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
+          },10000)
         } else if (message.type === 'socket_closed') {
           setIswsConnected(false);
           addNotification("Сокет закрылся")
@@ -82,16 +66,43 @@ export function WebSocketProvider({ children }) {
           setIsSWRegistered(true);
         } else if (message.type === 'socket_error') {
           addNotification("Ошибка подключения ", message.data)
+        } else if (message.type === 'socket_logout') {
+          addNotification("logout")
+          navigate("/login/")
         }
       };
 
-      navigator.serviceWorker.addEventListener('message', messageHandler)
+      const handleFocus = () =>{
+        checkSocket()
+      }
 
+      const addMessageListener = () => {
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.addEventListener('message', messageHandler);
+          window.addEventListener('focus', handleFocus)
+        }
+      };
+
+      if (navigator.serviceWorker.controller) {
+        addMessageListener();
+      } else {
+        const controllerChangeHandler = () => {
+          console.log("controller changed, new listner", navigator.serviceWorker.controller)
+          navigator.serviceWorker.removeEventListener('controllerchange', controllerChangeHandler);
+          addMessageListener();
+          
+        };
+  
+        navigator.serviceWorker.addEventListener('controllerchange', controllerChangeHandler);
+      }
 
       return ()=>{
         navigator.serviceWorker.removeEventListener('message', messageHandler)
+        window.removeEventListener("focus", handleFocus)
+        if (interval){
+          clearInterval(interval)
+        }
         console.log("Socket context unbuild")
-        navigator.serviceWorker.controller.postMessage({ type: 'close'});
       }
 
     } else {
@@ -148,7 +159,7 @@ export function WebSocketProvider({ children }) {
   
 
   return (
-    <WebSocketContext.Provider value={{ sendAction, iswsConnected, isSWRegistered, subscribeSocket, unsubscribeSocket }}>
+    <WebSocketContext.Provider value={{ sendAction, iswsConnected, isSWRegistered, subscribeSocket, unsubscribeSocket, checkSocket }}>
       {children}
     </WebSocketContext.Provider>
   );

@@ -83,7 +83,7 @@ const NewRepoModal = ({onConfirm, onCancel}) => {
          
           <div className="settings-flex-butt">
             <button type="submit">Создать</button>
-            <button type="button" onClick={onCancel}>Отмана</button>
+            <button type="button" onClick={onCancel}>Отмена</button>
           </div>
         </>)}
         

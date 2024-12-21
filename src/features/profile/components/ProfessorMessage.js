@@ -49,7 +49,7 @@ const ProfessorMessage = ({onConfirm, onCancel}) => {
     
         <div className="settings-flex-butt">
           <button type="submit">Отправить</button>
-          <button type="button" onClick={onCancel}>Отмана</button>
+          <button type="button" onClick={onCancel}>Отмена</button>
         </div>        
         </form>
       </div>

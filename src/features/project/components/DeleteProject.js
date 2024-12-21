@@ -52,7 +52,7 @@ const DeleteProjectModal = ({onConfirm, onCancel}) => {
         />
         <div className="settings-flex-butt">
           <button className={isDeleteAvailible ? "active-del-butt" : "blocked-del-butt"} type="submit">Удалить</button>
-          <button type="button" onClick={onCancel}>Отмана</button>
+          <button type="button" onClick={onCancel}>Отмена</button>
         </div>
         </form>
       </div>

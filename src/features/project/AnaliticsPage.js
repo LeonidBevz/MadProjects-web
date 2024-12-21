@@ -45,7 +45,6 @@ const AnaliticsPage = ()=>{
         <div className="info-page">
             <div className="indo-container">
             <h2>{`Оценка ${projectMark ? "(Уже оценено)": ""}`}</h2>
-              
                 <div className="info-tile info-tile-center" >
                     {isLoading && (<Loading/>)}
                     {!isLoading && (
@@ -72,7 +71,7 @@ const AnaliticsPage = ()=>{
                         title= "frame1"
                     />
                     <iframe
-                        src="/2.html"
+                        src={`${AnaliticsURL}/graph_user_commits?type=html&projectId=${projectId}&token=${accessToken}`}
                         width="100%"
                         height="500px"
                         style={{ border: 'none' }}

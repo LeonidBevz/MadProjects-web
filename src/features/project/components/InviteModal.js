@@ -64,7 +64,7 @@ const InviteModal = ({ onCancel, projectId}) => {
                     )}
                </div>
                 <div className="settings-flex-butt">
-                  <button type="button" onClick={onCancel}>Отмана</button>
+                  <button type="button" onClick={onCancel}>Отмена</button>
                 </div>
             </div>
           )}

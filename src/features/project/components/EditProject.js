@@ -91,7 +91,7 @@ const EditProjectModal = ({onConfirm, onCancel, newTitle, newDescription, setNew
           {!isLoading && (
             <div className="settings-flex-butt">
               <button type="submit">Сохранить</button>
-              <button type="button" onClick={onCancel}>Отмана</button>
+              <button type="button" onClick={onCancel}>Отмена</button>
             </div>
           )}
           

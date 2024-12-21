@@ -56,7 +56,7 @@ const App = () => {
                 <Routes> 
                   <Route path="/" element={
                     <AuthProvider>
-                      <WebSocketProvider>
+                      <WebSocketProvider> 
                         <Outlet/>
                       </WebSocketProvider>
                     </AuthProvider> 
@@ -67,7 +67,7 @@ const App = () => {
                       <Route path="activity/" element={<ActivityPage/>}/>
                       <Route path="info/" element={<InfoPage/>}/>
                       <Route path="kanban/" element={<KanbanPage/>}/>
-                      <Route path="messenger/" element={<MessengerPage/>}/>
+                      <Route path="messenger/" element={<MessengerPage/> }/>
                       <Route path="sprints/:sprint" element={<SprintPage/>}/>
                       <Route path="sprints/:sprint/edit" element={<SprintEditPage/>}/>
                       <Route path="sprints/create" element={<SprintCreatePage/>}/>

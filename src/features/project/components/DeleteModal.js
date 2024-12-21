@@ -29,7 +29,7 @@ const DeleteModal = ({text, onDelete, onCancel}) => {
         <p>{text}</p>
         <div className="flex-butt">
           <button className="deletem-button" onClick={onDelete}>Подтвердить</button>
-          <button onClick={onCancel}>Отмана</button>
+          <button onClick={onCancel}>Отмена</button>
         </div>
       </div>
     )

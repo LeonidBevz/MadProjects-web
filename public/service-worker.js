@@ -56,12 +56,10 @@ self.addEventListener('message', async (event) => {
   if (message.type === "close"){
     if (socket) {
       socket.close();
-      authorized=false
-      return
     }
     authorized=false
     subscriptions={}
-    sendMessageToAllClients({ type: 'socket_closed' })
+    sendMessageToAllClients({ type: 'socket_logout' })
     self.registration.unregister()
     return
   }  
@@ -114,6 +112,10 @@ self.addEventListener('message', async (event) => {
       }
     }
     return
+  }
+  if (message.type === 'keep_alive'){
+      console.log("keeping alive...")
+      return
   }
 });
 
