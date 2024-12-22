@@ -212,6 +212,7 @@
     margin: 0;
     font-weight: 500;
     color: var(--main-blue-color);
+    cursor: pointer;
 }
 .text-right{
     text-align: end;

@@ -1,9 +1,12 @@
+import { useTheme } from "features/shared/contexts/ThemeContext";
+import CrossIco from "images/cross";
 import React, {useRef, useEffect}  from "react";
 
 
 
 const PolicyModal = ({policyMode, onCancel = ()=>{}}) => {
     const container = useRef(null)
+    const {isNightTheme} = useTheme()
 
     const privacy = `
     1. Введение
@@ -90,8 +93,9 @@ const PolicyModal = ({policyMode, onCancel = ()=>{}}) => {
     }, []); 
   
     return (
-      <div className="policy-modal" ref={container}>
+      <div className="policy-modal z15-level" ref={container}>
         <span>{policyMode === 1 ? "Политика конфиденциальности MadProjects": "Правила пользования системой студенческих проектов MadProjects"}</span>
+        <CrossIco className="politics-cross" color={isNightTheme ? "#d4d3cf" : "black"} onClick={onCancel}/>
         <pre>{policyMode === 1 ? privacy: rules}</pre>
         
       </div>

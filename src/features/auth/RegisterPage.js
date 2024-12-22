@@ -103,7 +103,7 @@ const RegisterPage = () => {
 
     return (
       <div className="welcome-page register-page">
-        <div className={policyMode > 0 ? "bg-blur-shown" :"bg-blur-hidden"}/>
+        <div className={`${policyMode > 0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
         {policyMode > 0 && <PolicyModal policyMode={policyMode} onCancel={()=>{setPolicyMode(0)}}/>}         
             <div className="welcome-container">
                 <div className="welcome-image">

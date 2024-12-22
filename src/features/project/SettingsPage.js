@@ -149,7 +149,7 @@ const SettingsPage = () => {
             {data.team.map((member, index)=>(
               <div className="sprint" key={index}>
                 <div className="settings-flex">
-                  <p>{member.lastName + " " + member.firstName+ " " + member.secondName  }</p>
+                  <p onClick={()=>{window.open(`/profile/${member.id}`,"_blank")}}>{member.lastName + " " + member.firstName+ " " + member.secondName  }</p>
                   {index > 0 &&(
                     <CrossIco className="settings-cross" onClick={()=>deleteMember(member.id)} color={isNightTheme ? "#d4d3cf" : "black"}/>
                   )}

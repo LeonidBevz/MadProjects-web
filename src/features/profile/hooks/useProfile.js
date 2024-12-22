@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -55,6 +55,18 @@ export const useGetSharedUser = (access) =>{
     }
   );
 }
+export const useGetUserById = (id) =>{
+  return useQuery(
+    ["fetchUserById", id],
+    () => getUserById(id),
+    {
+      enabled: !!id,
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
 export const useEditCommonProfile = () =>{
   return useMutation(editCommonProfile);
 }

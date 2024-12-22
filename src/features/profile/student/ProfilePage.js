@@ -14,12 +14,20 @@ const ProfilePage = () => {
     const { isNightTheme } = useTheme()
     const [isGitAuth, setIsGitAuth] = useState(false)
     const [modalWindow, setModalWindow] = useState(0)
+    const {role} = useAuth()
 
     const navigate = useNavigate()
 
     const {accessToken} = useAuth()
     
     const { data, isLoading, error} = useGetStudentProfile()
+
+    useEffect(()=>{
+        if (role === "Curator"){
+          navigate("/teacher/profile/")
+        }
+        // eslint-disable-next-line
+    },[role])
 
     useEffect(()=>{
         if (!data) return

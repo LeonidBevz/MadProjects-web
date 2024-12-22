@@ -43,6 +43,7 @@ import GitAuthPage from "features/auth/GitAuthPage";
 import NotificationContainer from "features/shared/components/Notifications";
 import ProfileRouting from "features/profile/ProfileRouting";
 import LastActivitiesPage from "features/project/LastActivitiesPage";
+import SharedProfilePage from "features/profile/SharedProfilePage";
 
 const App = () => {  
   const queryClient = new QueryClient();
@@ -78,6 +79,11 @@ const App = () => {
 
                     {/*Маршрутизация профиля*/}
                     <Route path="profile/" element={<ProfileRouting/>}></Route>
+                    {/*Общий профиль для просмотра чужих профилей*/}
+                    <Route path="profile/" element={<StudentTopMenuPage/>}>
+                      <Route path=":userId" element={<SharedProfilePage/>}/>
+                    </Route>
+                   
                     {/*Навигация вне проекта для студента*/}
                     <Route path="student/" element={ <StudentTopMenuPage/> }>
                       <Route index element={<Navigate to="/student/profile" />}/>

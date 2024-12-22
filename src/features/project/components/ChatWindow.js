@@ -2,6 +2,7 @@ import React,{useState, useRef, useEffect} from "react";
 import LeftArrowIco from "images/arrowleft";
 import RightArrowIco from "images/arrowrightico";
 import { useTheme } from "features/shared/contexts/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 const formatLinuxTime = (timestamp) =>{
     const date = new Date(timestamp);
@@ -133,10 +134,12 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
                 {messagesADay.messages.map((messageGroup,i)=>(
                     <div className={(messageGroup.senderId === userId && !isSuperWide)? "message-group-r" :"message-group-l"} key={i}>
                         {(messageGroup.senderId !== userId || isSuperWide) && (<div className="userpic-container">
-                            <img className="user-pic" src={sendersList[messageGroup.senderId]?.avatar || "/baseProfilePic.png"} alt="pic"/>
+                            <img className="user-pic" src={sendersList[messageGroup.senderId]?.avatar || "/baseProfilePic.png"} alt="pic" style={{cursor: "pointer"}} onClick={()=>window.open(`/profile/${messageGroup.senderId}`, '_blank')}/>
                         </div>)}
                         <div className="messages-container">
-                            <p className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>{sendersList[messageGroup.senderId] ? sendersList[messageGroup.senderId].lastName + " "+sendersList[messageGroup.senderId].firstName + " "+sendersList[messageGroup.senderId].secondName : "Неизвестный хацкер"}</p>
+                            <p onClick={()=>window.open(`/profile/${messageGroup.senderId}`,"_blanc")} className={`message-author ${(messageGroup.senderId === userId && !isSuperWide) ?"text-right":""}`}>
+                                {sendersList[messageGroup.senderId] ? sendersList[messageGroup.senderId].lastName + " "+sendersList[messageGroup.senderId].firstName + " "+sendersList[messageGroup.senderId].secondName : "Неизвестный хацкер"}
+                            </p>
                             {messageGroup.messages.map((message,j)=>(<div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-container-r" : "message-container-l"} key={j}>
                                 <div className={(messageGroup.senderId === userId && !isSuperWide) ? "message-r message" : "message-l message"} index={message.id}>
                                     <pre className="message-text">{message.text}</pre>

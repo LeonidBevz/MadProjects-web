@@ -37,7 +37,7 @@ const SprintCreatePage = () => {
       // eslint-disable-next-line 
     },[createError])
 
-    const {data: kards, error} = useGetProjectKards(projectId) 
+    const {data: kards, error, isLoading: isKardsLoading} = useGetProjectKards(projectId) 
 
     useEffect(()=>{
       if (!error) return
@@ -114,7 +114,10 @@ const SprintCreatePage = () => {
             </div>
             <div>
               <label>Задачи</label>
-              <ChoseManyDropDown values={kards} displayKey={"title"} selectedValues={chosenCards} setSelectedValues={setChosenCards} emptyMessage={"Выберите задачи"}/>
+              {isKardsLoading && (<Loading/>)}
+              {!isKardsLoading &&(
+                <ChoseManyDropDown values={kards} displayKey={"title"} selectedValues={chosenCards} setSelectedValues={setChosenCards} emptyMessage={"Выберите задачи"}/>
+              )}
             </div>
             {errorMessage && (<p className="error-message" style={{marginTop: "10px"}}>{errorMessage}</p>)}
             {isCreateLoading && (

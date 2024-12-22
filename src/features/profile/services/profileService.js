@@ -30,6 +30,11 @@ export const getSharedUser = async () =>{
   return response.data;
 } 
 
+export const getUserById = async (id) =>{
+  const response = await api.get("/sharedProfile?userId=" + id)
+  return response.data;
+} 
+
 export const editCommonProfile = async (data) =>{
   const response = await api.post("/commonProfile/update", data)
   return response.data;

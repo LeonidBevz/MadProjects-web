@@ -25,7 +25,7 @@ const InfoPage = () => {
         team: members,
         repos: repos,
     })
-    },[projectData])
+    },[projectData, members, repos])
 
     const goToRepo = (repo) => {
       window.open(repo, "_blank");
@@ -44,7 +44,7 @@ const InfoPage = () => {
               <div className="info-tile">
                 {data.team.map((member, index)=>(
                   <div className="sprint" key={index}>
-                    <div className="sprints-flex" onClick={()=>navigate(`/profile/${member.name}`)}>
+                    <div className="sprints-flex" onClick={()=>navigate(`/profile/${member.id}`)}>
                       <p>{member.lastName + " " + member.firstName+ " " + member.secondName  }</p>
                       <RightArrowIco className="sprints-flex-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>

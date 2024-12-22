@@ -7,10 +7,10 @@ const ProfileRouting = ()=>{
 
     useEffect(()=>{
         if (role ==="Curator"){
-            navigate("/teacher/profile")
+            navigate("/teacher/profile", { replace: true })
         }
         else if (role === "Common"){
-            navigate("/student/profile")
+            navigate("/student/profile", { replace: true })
         }
         else{
             navigate("/login")

@@ -2,11 +2,13 @@ import CrossIco from "images/cross"
 import React, {useState} from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useProjectContext } from "../contexts/ProjectContext"
+import { useTheme } from "features/shared/contexts/ThemeContext"
 
 const StatusBar = () =>{
     const {projectId} = useParams()
     const { projectStatus } = useProjectContext()
     const [isBarVisible, setIsBarVisible] = useState(true)
+    const {isNightTheme} = useTheme()
     const navigate = useNavigate()
     const projectStatuses = {
       Pending: "Pending",
@@ -18,7 +20,7 @@ const StatusBar = () =>{
         return (
             <div className="status-bar yellow">
                 <span style={{fontWeight: "700"}}>Проект ожидает одобрения</span>
-                <CrossIco className="settings-cross" onClick={()=>setIsBarVisible(false)} color={"black"}/>
+                <CrossIco className="settings-cross" onClick={()=>setIsBarVisible(false)} color={isNightTheme ? "#d4d3cf" : "black"}/>
             </div>
         )
     }

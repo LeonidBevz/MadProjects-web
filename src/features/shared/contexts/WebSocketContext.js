@@ -54,8 +54,10 @@ export function WebSocketProvider({ children }) {
           interval = setInterval(()=>{
             navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
           },10000)
+          localStorage.setItem("keeping", true)
         } else if (message.type === 'socket_already_opened') {
           setIswsConnected(true);
+          clearInterval(interval)
           interval = setInterval(()=>{
             navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
           },10000)
@@ -68,6 +70,8 @@ export function WebSocketProvider({ children }) {
           addNotification("Ошибка подключения ", message.data)
         } else if (message.type === 'socket_logout') {
           addNotification("logout")
+          clearInterval(interval)
+          localStorage.setItem("keeping", false)
           navigate("/login/")
         }
       };
@@ -90,18 +94,25 @@ export function WebSocketProvider({ children }) {
           console.log("controller changed, new listner", navigator.serviceWorker.controller)
           navigator.serviceWorker.removeEventListener('controllerchange', controllerChangeHandler);
           addMessageListener();
-          
         };
   
         navigator.serviceWorker.addEventListener('controllerchange', controllerChangeHandler);
       }
 
+      const clearTimer = () =>{
+        if (interval){
+          localStorage.setItem("keeping", false)
+        }
+        clearInterval(interval)
+      }
+
+      window.addEventListener('beforeunload', clearTimer);
+
       return ()=>{
         navigator.serviceWorker.removeEventListener('message', messageHandler)
         window.removeEventListener("focus", handleFocus)
-        if (interval){
-          clearInterval(interval)
-        }
+        window.removeEventListener('beforeunload', clearTimer)
+        clearTimer()
         console.log("Socket context unbuild")
       }
 
