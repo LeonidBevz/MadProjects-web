@@ -17,7 +17,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker активирован...');
+  //console.log('Service Worker активирован...');
   event.waitUntil(
     self.clients.claim().then(() => {
       sendMessageToAllClients({ type: 'SW_registered' })
@@ -34,11 +34,11 @@ self.addEventListener('destroy', () => {
 
 self.addEventListener('message', async (event) => {
   const message = event.data;
-  console.log("Client message ", message)
+  //le.log("Client message ", message)
 
   if (message.type === 'reconnect') {
     if (socket) return
-    console.log("try reconnect ", socket)
+    //console.log("try reconnect ", socket)
     await createWebSocket(message.data.url)
     sendMessageToAllClients({type: "RECONNECTED"})
     return
@@ -114,7 +114,7 @@ self.addEventListener('message', async (event) => {
     return
   }
   if (message.type === 'keep_alive'){
-      console.log("keeping alive...")
+      //console.log("keeping alive...")
       return
   }
 });
@@ -126,7 +126,7 @@ async function createWebSocket(url){
       socketURL = url
       
       socket.onopen = () => {
-        console.log('WebSocket открыт');
+        //console.log('WebSocket открыт');
         sendMessageToAllClients({ type: 'socket_opened' })
         resolve()        
       }; 
@@ -135,16 +135,16 @@ async function createWebSocket(url){
         try {
           const data = JSON.parse(event.data);
   
-          console.log("Socket message: ", data)
+          //console.log("Socket message: ", data)
   
           sendMessageToAllClients({ type: 'RECEIVE_MESSAGE', data: data })
         } catch (error) {
-          console.error('Ошибка парсинга:', error);
+          //console.error('Ошибка парсинга:', error);
         }
       };
   
       socket.onerror = (error) => {
-        console.error('WebSocket ошибка:', error);
+        //console.error('WebSocket ошибка:', error);
         socket = null;
         authorized = false
         subscriptions={}
@@ -154,7 +154,7 @@ async function createWebSocket(url){
       };
   
       socket.onclose = () => {
-        console.log('WebSocket закрыт');
+        //console.log('WebSocket закрыт');
         socket = null;
         authorized = false
         subscriptions={}
@@ -164,7 +164,7 @@ async function createWebSocket(url){
     }
     else{
       sendMessageToAllClients({ type: 'socket_already_opened' })
-      console.log("Socket already started ", socket) 
+      //console.log("Socket already started ", socket) 
       resolve()
     }
   })

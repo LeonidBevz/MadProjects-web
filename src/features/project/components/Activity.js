@@ -94,7 +94,7 @@ const Activity = ({year, activities, isRepoError, isRepoLoading}) => {
     },[activities])
 
     const handleClick = (day) =>{
-      console.log(getDateFromDayNumber(day, year))
+      //console.log(getDateFromDayNumber(day, year))
     }
 
     const handleMouseEnter = (event) => {

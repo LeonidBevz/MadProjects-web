@@ -25,10 +25,10 @@ export function TokenProvider({children}){
         navigator.serviceWorker.register('/service-worker.js')
           .then(registration => {
               setIsSWRegistered(true)   
-            console.log('Service Worker зарегистрирован');         
+            //console.log('Service Worker зарегистрирован');         
           })
           .catch(error => {
-            console.error('Ошибка регистрации Service Worker:', error);
+            //console.error('Ошибка регистрации Service Worker:', error);
           });
     
         // Прослушивание сообщений от Service Worker
@@ -50,12 +50,12 @@ export function TokenProvider({children}){
         });
       } else {
         alert("Service Worker не поддерживается в вашем браузере, некоторые функции ограничены.")
-        console.log('Service Worker не поддерживается в этом браузере');
+        //console.log('Service Worker не поддерживается в этом браузере');
       }
     }, []);
    
     useEffect (()=>{
-      console.log("try start", isSWRegistered, userId)
+      //console.log("try start", isSWRegistered, userId)
       if (!isSWRegistered) return
       if (!navigator.serviceWorker.controller) {
         return
@@ -71,10 +71,6 @@ export function TokenProvider({children}){
         navigate('/login/')     
       }
     },[userId, isSWRegistered])
-
-    useEffect (()=>{
-      console.log(isSWRegistered)
-    },[isSWRegistered])
   
     const sendAction = (actionType, params) => {
       navigator.serviceWorker.controller.postMessage({type: "SEND_MESSAGE", data:  JSON.stringify({ type: "entities.Intent." + actionType, ...params })});
@@ -147,20 +143,13 @@ export function TokenProvider({children}){
       localStorage.setItem('userdata', data);
 
       if (!data.id){
-        console.log("wrong user data")
+        //console.log("wrong user data")
         return
       }
       localStorage.setItem('userid', data.id);
       setUserId(parseInt(data.id))
     }
-    const updateUsername = async (token) => {
       
-      return //old
-      const newUsername = await getUsername(token)
-      localStorage.setItem('username', newUsername);
-      console.log("new username: ",newUsername)
-    }
-  
     const onLogout = () => {
       //logOut(localStorage.getItem("refresh"),localStorage.getItem("access"))
       localStorage.removeItem('access');
@@ -255,9 +244,9 @@ export function TokenProvider({children}){
             
         });
         
-        console.log("Logout", response.status);
+        //console.log("Logout", response.status);
     } catch (error) {
-        console.error('Ошибка:', error);
+        //console.error('Ошибка:', error);
         return null;
     }
 }
@@ -273,7 +262,7 @@ async function getNewTokens(refresh){
             
         });
         
-        console.log("Refreshed token", response.status);
+        //console.log("Refreshed token", response.status);
         if (response.status===200){
           const result = await response.json()
           return result
@@ -282,7 +271,7 @@ async function getNewTokens(refresh){
           return null
         }
     } catch (error) {
-        console.error('Ошибка:', error);
+        //console.error('Ошибка:', error);
         return null;
     }
 }
@@ -304,7 +293,7 @@ async function getUsername(token){
                     
   } catch (error) {
     //временно без сервера
-    console.error('Ошибка:', error);
+    //console.error('Ошибка:', error);
     
     return null;
   }

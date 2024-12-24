@@ -2,7 +2,6 @@ import React,{useState, useRef, useEffect} from "react";
 import LeftArrowIco from "images/arrowleft";
 import RightArrowIco from "images/arrowrightico";
 import { useTheme } from "features/shared/contexts/ThemeContext";
-import { useNavigate } from "react-router-dom";
 
 const formatLinuxTime = (timestamp) =>{
     const date = new Date(timestamp);
@@ -57,7 +56,7 @@ const ChatWindow = ({chat, isMobile, onBackClick, isSuperWide, groupedMessages, 
             };
             //уменьшить число непрочитанных
             readTimout.current = setTimeout(() => {
-              console.log("sendReaded", parseInt(lastVisibleItem.getAttribute("index")), chat.id)
+              //console.log("sendReaded", parseInt(lastVisibleItem.getAttribute("index")), chat.id)
               
               onReadUntil(parseInt(lastVisibleItem.getAttribute("index")))              
               readTimout.current = null;

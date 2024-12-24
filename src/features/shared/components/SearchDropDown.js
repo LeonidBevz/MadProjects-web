@@ -61,7 +61,7 @@ const SearchDropDown = ({values, chosenOption, setChosenOption, emptyMessage}) =
     return (
       <div className="search-dd-container" ref={container}>
         <div className={isDropdownOpen ? "search-dd-button isddactive" : "search-dd-button"} onClick={()=>setIsDropdownOpen(!isDropdownOpen)}>
-            <div className="input-text no-trans">{chosenOption}</div>
+            <div className="input-text no-trans">{chosenOption ? chosenOption : emptyMessage}</div>
             {isDropdownOpen ? 
               <DownArrowIco color={isNightTheme ? "#d4d3cf" : "#D9D9D9"} className="search-dd-button-img"/>
               :<UpArrowIco color={isNightTheme ? "#d4d3cf" : "#D9D9D9"} className="search-dd-button-img"/>}

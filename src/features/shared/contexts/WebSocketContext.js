@@ -34,7 +34,7 @@ export function WebSocketProvider({ children }) {
         });
 
       }).catch((error) => {
-        console.error('Ошибка регистрации Service Worker:', error);
+        //console.error('Ошибка регистрации Service Worker:', error);
       });
     }
   }
@@ -47,7 +47,7 @@ export function WebSocketProvider({ children }) {
       // Прослушивание сообщений от Service Worker
       const messageHandler = (event) => {
         const message = event.data;
-        console.log("messege in main ",message);
+        //console.log("messege in main ",message);
         if (message.type === 'socket_opened') {
           navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: accessToken })});
           setIswsConnected(true);
@@ -91,7 +91,7 @@ export function WebSocketProvider({ children }) {
         addMessageListener();
       } else {
         const controllerChangeHandler = () => {
-          console.log("controller changed, new listner", navigator.serviceWorker.controller)
+          //console.log("controller changed, new listner", navigator.serviceWorker.controller)
           navigator.serviceWorker.removeEventListener('controllerchange', controllerChangeHandler);
           addMessageListener();
         };
@@ -113,12 +113,12 @@ export function WebSocketProvider({ children }) {
         window.removeEventListener("focus", handleFocus)
         window.removeEventListener('beforeunload', clearTimer)
         clearTimer()
-        console.log("Socket context unbuild")
+        //console.log("Socket context unbuild")
       }
 
     } else {
       alert("Service Worker не поддерживается в вашем браузере, некоторые функции ограничены.")
-      console.log('Service Worker не поддерживается в этом браузере');
+      //console.log('Service Worker не поддерживается в этом браузере');
     }
     // eslint-disable-next-line 
   }, []);

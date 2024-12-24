@@ -111,6 +111,10 @@ const TeacherTopMenuPage = () => {
                 Одобрение проектов
               </div>
               <div className="sidebar-separator"/>
+              <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/stats/`)}>
+                Статистика и отчеты
+              </div>
+              <div className="sidebar-separator"/>
             </div>
           </div>
           <Outlet/>

@@ -50,7 +50,17 @@ export const getGroupProjects = async (id) =>{
 } 
 
 export const getCouratorGroups = async (id) =>{
-  const response = await api.get("projectgroup/getCuratorGroups?curatorId=" + id)
+  const response = await api.get("/projectgroup/getCuratorGroups?curatorId=" + id)
+  return response.data;
+} 
+
+export const getCouratorGroupsJwt = async (id) =>{
+  const response = await api.get("/projectgroup/getCuratorGroups")
+  return response.data;
+} 
+
+export const getStudyGroups = async (id) =>{
+  const response = await api.get("/analytics/getGroups?projectGroupId=" + id)
   return response.data;
 } 
 

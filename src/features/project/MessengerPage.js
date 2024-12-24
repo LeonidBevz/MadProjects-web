@@ -93,7 +93,7 @@ const MessengerPage = () => {
       sendAction("Messenger.RequestChatsList",{
         projectId: projectIdInt
       })
-      console.log('Messages ws subscribed');
+      //console.log('Messages ws subscribed');
 
       const onmessage = (event )=>{
         const SWmessage = event.data;
@@ -109,7 +109,7 @@ const MessengerPage = () => {
           sendAction("Messenger.RequestChatsList",{
             projectId: projectIdInt
           })
-          console.log('Messages ws subscribed reconnect');
+          //console.log('Messages ws subscribed reconnect');
           return
         }
         if (SWmessage.type === 'RECEIVE_MESSAGE') {
@@ -144,7 +144,7 @@ const MessengerPage = () => {
         navigator.serviceWorker.removeEventListener('message', onmessage)
         window.removeEventListener('beforeunload', unsubscribe)
         unsubscribe()
-        console.log("Messages ws unsubscribed")
+        //console.log("Messages ws unsubscribed")
         
       };
     },[iswsConnected])
@@ -204,7 +204,7 @@ const MessengerPage = () => {
       };
 
       if (initialMessages.length===0){return}
-      const start = performance.now();
+      //const start = performance.now();
 
       const grouped = {
           read: groupMessages(initialMessages.find(messages => messages.chatId === activeChat.id).readMessages),
@@ -212,9 +212,9 @@ const MessengerPage = () => {
           chatId: activeChat.id
       }        
 
-      const end = performance.now();  
+      //const end = performance.now();  
 
-      console.log(`Время группировки: ${end - start} миллисекунд`);
+      //console.log(`Время группировки: ${end - start} миллисекунд`);
       
       setGroupedMessages(prevMessages => [...prevMessages, grouped])
       scrollChatToNewMess()

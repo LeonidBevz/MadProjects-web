@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
 
   const handleLogOut = async (navigateToLogin = true) => {
     if (!navigator.serviceWorker.controller) {
-      console.error("Service Worker не доступен");
+      //console.error("Service Worker не доступен");
       onLogout(); 
       if (navigateToLogin) navigate("/login/");
       return;
@@ -71,7 +71,7 @@ export function AuthProvider({ children }) {
       if (navigateToLogin) navigate("/login/");
       setIsLoggingOut(false)
     } catch (error) {
-      console.error("Ошибка при logout:", error);
+      //console.error("Ошибка при logout:", error);
       onLogout();
       if (navigateToLogin) navigate("/login/");
       setIsLoggingOut(false)

@@ -36,6 +36,7 @@ const AnaliticsPage = ()=>{
         })
     }   
 
+
     if (role!== "Curator") {
         return (<NotFoundPage/>)        
     }
@@ -43,7 +44,7 @@ const AnaliticsPage = ()=>{
     
     return(
         <div className="info-page page">
-            <div className="indo-container">
+            <div className="info-container">
             <h2>{`Оценка ${projectMark ? "(Уже оценено)": ""}`}</h2>
                 <div className="info-tile info-tile-center" >
                     {isLoading && (<Loading/>)}
@@ -60,7 +61,7 @@ const AnaliticsPage = ()=>{
                     
                 </div>
             </div>
-            <div className="indo-container">
+            <div className="info-container">
                 <h2>Аналитика</h2>
                 <div className="info-tile">
                     <iframe

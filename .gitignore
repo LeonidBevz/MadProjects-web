@@ -12,6 +12,7 @@
 # production
 /build
 nginx.conf
+nginx.conf.template
 
 # misc
 .DS_Store

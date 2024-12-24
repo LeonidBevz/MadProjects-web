@@ -36,11 +36,6 @@ const ProfessorProfileEditPage = () => {
 
     const navigate = useNavigate()
 
-    useEffect(()=>{
-      console.log("fetch-server-for-data")      
-      // eslint-disable-next-line
-    },[])
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfessorForm((prevForm) => ({

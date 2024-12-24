@@ -37,7 +37,7 @@ export function ThemeProvider({ children }) {
   },[isWide, isSideBarOpen])
 
   useEffect(()=>{
-    console.log(isSideBarPinned)
+    //console.log(isSideBarPinned)
   },[isSideBarPinned])
 
   useEffect(() => {

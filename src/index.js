@@ -44,6 +44,7 @@ import NotificationContainer from "features/shared/components/Notifications";
 import ProfileRouting from "features/profile/ProfileRouting";
 import LastActivitiesPage from "features/project/LastActivitiesPage";
 import SharedProfilePage from "features/profile/SharedProfilePage";
+import ProjectsStatsPage from "features/profile/teacher/ProjectsStatsPage";
 
 const App = () => {  
   const queryClient = new QueryClient();
@@ -99,6 +100,7 @@ const App = () => {
                       <Route path="approve/" element={<ProjectsApprovePage/>}/>
                       <Route path="rate/" element={<ProjectsRatePage/>}/>
                       <Route path="group/:group/" element={<ProjectsGroupPage/>}/>
+                      <Route path="stats/" element={<ProjectsStatsPage/>}/>
                       <Route path="profile/edit" element={<ProfessorProfileEditPage/>}/>            
                     </Route>
 

@@ -66,7 +66,7 @@ const GitActivity = () => {
 
     useEffect(()=>{
       if (!chosenBranch) return
-      console.log(branchesData)
+      //console.log(branchesData)
       const newChosenRepo = branchesData.flatMap(repo => 
         repo.repoBranches.map(branch => ({
             repoName: repo.name,
@@ -93,7 +93,7 @@ const GitActivity = () => {
       const authIds = repoData.authors
         .filter(author => author.githubMeta !== null)
         .map(author => author.githubMeta.githubId);
-      console.log(authIds)
+      //console.log(authIds)
 
       if (repoData.authors.some(author => author.githubMeta === null)){
         unknownGithubIds = Array.from(
@@ -157,7 +157,7 @@ const GitActivity = () => {
       });
 
       usersObject.unshift({ name: "Все" });
-      console.log(usersObject,repoData.commits )
+      //console.log(usersObject,repoData.commits )
 
 
       const formattedData = repoData.commits.map(commit => {

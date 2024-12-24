@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById, getCouratorGroupsJwt, getStudyGroups } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -99,6 +99,29 @@ export const useGetCuratorGroups = (id) =>{
   );
 }
 
+export const useGetCuratorGroupsJwt = () =>{
+  return useQuery(
+    ["fetchCouratorGroupsJwt"],
+    () => getCouratorGroupsJwt(),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
+export const useGetStudyGroups = (id) =>{
+  return useQuery(
+    ["fetchStudyGroups", id],
+    () => getStudyGroups(id),
+    {
+      enabled: !!id,
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+}
+
 export const useJoinProject = () => {
   return useMutation(joinProject);
 }
@@ -110,7 +133,7 @@ export const useGetPendingProjects = () =>{
     () => getPendingProjects(),
     {
       retry: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   );
 }

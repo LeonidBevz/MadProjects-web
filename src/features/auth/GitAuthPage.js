@@ -17,12 +17,10 @@ const GitAuthPage = () =>{
         window.location.href = `https://github.com/login/oauth/authorize?client_id=Iv23liCiBaSIoD9dEHe6&state=${state}`;
     }
     
-    const { data, isLoading, error, isSuccess } = useGitAuth(code, state);
+    const { isLoading, error, isSuccess } = useGitAuth(code, state);
 
     useEffect(()=>{ 
-        if (!isSuccess) return
-
-        console.log("succ")          
+        if (!isSuccess) return    
         const timer = setTimeout(()=>{
             navigate('/profile/')
     },5000)
