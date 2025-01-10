@@ -99,11 +99,12 @@ const ProjectsApprovePage = () => {
         {isMessageWindowVisible && (<ProfessorMessage project= {denyProject} onConfirm={sendDeny} onCancel={()=>setIsMessageWindowVisible(false)}/>)}         
 
         <div className="info-container">
-            <h2>Одобрение тем проектов</h2>       
+            <h2>Одобрение тем проектов</h2>     
+            <div className="table-tile">
             {table.length === 0 
                 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, создайте группу проектов в профиле, и ожидайте заявок от студентов."}/> 
                 : <Table titles={titles} data={table} onApprove={onApprove} onDeny={onDeny}/>}       
-            
+            </div>
         </div>
       </div>
     );

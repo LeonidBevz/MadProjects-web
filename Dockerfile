@@ -15,8 +15,7 @@ FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN apk update && \
-    apk add --no-cache jq openssl
+RUN apk --no-cache add jq openssl
 
 ENTRYPOINT ["sh", "-c", " \
     PASSWORD=$(jq -r '.ssl.certificatePassword' /etc/compose/config.json) && \

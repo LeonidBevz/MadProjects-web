@@ -65,13 +65,6 @@ const AnaliticsPage = ()=>{
                 <h2>Аналитика</h2>
                 <div className="info-tile">
                     <iframe
-                        src={`${AnaliticsURL}/graph_statuses?type=html&projectId=${projectId}&token=${accessToken}`}
-                        width="100%"
-                        height="500px"
-                        style={{ border: 'none' }}
-                        title= "frame1"
-                    />
-                    <iframe
                         src={`${AnaliticsURL}/graph_user_commits?type=html&projectId=${projectId}&token=${accessToken}`}
                         width="100%"
                         height="500px"

@@ -100,7 +100,7 @@ const TeacherTopMenuPage = () => {
             <div className="sidemenu-buttons">
               <div className="sidebar-separator"/>
               <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/current/`)}>
-                Текущие проекты
+                Все проекты
               </div>
               <div className="sidebar-separator"/>
               <div className="sidemenu-butt" onClick={()=>onSideMenuClick(`/teacher/rate/`)}>

@@ -19,7 +19,6 @@ const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}}) => {
     */
 
     return (
-      <div className="table-tile">  
         <table>
           <thead>
             <tr>
@@ -48,10 +47,7 @@ const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}}) => {
               </td>))}
             </tr>))}
           </tbody>
-        </table>        
-     
-      </div>
-      
+        </table>         
     );
   }
   

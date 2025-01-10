@@ -6,9 +6,11 @@ export const useRegister = () => {
   
   return useMutation(registerUser,{
     onSuccess: (data) => {
-      localStorage.setItem("access", data.token);
+      localStorage.setItem("access", data.accessToken);
+      localStorage.setItem("refresh", data.refreshToken);
       localStorage.setItem("role", data.userType)
-      localStorage.setItem("tokenTime", data.expiresAt);
+      localStorage.setItem("accessTime", data.accessExpiresAt);
+      localStorage.setItem("refreshTime", data.refreshExpiresAt);
     }
   });
 };
@@ -18,9 +20,11 @@ export const useLogin = () => {
 
   return useMutation(loginUser,{
     onSuccess: (data) => {
-      localStorage.setItem("access", data.token);
+      localStorage.setItem("access", data.accessToken);
+      localStorage.setItem("refresh", data.refreshToken);
       localStorage.setItem("role", data.userType)
-      localStorage.setItem("tokenTime", data.expiresAt);
+      localStorage.setItem("accessTime", data.accessExpiresAt);
+      localStorage.setItem("refreshTime", data.refreshExpiresAt);
       navigate("/profile/")      
     }
   });

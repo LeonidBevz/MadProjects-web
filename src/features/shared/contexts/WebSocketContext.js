@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import {  MessengerSocket } from "urls";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "./NotificationsContext";
+import { useAuth } from "./AuthContext";
 
 const WebSocketContext = createContext();
 
@@ -12,8 +13,7 @@ export function useWebSocket() {
 export function WebSocketProvider({ children }) {
   const [iswsConnected, setIswsConnected] = useState(null);
   const [isSWRegistered, setIsSWRegistered] = useState(false);
-  const tokenExpTime = localStorage.getItem("tokenTime")
-  const accessToken = localStorage.getItem("access")
+  const { accessToken,accessExpTime,refreshExpTime, updateTokens } = useAuth()
   const navigate = useNavigate()
   const clientId = crypto.randomUUID();
   const { addNotification } = useNotifications()
@@ -63,13 +63,13 @@ export function WebSocketProvider({ children }) {
           },10000)
         } else if (message.type === 'socket_closed') {
           setIswsConnected(false);
-          addNotification("Сокет закрылся")
+          //addNotification("Сокет закрылся")
         } else if (message.type === 'SW_registered') {
           setIsSWRegistered(true);
         } else if (message.type === 'socket_error') {
           addNotification("Ошибка подключения ", message.data)
         } else if (message.type === 'socket_logout') {
-          addNotification("logout")
+          //addNotification("logout")
           clearInterval(interval)
           localStorage.setItem("keeping", false)
           navigate("/login/")
@@ -124,19 +124,36 @@ export function WebSocketProvider({ children }) {
   }, []);
 
   useEffect (()=>{
-    if (!isSWRegistered) return
-    if (!navigator.serviceWorker.controller) {
-      return
-    }
-
-    if ((tokenExpTime - 1000) > Date.now()){
-      navigator.serviceWorker.controller.postMessage({ type: 'start', url: MessengerSocket});
-      return
-    }
-    else {
-      addNotification("Сессия истекла, пожалуйста войдите снова", "info")
-      navigate("/login/")
-    }
+    const handleServiceWorker = async () => {
+      if (!isSWRegistered) return;
+  
+      const controller = navigator.serviceWorker.controller;
+      if (!controller) return;
+  
+      const currentTime = Date.now();
+  
+      if ((accessExpTime - 1000) > currentTime) {
+        controller.postMessage({ type: 'start', url: MessengerSocket });
+        return;
+      }
+  
+      if ((refreshExpTime - 1000) > currentTime) {
+        try {
+          await updateTokens();
+          controller.postMessage({ type: 'start', url: MessengerSocket });
+        } catch (error) {
+          console.error("Ошибка обновления токенов:", error);
+          addNotification("Ошибка при обновлении токенов", "error");
+          navigate("/login/");
+        }
+        return;
+      }
+  
+      addNotification("Сессия истекла, пожалуйста войдите снова", "info");
+      navigate("/login/");
+    };
+  
+    handleServiceWorker();
     // eslint-disable-next-line 
   },[isSWRegistered])
 

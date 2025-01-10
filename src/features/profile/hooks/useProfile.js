@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById, getCouratorGroupsJwt, getStudyGroups } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById, getCouratorGroupsJwt, getStudyGroups, getAllProjects } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -159,4 +159,15 @@ export const useGetUnmarkedProjects = () =>{
 
 export const useEditTeacher = () => {
   return useMutation(editTeacherProfile);
+}
+
+export const useGetAllProjects = (data) =>{
+  return useQuery(
+    ["fetchAllProjects", data.projectGroupId, data.status, data.mark, data.marked],
+    () => getAllProjects(data),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 }

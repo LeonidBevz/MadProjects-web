@@ -293,17 +293,27 @@ const GitActivity = () => {
       )
     }
       
+    if (branchesNames?.length === 0){
+      return (
+        <div className="commits-container">
+          <h2>{`Общая активность на GitHub`}</h2>
+          <div className="commits-tile">
+            <span> В проекте не привязаны репозитории, добавить их может создатель проекта в настройках </span>
+          </div>
+        </div>
+      )
+    }
     return(
       <div className="commits-container">
         {year && <h2>{`Общая активность за ${year} год`}</h2>}
         {!year && <h2>{`Общая активность на GitHub`}</h2>}
         <div className="commits-tile">
-        <div className="commits-controls-container">
-          <div className="controls-block repo">
-              <p>Репозиторий</p>
-              <div className="flex1">
-                <SearchDropDown values={branchesNames} chosenOption={chosenBranch} setChosenOption={setChosenBranch} emptyMessage={"Выберите репозиторий"}/>
-              </div>
+          <div className="commits-controls-container">
+            <div className="controls-block repo">
+                <p>Репозиторий</p>
+                <div className="flex1">
+                  <SearchDropDown values={branchesNames} chosenOption={chosenBranch} setChosenOption={setChosenBranch} emptyMessage={"Выберите репозиторий"}/>
+                </div>
             </div> 
           </div>
           <div className="commits-controls-container">
@@ -327,6 +337,9 @@ const GitActivity = () => {
           {activities && (
             <Activity year={year} activities={activities} isRepoError={isRepoError} isRepoLoading={isRepoLoading}/>
           )}
+          {isRepoLoading && (
+            <Loading/>
+          )} 
           {commitsToDisplay && !isRepoLoading && (
             <div className="commits">
               {commitsToDisplay.map((commitList,i)=>(

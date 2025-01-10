@@ -6,7 +6,7 @@ let AnaliticsURL;
 
 
 if (url.hostname === "localhost") {
-    const hostname =  "kaelesty.ru"
+    const hostname =  "mad-projects.ru"
 
     MessengerSocket = "wss://"+ hostname+":8080/project";
     BackURL = "https://"+ hostname+":8080";

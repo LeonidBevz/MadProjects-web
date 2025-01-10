@@ -93,3 +93,8 @@ export const editTeacherProfile = async (data) =>{
   const response = await api.post("/curatorProfile/update",data )
   return response.data;
 } 
+
+export const getAllProjects= async (data) =>{
+  const response = await api.get("/curatorship/getProjects?projectGroupId=" + data.projectGroupId + "&status=" +data.status + "&mark="+ data.mark +"&marked=" + data.marked)
+  return response.data;
+} 

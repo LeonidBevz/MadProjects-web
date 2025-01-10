@@ -109,11 +109,11 @@ const ProjectsStatsPage = ()=>{
                     </div>
                     {chosenProjectsGroupComp && (
                       <iframe
-                        src={`${AnaliticsURL}/graph_grades?type=html&groupId=${chosenProjectsGroupComp.id}&token=${accessToken}`}
+                        src={`${AnaliticsURL}/graph_statuses?type=html&groupId=${chosenProjectsGroupComp.id}&token=${accessToken}`}
                         width="100%"
                         height="500px"
                         style={{ border: 'none' }}
-                        title= "frame1"
+                        title= "Статусы прооектов"
                       />
                     )}
                     {chosenProjectsGroupComp && (
@@ -122,10 +122,18 @@ const ProjectsStatsPage = ()=>{
                         width="100%"
                         height="500px"
                         style={{ border: 'none' }}
-                        title= "frame1"
+                        title= "Коммиты"
                       />
                     )}
-                   
+                    {chosenProjectsGroupComp && (
+                      <iframe
+                        src={`${AnaliticsURL}/graph_grades?type=html&groupId=${chosenProjectsGroupComp.id}&token=${accessToken}`}
+                        width="100%"
+                        height="500px"
+                        style={{ border: 'none' }}
+                        title= "Оценки"
+                      />
+                    )}
                 </div>
             </div>
             

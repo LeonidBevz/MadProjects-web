@@ -46,9 +46,10 @@ const ProjectsRatePage = () => {
     return (
       <div className="info-page page">  
         <div className="info-container">
-            <h2>Оценивание проектов</h2>       
-            {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, одобрите их "} linktext={"тут"} linkto={"/teacher/approve"}/> : <Table titles={titles} data={table}/>}  
-            
+            <h2>Оценивание проектов</h2>   
+            <div className="table-tile">
+                {table.length === 0 ? <EmptyTable text={"Тут пусто, чтобы здесь появились проекты, одобрите их "} linktext={"тут"} linkto={"/teacher/approve"}/> : <Table titles={titles} data={table}/>}  
+            </div>    
         </div>
       </div>
     );
