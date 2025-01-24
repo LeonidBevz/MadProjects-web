@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import {  MessengerSocket } from "urls";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "./NotificationsContext";
@@ -43,7 +43,6 @@ export function WebSocketProvider({ children }) {
   useEffect(() => {
     if ('serviceWorker' in navigator) { 
       startServiceWorker()
-      let interval
 
       // Прослушивание сообщений от Service Worker
       const messageHandler = (event) => {
@@ -52,16 +51,8 @@ export function WebSocketProvider({ children }) {
         if (message.type === 'socket_opened') {
           navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: localStorage.getItem("access") })});
           setIswsConnected(true);
-          interval = setInterval(()=>{
-            navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
-          },10000)
-          localStorage.setItem("keeping", true)
         } else if (message.type === 'socket_already_opened') {
           setIswsConnected(true);
-          clearInterval(interval)
-          interval = setInterval(()=>{
-            navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
-          },10000)
         } else if (message.type === 'socket_closed') {
           setIswsConnected(false);
           //addNotification("Сокет закрылся")
@@ -71,8 +62,6 @@ export function WebSocketProvider({ children }) {
           addNotification("Ошибка подключения ", message.data)
         } else if (message.type === 'socket_logout') {
           //addNotification("logout")
-          clearInterval(interval)
-          localStorage.setItem("keeping", false)
           navigator.serviceWorker.controller.postMessage({ type: 'close'}); 
           navigate("/login/")
         } else if (message.type === 'RECEIVE_MESSAGE' && message.data?.type === "entities.Action.Unauthorized") {
@@ -103,20 +92,9 @@ export function WebSocketProvider({ children }) {
         navigator.serviceWorker.addEventListener('controllerchange', controllerChangeHandler);
       }
 
-      const clearTimer = () =>{
-        if (interval){
-          localStorage.setItem("keeping", false)
-        }
-        clearInterval(interval)
-      }
-
-      window.addEventListener('beforeunload', clearTimer);
-
       return ()=>{
         navigator.serviceWorker.removeEventListener('message', messageHandler)
         window.removeEventListener("focus", handleFocus)
-        window.removeEventListener('beforeunload', clearTimer)
-        clearTimer()
         //console.log("Socket context unbuild")
       }
 
@@ -161,6 +139,61 @@ export function WebSocketProvider({ children }) {
     handleServiceWorker();
     // eslint-disable-next-line 
   },[isSWRegistered])
+  
+  //поддерживание работы воркера пока пользователь на вкладке 
+  const intervalRef = useRef(null);
+  const stopTimeout = useRef(null)
+
+  useEffect(() => {
+    const startKeepInterval = () => {
+      if (stopTimeout.current){
+        clearTimeout(stopTimeout.current)
+        stopTimeout.current = null
+      }
+      if (intervalRef.current) return; 
+
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: "keep_alive" });
+      }
+        
+
+      intervalRef.current = setInterval(() => {
+        if (!navigator.serviceWorker.controller) return;
+        navigator.serviceWorker.controller.postMessage({ type: "keep_alive" });
+      }, 10000);
+
+      console.log("Start interval", !!navigator.serviceWorker.controller);
+    };
+
+    const clearKeepInterval = () => {
+      if (intervalRef.current) {
+        stopTimeout.current = setTimeout(()=>{
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+          console.log("Stop interval");
+        }, 5*60*1000)        
+      }
+    };
+
+    const handleStartInterval = () => {
+      startKeepInterval();
+    };
+
+    const handleStopInterval = () => {
+      clearKeepInterval();
+    };
+
+    window.addEventListener("focus", handleStartInterval);
+    window.addEventListener("load", handleStartInterval);
+    window.addEventListener("blur", handleStopInterval);
+
+    return () => {
+      window.removeEventListener("focus", handleStartInterval);
+      window.removeEventListener("load", handleStartInterval)
+      window.removeEventListener("blur", handleStopInterval);
+      clearKeepInterval();
+    };
+  }, []);
 
   const sendAction = (actionType, params) => {
     navigator.serviceWorker.controller.postMessage({

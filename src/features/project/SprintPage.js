@@ -67,18 +67,23 @@ const SprintPage = () => {
          <div className="sprint-info-container">
               <div className="flex-title">
                 <h2>{`Спринт / ${data.meta.title}`} </h2>
-                <EditIco 
+                {!data.meta.actualEndDate &&(
+                  <EditIco 
                   className="edit" color={isNightTheme ? "#d4d3cf" : "black"} 
                   onClick={()=>{navigate("edit/", {
                     state: { name: data.meta.title, description: data.meta.desc, endDate: formatDate(data.meta.supposedEndDate), chosenTasks: data.kanban.columns }
                   })}}/>
+                )}
               </div>
               
               <div className="sprint-info-tile">
                 <p>{`Дата начала: ${data.meta.startDate}`}</p>
                 <p>{`Планируемая дата завершения: ${data.meta.supposedEndDate}`}</p>
-                {isFinishLoading && (<Loading/>)}
-                {!isFinishLoading && (
+                {data.meta.actualEndDate && (
+                  <p>{`Дата завершения: ${data.meta.actualEndDate}`}</p>
+                )}
+                {!data.meta.actualEndDate && isFinishLoading && (<Loading/>)}
+                {!data.meta.actualEndDate && !isFinishLoading && (
                   <button onClick={handleEnd}>Завершить</button>
                 )} 
             </div>

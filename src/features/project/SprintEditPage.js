@@ -43,19 +43,13 @@ const SprintEditPage = () => {
 
     const handleSubmit = (event)=>{
       event.preventDefault()
-      const isNameChanged = name !== newName
-      const isDescChanged = description !== newDescription
       const newTasks = chosenCards.filter(card => !chosenTasks.some(task => task.id === card.id))
-      if (!(isNameChanged || isDescChanged || newTasks.length>0)){
-        setErrorMessage("Ничего не изменилось!")
-        return
-      }
 
       const data = {
         sprintId: sprintId,
-        title: isNameChanged ? newName : null,
-        desc: isDescChanged ? newDescription : null,
-        kardIds: newTasks
+        title: newName,
+        desc: newDescription,
+        kardIds: newTasks.map(kard => kard.id)
       }
    
       mutate(data)

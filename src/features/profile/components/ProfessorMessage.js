@@ -42,7 +42,7 @@ const ProfessorMessage = ({onConfirm, onCancel}) => {
         <textarea
           value={message}
           onChange={handleValueChange}
-          maxLength={1000}
+          maxLength={200}
           placeholder="Комментарий"
           style={{marginBottom: "15px"}}
         />
