@@ -251,7 +251,7 @@ const GitActivity = () => {
     if (isReposLoading){
       return (
         <div className="commits-container">
-          <h2>{`Общая активность на GitHub`}</h2>
+          <h2>{`Активность на GitHub`}</h2>
           <div className="commits-tile">
             <Loading/>        
           </div>
@@ -262,7 +262,7 @@ const GitActivity = () => {
       if (reposError.status===425){
         return (
           <div className="commits-container">
-            <h2>{`Общая активность на GitHub`}</h2>
+            <h2>{`Активность на GitHub`}</h2>
             <div className="commits-tile">
               <div className="git-not-auth-container">
                 <img className="git-logo" src={GitLogo} alt="HitHub"/>
@@ -275,7 +275,7 @@ const GitActivity = () => {
       }
       return (
         <div className="commits-container">
-          <h2>{`Общая активность на GitHub`}</h2>
+          <h2>{`Активность на GitHub`}</h2>
           <div className="commits-tile">
             {reposError.message}
           </div>
@@ -285,7 +285,7 @@ const GitActivity = () => {
     if (!accessToken){
       return (
         <div className="commits-container">
-          <h2>{`Общая активность на GitHub`}</h2>
+          <h2>{`Активность на GitHub`}</h2>
           <div className="commits-tile">
             Отсутствует токен авторизации      
           </div>
@@ -296,7 +296,7 @@ const GitActivity = () => {
     if (branchesNames?.length === 0){
       return (
         <div className="commits-container">
-          <h2>{`Общая активность на GitHub`}</h2>
+          <h2>{`Активность на GitHub`}</h2>
           <div className="commits-tile">
             <span> В проекте не привязаны репозитории, добавить их может создатель проекта в настройках </span>
           </div>
@@ -305,8 +305,8 @@ const GitActivity = () => {
     }
     return(
       <div className="commits-container">
-        {year && <h2>{`Общая активность за ${year} год`}</h2>}
-        {!year && <h2>{`Общая активность на GitHub`}</h2>}
+        {year && <h2>{`GitHub активность за ${year} год`}</h2>}
+        {!year && <h2>{`Активность на GitHub`}</h2>}
         <div className="commits-tile">
           <div className="commits-controls-container">
             <div className="controls-block repo">

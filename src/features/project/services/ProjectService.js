@@ -74,3 +74,8 @@ export const rateProject = async (data) =>{
   const response = await api.post("/project/mark/set?projectId=" + data.projectId + "&mark=" + data.mark);
   return response.data;
 }
+
+export const retrySubmission = async (data) => {
+  const response = await api.post("/curatorship/retrySubmission?projectId=" + data.projectId );
+  return response.data;
+}

@@ -3,6 +3,7 @@ import {  MessengerSocket } from "urls";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "./NotificationsContext";
 import { useAuth } from "./AuthContext";
+import { updateTokens } from "../services/apiClient";
 
 const WebSocketContext = createContext();
 
@@ -13,7 +14,7 @@ export function useWebSocket() {
 export function WebSocketProvider({ children }) {
   const [iswsConnected, setIswsConnected] = useState(null);
   const [isSWRegistered, setIsSWRegistered] = useState(false);
-  const { accessToken,accessExpTime,refreshExpTime, updateTokens } = useAuth()
+  const { accessExpTime, refreshExpTime } = useAuth()
   const navigate = useNavigate()
   const clientId = crypto.randomUUID();
   const { addNotification } = useNotifications()
@@ -49,7 +50,7 @@ export function WebSocketProvider({ children }) {
         const message = event.data;
         //console.log("messege in main ",message);
         if (message.type === 'socket_opened') {
-          navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: accessToken })});
+          navigator.serviceWorker.controller.postMessage({type: "AUTHORIZE", data:  JSON.stringify({ type: "entities.Intent.Authorize", jwt: localStorage.getItem("access") })});
           setIswsConnected(true);
           interval = setInterval(()=>{
             navigator.serviceWorker.controller.postMessage({type: "keep_alive"})
@@ -72,8 +73,11 @@ export function WebSocketProvider({ children }) {
           //addNotification("logout")
           clearInterval(interval)
           localStorage.setItem("keeping", false)
+          navigator.serviceWorker.controller.postMessage({ type: 'close'}); 
           navigate("/login/")
-        }
+        } else if (message.type === 'RECEIVE_MESSAGE' && message.data?.type === "entities.Action.Unauthorized") {
+      
+        }    
       };
 
       const handleFocus = () =>{
@@ -144,12 +148,13 @@ export function WebSocketProvider({ children }) {
         } catch (error) {
           console.error("Ошибка обновления токенов:", error);
           addNotification("Ошибка при обновлении токенов", "error");
+          navigator.serviceWorker.controller.postMessage({type: "close"});
           navigate("/login/");
         }
         return;
       }
-  
       addNotification("Сессия истекла, пожалуйста войдите снова", "info");
+      navigator.serviceWorker.controller.postMessage({type: "close"});
       navigate("/login/");
     };
   
@@ -174,7 +179,7 @@ export function WebSocketProvider({ children }) {
   const checkSocket = () =>{
     navigator.serviceWorker.controller.postMessage({
       type: "reconnect",
-      data: {jwt: accessToken, url: MessengerSocket}
+      data: {jwt: localStorage.getItem("access"), url: MessengerSocket}
     })
   }
 

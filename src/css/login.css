@@ -231,7 +231,7 @@
     }
 }
 @media (resolution > 100dpi) {
-    .register-page{
+    .welcome-container{
         transform: scale(0.9);
     }
 }

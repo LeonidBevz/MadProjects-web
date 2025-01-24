@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetSharedUser } from "features/profile/hooks/useProfile";
 import api from "../services/apiClient";
 import { BackURL } from "urls";
+import { useNotifications } from "./NotificationsContext";
 
 const AuthContext = createContext();
 
@@ -19,88 +20,11 @@ export function AuthProvider({ children }) {
   const [profileImage, setProfileImage] = useState("")
   const [fullName, setFullName] = useState("")
   const navigate = useNavigate();
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)  
 
   const { data, refetch: refetchSharedUser } = useGetSharedUser(accessToken)
   
-  async function getNewTokens(refresh){
-    try {
-        const response = await fetch(BackURL + "/auth/refresh", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": "Bearer " + refresh,
-            },          
-        });
-        
-        if (response.status===200){
-          const result = await response.json()
-          return result
-        }
-        else {
-          return null
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-        return null;
-    }
-  }
-
-  const updateTokens = async ()=>{
-    const newTokens = await getNewTokens(localStorage.getItem('refresh'));
-              
-    if (newTokens) {
-      localStorage.setItem("access", newTokens.accessToken);
-      setAccessToken(newTokens.accessToken)
-      localStorage.setItem("refresh", newTokens.refreshToken);
-      setRefreshToken(newTokens.refreshToken)
-      localStorage.setItem("role", newTokens.userType)
-      setRole(newTokens.userType)
-      localStorage.setItem("accessTime", newTokens.accessExpiresAt);
-      setAccessExpTime(newTokens.accessExpiresAt)
-      localStorage.setItem("refreshTime", newTokens.refreshExpiresAt);
-      setRefreshExpTime(newTokens.refreshExpiresAt)
-    }
-  }
-
-  useEffect(()=>{
-    
-    
-    api.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      async (error) => {
-        const originalRequest = error.config;
-            if (error.response.status === 401 && !originalRequest._retry) {
-              originalRequest._retry = true;
-              
-              const newTokens = await getNewTokens(localStorage.getItem('refresh'));
-              
-              if (newTokens) {
-                localStorage.setItem("access", newTokens.accessToken);
-                setAccessToken(newTokens.accessToken)
-                localStorage.setItem("refresh", newTokens.refreshToken);
-                setRefreshToken(newTokens.refreshToken)
-                localStorage.setItem("role", newTokens.userType)
-                setRole(newTokens.userType)
-                localStorage.setItem("accessTime", newTokens.accessExpiresAt);
-                setAccessExpTime(newTokens.accessExpiresAt)
-                localStorage.setItem("refreshTime", newTokens.refreshExpiresAt);
-                setRefreshExpTime(newTokens.refreshExpiresAt)
-
-                api.defaults.headers.common['Authorization'] = `Bearer ${newTokens.accessToken}`;
-                originalRequest.headers['Authorization'] = `Bearer ${newTokens.accessToken}`;
-                return api(originalRequest);
-              } else {
-                window.location.href = '/login/';
-              }
-            }
-        
-            return Promise.reject(error);
-      }
-    );
-  },[])
+  
 
   useEffect(()=>{
     if (!data) return
@@ -173,8 +97,7 @@ export function AuthProvider({ children }) {
     isLoggingOut,
     fullName,
     profileImage,
-    refetchSharedUser,
-    updateTokens
+    refetchSharedUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

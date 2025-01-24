@@ -95,7 +95,7 @@ const ProjectsApprovePage = () => {
     }
     return (
       <div className="info-page page">  
-        <div className={isMessageWindowVisible ? "bg-blur-shown" :"bg-blur-hidden"}/>
+        <div className={isMessageWindowVisible ? "bg-blur-shown z15-level" :"bg-blur-hidden z15-level"}/>
         {isMessageWindowVisible && (<ProfessorMessage project= {denyProject} onConfirm={sendDeny} onCancel={()=>setIsMessageWindowVisible(false)}/>)}         
 
         <div className="info-container">

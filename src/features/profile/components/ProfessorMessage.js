@@ -35,7 +35,7 @@ const ProfessorMessage = ({onConfirm, onCancel}) => {
       onConfirm(message)      
     }
     return (
-      <div className="settings-modal" ref={container}>
+      <div className="settings-modal z15-level" ref={container}>
         <form onSubmit={handleSubmit}>
         <h2 className="modal-edit-text" style={{paddingBottom: "10px"}}>Комментарий преподавателя</h2>
         <span>Здесь можно указать причину отказа, а можно и не указывать.</span>
