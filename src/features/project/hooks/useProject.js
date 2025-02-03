@@ -1,5 +1,5 @@
 import {  useMutation, useQuery } from 'react-query';
-import { addRepo, createSprint, deleteMember, deleteProject, deleteRepo, finishSprint, getInviteCode, getLastActivities, getProjectKards, getProjectMeta, getProjectSprints, getSprint, postUpdateProject, rateProject, updateSprint, retrySubmission  } from '../services/ProjectService';
+import { addRepo, createSprint, deleteMember, deleteProject, deleteRepo, finishSprint, getInviteCode, getLastActivities, getProjectKards, getProjectMeta, getProjectSprints, getSprint, postUpdateProject, rateProject, updateSprint, retrySubmission, createChat  } from '../services/ProjectService';
 
 export const useGetProjectMeta = (projectId) => {
     return useQuery(['GetProject', projectId], () => getProjectMeta(projectId), {
@@ -87,4 +87,8 @@ export const useRateProject = () =>{
 
 export const useRetrySubmission = () =>{
   return useMutation( retrySubmission );
+}
+
+export const useCreateChat = () =>{
+  return useMutation( createChat )
 }

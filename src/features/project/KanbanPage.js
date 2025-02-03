@@ -8,8 +8,15 @@ import "css/kanbanpage.css";
 import Loading from "features/shared/components/Loading";
 import { useWebSocket } from "features/shared/contexts/WebSocketContext";
 import { useTheme } from "features/shared/contexts/ThemeContext";
-import { useParams } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
+import useCSSVariable from "features/shared/hooks/useCssStyle";
+import mixHexColors from "features/shared/components/ColorMIxer";
+import ChatIco from "images/chatico";
+import ChatAddIco from "images/chataddico";
+import MenuRowDotsIco from "images/menurowdots";
+import RecolorModal from "./components/Recolor";
+import { useCreateChat } from "./hooks/useProject";
+import CreateRowModal from "./components/CreateKanbanRow";
 
 const KanbanPage = () => {
   const {isNightTheme, isSideBarPinned } = useTheme();
@@ -24,10 +31,29 @@ const KanbanPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { projectId } = useParams()
   const projectIdInt = parseInt(projectId)
+  const navigate = useNavigate()
 
   const [rowsCount,setRowsCount] = useState(cards.length)
   const [cardsCount,setCardsCount] = useState(cards.reduce((total, row) => total + row.kards.length, 0))
   
+  const backgroundColor = useCSSVariable("--bg-color")
+
+  const {mutate} = useCreateChat()
+
+  const handleCreateChat = (cardId)=>{
+    mutate({
+      kardId: cardId,
+      projectId: projectId
+    }, {onSuccess: (data) =>{
+      navigate(`/${projectId}/messenger`, {
+        state: { chatId: data.chatId}
+      }
+      )
+      
+    }})
+  }
+
+
   const refactorKanbanData = (data) =>{
     const refactoredData = data.kanban.columns.map(column => ({
         ...column,
@@ -98,11 +124,12 @@ const KanbanPage = () => {
     setIsDeleteWindowShown(6)
   }
 
-  const addColumn = () =>{
+  const onCreateRow = (newName, color) =>{
     setRowsCount(rowsCount + 1)
 
     sendAction("Kanban.CreateColumn",{
       name: newName,
+      color: color.slice(1),
       projectId: projectIdInt
     })
 
@@ -139,6 +166,20 @@ const KanbanPage = () => {
     setRowToEdit(rowIndex)
     setIsDeleteWindowShown(1)
   }
+  const handleRecolorRowClick = (rowId, rowIndex)=>{
+    setRowToEditId(rowId)
+    setRowToEdit(rowIndex)
+    setIsDeleteWindowShown(7)
+  }
+  const onRecolor = (color) => {
+    sendAction("Kanban.UpdateColumn", {
+      projectId: projectIdInt,
+      id: rowToEditId,
+      name: null,
+      color: color.slice(1)
+    })
+    setIsDeleteWindowShown(0)
+  }
 
   const deleteCard = (cardId) => {
     sendAction("Kanban.DeleteKard", {
@@ -164,7 +205,8 @@ const KanbanPage = () => {
     sendAction("Kanban.UpdateColumn", {
       projectId: projectIdInt,
       id: rowId,
-      name: newName
+      name: newName,
+      color: null
     })
     setIsDeleteWindowShown(0)
   }
@@ -280,49 +322,6 @@ const KanbanPage = () => {
 
   };
 
-  function formatDate(milliseconds) {
-      const getWordEnding = (number, one, two, five) => {
-          number = Math.abs(number) % 100;
-          const n1 = number % 10;
-          if (number > 10 && number < 20) {
-            return five;
-          }
-          if (n1 > 1 && n1 < 5) {
-            return two;
-          }
-          if (n1 === 1) {
-            return one;
-          }
-          return five;
-      };
-      const now = new Date();
-      const diff = now - new Date(milliseconds);
-      const seconds = Math.floor(diff / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-    
-      if (seconds < 60) {
-        return "только что";
-      } else if (minutes < 60) {
-        return `${minutes} минут${getWordEnding(minutes, 'у', 'ы', '')} назад`;
-      } else if (hours < 24) {
-        return `${hours} час${getWordEnding(hours, '', 'а', 'ов')} назад`;
-      } else if (days < 7) {
-        return `${days} д${getWordEnding(days, 'ень', 'ня', 'ней')} назад`;
-      } else if (days < 30) {
-        const weeks = Math.floor(days / 7);
-        return `${weeks} недел${getWordEnding(weeks, 'ю', 'и', 'ь')} назад`;
-      } else if (days < 365) {
-        const months = Math.floor(days / 30);
-        return `${months} месяц${getWordEnding(months, '', 'а', 'ев')} назад`;
-      } else {
-        const years = Math.floor(days / 365);
-        return `${years} ${getWordEnding(years, 'год', 'года', 'лет')} назад`;
-      }
-  }
-
-
   if (!('serviceWorker' in navigator)) {
     return(
       <div className="no-chat-text page">В вашем браузере не поддерживается serviceWorker</div>
@@ -349,7 +348,8 @@ const KanbanPage = () => {
       {isDeleteWindowShown === 3 && (<EditModal emptyText="Название столбца" onConfirm={()=>setRowName(rowToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название колонки: `} isRowEdit={true} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 4 && (<EditModal emptyText="Название карточки"onConfirm={()=>setCardName(cardToEditId, newName)} newValue={newName} setNewValue={setNewName} text={`Введите название карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       {isDeleteWindowShown === 5 && (<EditModal emptyText="Название карточки" onConfirm={()=>addCard(rowToEditId)} newValue={newName} setNewValue={setNewName} text={`Введите название новой карточки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
-      {isDeleteWindowShown === 6 && (<EditModal emptyText="Название столбца" onConfirm={()=>addColumn()} newValue={newName} setNewValue={setNewName} text={`Введите название новой колонки: `} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 6 && (<CreateRowModal onConfirm={onCreateRow} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
+      {isDeleteWindowShown === 7 && (<RecolorModal onConfirm={onRecolor} onCancel={()=>{setIsDeleteWindowShown(0)}}/>)}
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
           {(provided) => (
@@ -357,10 +357,10 @@ const KanbanPage = () => {
               {cards.map((row, i) => (
                 <Draggable draggableId={row.frontId} index={i} key={row.frontId} isDragDisabled={isDragging}>
                   {(provided) => (
-                    <div {...provided.draggableProps} ref={provided.innerRef} className="kanban-row">
-                      <div className="kanban-row-top" {...provided.dragHandleProps}>
+                    <div ref={provided.innerRef} className="kanban-row" {...provided.draggableProps} style={{borderTop: `7px solid #${row.color}` , backgroundColor: mixHexColors(backgroundColor, row.color), ...provided.draggableProps.style}} >
+                      <div className="kanban-row-top" {...provided.dragHandleProps}> 
                         <p onClick={()=>{handleEditRowClick(i,row.id)}}>{row.name}</p>
-                        <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(row.id, i)} onEdit={()=>handleEditRowClick(i,row.id)}/>
+                        <MenuRowDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteRowClick(row.id, i)} onRecolor={()=>handleRecolorRowClick(row.id, i)} onEdit={()=>handleEditRowClick(i,row.id)}/>
                       </div>
                       <Droppable droppableId={row.frontId} type="card">
                         {(provided) => (
@@ -375,21 +375,28 @@ const KanbanPage = () => {
                                         <MenuDotsIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots" onDelete={()=>handleDeleteCardClick(i,j,card.id)} onEdit={()=>handleEditCardClick(i,j)}/>
                                       </div>
                                     </div>
-                                    <p className="card-info">{`Автор: ${card.authorName}`}</p>
-                                    <p className="card-info">{`Создано: ${formatDate(card.createdTimeMillis)}`}</p>
-                                    <p className="card-info">{`Изменено: ${formatDate(card.updateTimeMillis)}`}</p>
+                                    <div className="card-bott" style={{display: "flex", cursor: "pointer"}} >
+                                      {card.chatId && (<div onClick={()=> navigate(`/${projectId}/messenger`, {state: { chatId: card.chatId}})} style={{display: "flex", alignItems: "center"}}>
+                                        <ChatIco className="chat-icon" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                                        {card.unreadMessage && <span>{card.unreadMessage}</span>}
+                                      </div>
+                                      )}
+                                      {!card.chatId && (<div onClick={()=>handleCreateChat(card.id)} style={{display: "flex", alignItems: "center"}}>
+                                        <ChatAddIco className="chat-icon" color={isNightTheme ? "#d4d3cf" : "black"}/>
+                                        <span style={{fontSize: "0.8rem"}}>Создать чат</span>
+                                      </div>
+                                      )}
+                                    </div>
                                   </div>
                                 )}
                               </Draggable>
                             ))}
                             {provided.placeholder}
-                            <div className="kanban-row">
                               <div className="kanban-add-cont pointer" onClick={()=>handleAddCardClick(row.id)}>
                                 <p className="kanban-add-text">Добавить карточку</p>
                                 <PlusIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots"/>
                               </div>
                             </div>
-                          </div>
                         )}
                       </Droppable>
                     </div>
@@ -397,16 +404,13 @@ const KanbanPage = () => {
                 </Draggable>
               ))}
               {provided.placeholder}
-              <div className="kanban-row">
-                <div className="kanban-add-cont pointer" onClick={handleAddColumnClick}>
-                  <p>Добавить столбец</p>
-                  <PlusIco color={isNightTheme ? "#d4d3cf" : "black"} className="dots"/>
-                </div>
-              </div>
             </div>
           )}
         </Droppable>
       </DragDropContext>
+      <div className="add-column" onClick={handleAddColumnClick}>
+        <PlusIco color={"white"} className="plus-column"/>
+      </div>
     </div>
   );
 };

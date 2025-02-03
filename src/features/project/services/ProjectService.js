@@ -79,3 +79,9 @@ export const retrySubmission = async (data) => {
   const response = await api.post("/curatorship/retrySubmission?projectId=" + data.projectId );
   return response.data;
 }
+
+
+export const createChat = async (data) => {
+  const response = await api.post("/project/createKardChat?kardId=" + data.kardId + "&projectId=" + data.projectId );
+  return response.data;
+}

@@ -66,7 +66,7 @@ const LoginForm = ({onSubmit, errorMessage, isLoading}) =>{
                             {errorMessage && (<p className="error-message">{errorMessage}</p>)}
                             {!isLoading && (<button className= "login-but" type="submit">Войти</button>)}
                             {isLoading && (<Loading/>)}
-                            <span style={{display:"block", marginTop: "1rem"}} className="new-user">Возникли вопросы? Ответим <a target="_blank" href="https://mad-projects.ru:8080/inst">тут</a></span>
+                            <span style={{display:"block", marginTop: "1rem"}} className="new-user">Возникли вопросы? Ответим <a target="_blank" rel="noreferrer" href="https://mad-projects.ru:8080/inst">тут</a></span>
                             <span style={{display:"block", marginTop: "0.5rem"}} className="new-user">Новый пользователь? <a href="/register/">Регистрация</a></span>
                         </form>
                     </div>

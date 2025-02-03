@@ -5,7 +5,7 @@ import "css/messenger.css"
 import Loading from "features/shared/components/Loading";
 import { useWebSocket } from "features/shared/contexts/WebSocketContext";
 import { useTheme } from "features/shared/contexts/ThemeContext";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const MessengerPage = () => {
     const { isSideBarPinned} = useTheme();
@@ -31,7 +31,9 @@ const MessengerPage = () => {
     
     const [width, setWidth] = useState(window.innerWidth);
     const [isMobile, setIsMobile] = useState(((isSideBarPinned && width < 1240 ) || (!isSideBarPinned && width < 1000)))
-
+    
+    const location = useLocation();
+    const { chatId: initialChatId } = location.state || {}
     //resize
     const handleBackClick = () =>{
       setActiveChat(null)
@@ -157,7 +159,11 @@ const MessengerPage = () => {
     },[groupedMessages])
 
     useEffect(()=>{
-      chatsListRef.current = chatsList 
+      chatsListRef.current = chatsList
+      if (!chatsList || !initialChatId) return
+      const initialChat = chatsList.find(chat => chat.id === parseInt(initialChatId))
+      if (!initialChat) return
+      handleChatSelect(initialChat)
       // eslint-disable-next-line
     },[chatsList])
 
