@@ -4,19 +4,26 @@ import RightArrowIco from "images/arrowrightico";
 import CreateGroupModal from "features/profile/components/CreateGroupModal";
 import "css/profilepage.css"
 import { useTheme } from "features/shared/contexts/ThemeContext";
-import { useGetTeacherProfile } from "../hooks/useProfile";
+import { useDeletePGroup, useGetTeacherProfile } from "../hooks/useProfile";
 import Loading from "features/shared/components/Loading";
 import { useAuth } from "features/shared/contexts/AuthContext";
 import GitLogo from "images/gitlogo.svg"
+import CrossIco from "images/cross";
+import DeletePGModal from "../components/DeleteProjectGroupModal";
+import { useNotifications } from "features/shared/contexts/NotificationsContext";
 
 const TeacherProfilePage = () => {
     const {isNightTheme} = useTheme()
     const [modalWindow, setModalWindow] = useState(0)
     const navigate = useNavigate()
     const [isGitAuth, setIsGitAuth] = useState(false)
+    const [groupToEdit, setGroupToEdit] = useState()
     const { accessToken } = useAuth()
+    const {addNotification} = useNotifications()
 
     const { data, isLoading, error, refetch} = useGetTeacherProfile()
+
+    const {mutate} = useDeletePGroup()
     
     useEffect(()=>{
         if (!data) return
@@ -38,6 +45,27 @@ const TeacherProfilePage = () => {
         navigate(`/git/auth?code=&state=${accessToken}`)
     }
 
+    const handleDeleteGroupClick = (group, e) => {
+        e.stopPropagation();
+        setGroupToEdit(group)
+        setModalWindow(2)
+    }
+
+    const onGroupDelete = (id) => {
+        console.log(id)
+            mutate(id, {
+            onSuccess: () => {
+                addNotification("Успешно удалено","success")
+                setModalWindow(0)
+                refetch()
+            },
+            onError: (error) => {
+                addNotification(`Ошибка удаления ${error.code}!`,"error")
+            }
+    });
+
+    }
+
     if (isLoading) {
         return(
             <div className="loading-page page">
@@ -54,10 +82,12 @@ const TeacherProfilePage = () => {
         )
     }
   
+
     return (
       <div className="profile-page page">
         <div className={`${modalWindow !==0 ? "bg-blur-shown" :"bg-blur-hidden"} z15-level`}/>
-        {modalWindow === 1 && (<CreateGroupModal onCancel={()=>{setModalWindow(0)}} onConfirm={onGroupCreate}/>)}          
+        {modalWindow === 1 && (<CreateGroupModal onCancel={()=>{setModalWindow(0)}} onConfirm={onGroupCreate}/>)}   
+        {modalWindow === 2 && (<DeletePGModal name = {groupToEdit.title} onCancel={()=>{setModalWindow(0)}} onDelete={()=>onGroupDelete(groupToEdit.id)}/>)}        
         <div className="profile-page-content">
             <div className="profile-info">
                 <div className="profile-pic-container">
@@ -99,6 +129,7 @@ const TeacherProfilePage = () => {
                 {data.projectGroups.map((group, index)=>(<div className="profile-projects-item" key={index}>
                     <div className="profile-projects-content" onClick={()=>navigate(`/teacher/group/${group.id}/`)}>
                         <p>{group.title}</p>
+                        <CrossIco style={{width: "1rem", marginRight: "0.5rem"}} color={isNightTheme ? "#d4d3cf" : "black"} onClick={(e)=>handleDeleteGroupClick(group,e)}/>
                         <RightArrowIco className="profile-projects-content-img" color={isNightTheme ? "#d4d3cf" : "black"}/>
                     </div>
                     <div className="profile-projects-separator"></div>

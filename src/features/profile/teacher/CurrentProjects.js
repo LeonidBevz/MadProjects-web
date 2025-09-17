@@ -7,7 +7,7 @@ import ObjectSearchDropDown from "features/shared/components/ObjectSearchDropDow
 
 const CurrentProjectsPage = () => {
     const [chosenGroup, setChosenGroup] = useState(null)
-    const [chosenApproveStatus, setChosenApproveStatus] = useState(null)
+    const [chosenApproveStatus, setChosenApproveStatus] = useState( {title: "Одобрен", value: "Approved"})
     const [chosenRateStatus, setChosenRateStatus] = useState(null)
     const [chosenRate, setChosenRate] = useState(null)
     const [fetchData, setFetchData] = useState({projectGroupId: null,

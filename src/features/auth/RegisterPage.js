@@ -86,7 +86,7 @@ const RegisterPage = () => {
     
     useEffect(()=>{
         if (!isSuccess) return
-        navigate(`/git/auth?code=&state=${data.token}`)
+        navigate(`/git/auth?code=&state=${data.accessToken}`)
         //подтверждение почты
         //setIsEmailConfirm(true)
     },[isSuccess])

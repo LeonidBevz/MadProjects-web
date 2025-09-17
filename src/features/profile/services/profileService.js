@@ -98,3 +98,8 @@ export const getAllProjects= async (data) =>{
   const response = await api.get("/curatorship/getProjects?projectGroupId=" + data.projectGroupId + "&status=" +data.status + "&mark="+ data.mark +"&marked=" + data.marked)
   return response.data;
 } 
+
+export const deletePGroup = async (data) =>{
+  const response = await api.post("/projectGroup/delete?projectGroupId=" + data )
+  return response.data;
+} 

@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById, getCouratorGroupsJwt, getStudyGroups, getAllProjects } from "../services/profileService";
+import { getStudentProfile, getProfessorsList, verifyRepoLink, createProject, getSharedUser, getTeacherProfile, createProjectsGroup, getGroupProjects, editCommonProfile, getCouratorGroups, joinProject, getPendingProjects, approveProject, disapproveProject, getUnmarkedProjects, editTeacherProfile, getUserById, getCouratorGroupsJwt, getStudyGroups, getAllProjects, deletePGroup } from "../services/profileService";
 import { useAuth } from "features/shared/contexts/AuthContext";
 
 export const useGetStudentProfile = () => {
@@ -170,4 +170,8 @@ export const useGetAllProjects = (data) =>{
       refetchOnWindowFocus: false,
     }
   );
+}
+
+export const useDeletePGroup = () => {
+  return useMutation(deletePGroup);
 }
