@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import SearchDropDown from "features/shared/components/SearchDropDown";
 import ConfirmIco from "images/conf";
-import { AnaliticsURL } from "urls";
 import { useAuth } from "features/shared/contexts/AuthContext";
 import { useParams } from "react-router-dom";
 import { useProjectContext } from "./contexts/ProjectContext";
@@ -9,10 +8,12 @@ import { useRateProject } from "./hooks/useProject";
 import { useNotifications } from "features/shared/contexts/NotificationsContext";
 import Loading from "features/shared/components/Loading";
 import NotFoundPage from "features/shared/notfound";
+import ParticipationGraph from "features/shared/components/graphs/ParticipationGraph";
+
 
 const AnaliticsPage = ()=>{
     const {projectId} = useParams()
-    const {accessToken, role} = useAuth()
+    const { role} = useAuth()
     const {projectMark} = useProjectContext()
     const [rate, setRate] = useState(5)
 
@@ -62,16 +63,8 @@ const AnaliticsPage = ()=>{
                 </div>
             </div>
             <div className="info-container">
-                <h2>Аналитика</h2>
-                <div className="info-tile">
-                    <iframe
-                        src={`${AnaliticsURL}/graph_user_commits?type=html&projectId=${projectId}&token=${accessToken}`}
-                        width="100%"
-                        height="500px"
-                        style={{ border: 'none' }}
-                        title= "frame2"
-                    />
-                </div>
+                {/*<h2>Аналитика</h2>
+                <ParticipationGraph projectId={ projectId}/>*/}
             </div>
             
         </div>

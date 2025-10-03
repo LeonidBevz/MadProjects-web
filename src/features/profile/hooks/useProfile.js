@@ -99,13 +99,14 @@ export const useGetCuratorGroups = (id) =>{
   );
 }
 
-export const useGetCuratorGroupsJwt = () =>{
+export const useGetCuratorGroupsJwt = (options ={}) =>{
   return useQuery(
     ["fetchCouratorGroupsJwt"],
     () => getCouratorGroupsJwt(),
     {
       retry: false,
       refetchOnWindowFocus: false,
+      ...options,
     }
   );
 }

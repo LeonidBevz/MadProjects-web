@@ -30,7 +30,15 @@ const Table = ({titles, data, onApprove = ()=>{}, onDeny = ()=>{}}) => {
           <tbody>
             {data.map((row, i)=>(<tr className={i%2===0 ? "bg1" : "bg2"} key={i}>
               {titles.map((_,j)=>(<td key={j}>
-                {titles[j].type === "link" && <span className="link" onClick={()=>{navigate(row.linkto)}}>{row[titles[j].key]}</span>}
+                {titles[j].type === "link" && <a 
+                  className="link" 
+                  href={row.linkto} 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(row.linkto); 
+                  }}> 
+                  {row[titles[j].key]}
+                </a>}
                 {titles[j].type === "text" && <span>{row[titles[j].key]}</span>}
                 {titles[j].type === "approve" && <div className="table-butt-flex">
                     <button className="approve-butt" onClick={()=>{onApprove(row)}}>Одобрить</button>    

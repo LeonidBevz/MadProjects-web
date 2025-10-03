@@ -7,9 +7,10 @@ import NotFoundPage from "features/shared/notfound";
 import { useGetCuratorGroupsJwt, useGetStudyGroups } from "../hooks/useProfile";
 import Loading from "features/shared/components/Loading";
 import ObjectSearchDropDown from "features/shared/components/ObjectSearchDropDown";
-import { useGetExcelStats } from "../../shared/hooks/useStats";
-import { AnaliticsURL } from "urls";
 import { useNotifications } from "features/shared/contexts/NotificationsContext";
+import StatusesGraph from "../../shared/components/graphs/StatusesGraph";
+import CommitsGraph from "../../shared/components/graphs/CommitsGraph";
+import MarksGraph from "../../shared/components/graphs/MarksGraph";
 
 const ProjectsStatsPage = ()=>{
     const {role, accessToken} = useAuth()
@@ -21,7 +22,7 @@ const ProjectsStatsPage = ()=>{
 
     const {data: studyGroups, error: studyGroupsError} = useGetStudyGroups(chosenProjectsGroup?.id)
 
-    const {data: ExcelData, error: excelError} = useGetExcelStats(chosenProjectsGroup?.id, chosenStudyGroup)
+    const {data: ExcelData, error: excelError} = {data: null, error: null}
 
     useEffect(()=>{
       if (!studyGroupsError) return
@@ -101,40 +102,21 @@ const ProjectsStatsPage = ()=>{
             </div>
             <div className="info-container" style={{marginBottom: '200px'}}>
                 <h2>Сравнительный анализ проектов</h2>
-                 <div className="info-tile info-tile-center" >
+                 <div className="info-tile info-tile-center">
                     <div className="table-rate-flex">
                             <div className="flex1">
                               <ObjectSearchDropDown values={projectsGroups} displayKey={"title"} chosenOption={chosenProjectsGroupComp} setChosenOption={setChosenProjectsGroupComp} emptyMessage={"Группа проектов *"}/> 
                             </div>
                     </div>
-                    {chosenProjectsGroupComp && (
-                      <iframe
-                        src={`${AnaliticsURL}/graph_statuses?type=html&groupId=${chosenProjectsGroupComp.id}&token=${accessToken}`}
-                        width="100%"
-                        height="500px"
-                        style={{ border: 'none' }}
-                        title= "Статусы прооектов"
-                      />
-                    )}
-                    {chosenProjectsGroupComp && (
-                      <iframe
-                        src={`${AnaliticsURL}/graph_commits?type=html&groupId=${chosenProjectsGroupComp.id}&token=${accessToken}`}
-                        width="100%"
-                        height="500px"
-                        style={{ border: 'none' }}
-                        title= "Коммиты"
-                      />
-                    )}
-                    {chosenProjectsGroupComp && (
-                      <iframe
-                        src={`${AnaliticsURL}/graph_grades?type=html&groupId=${chosenProjectsGroupComp.id}&token=${accessToken}`}
-                        width="100%"
-                        height="500px"
-                        style={{ border: 'none' }}
-                        title= "Оценки"
-                      />
-                    )}
+                    {chosenProjectsGroupComp && (<>
+                      <CommitsGraph groupId={chosenProjectsGroupComp.id} />
+                      <StatusesGraph groupId={chosenProjectsGroupComp.id} />
+                      <MarksGraph groupId={chosenProjectsGroupComp.id} />
+                    </>)}
                 </div>
+
+
+                
             </div>
             
         </div>

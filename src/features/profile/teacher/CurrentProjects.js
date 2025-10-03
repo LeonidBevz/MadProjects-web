@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Table from "features/profile/components/Table";
 import EmptyTable from "features/profile/components/EmptyTable";
-import { useGetAllProjects, useGetCuratorGroupsJwt, useGetUnmarkedProjects } from "../hooks/useProfile";
+import { useGetAllProjects, useGetCuratorGroupsJwt } from "../hooks/useProfile";
 import Loading from "features/shared/components/Loading";
 import ObjectSearchDropDown from "features/shared/components/ObjectSearchDropDown";
 
 const CurrentProjectsPage = () => {
+    const [projectsGroups, setProjectsGroups] = useState([])
     const [chosenGroup, setChosenGroup] = useState(null)
     const [chosenApproveStatus, setChosenApproveStatus] = useState( {title: "Одобрен", value: "Approved"})
     const [chosenRateStatus, setChosenRateStatus] = useState(null)
@@ -25,15 +26,19 @@ const CurrentProjectsPage = () => {
     },[chosenGroup, chosenApproveStatus, chosenRateStatus, chosenRate])
 
     const approveStatuses =[
+        {title: "Любой", value: null},
         {title: "Одобрен", value: "Approved"},
         {title: "Отклонен", value: "Unapproved"},
         {title: "Ожидает одобрения", value: "Pending"}
+        
     ]
     const rateStatuses =[
+        {title: "Любой", value: null},
         {title: "Оценен", value: true},
         {title: "Не оценен", value: false}
     ]
     const rates =[
+        {title: "Любая", value: null},
         {title: "Отлично", value: 5},
         {title: "Хорошо", value: 4},
         {title: "Удовл.", value: 3},
@@ -49,9 +54,14 @@ const CurrentProjectsPage = () => {
 
 
     const [table,setTable] = useState([])
+    const {isLoading, error} = useGetCuratorGroupsJwt({
+        onSuccess: (data) => {
+            const modified = [{ id: null, title: "Любая" }, ...data];
+            setProjectsGroups(modified);
+        }
+    })
 
-
-    const {data, isLoading: isUpdateLoadig, error: updateError } = useGetAllProjects(fetchData)
+    const {data, isLoading: isUpdateLoading, error: updateError } = useGetAllProjects(fetchData)
     useEffect(()=>{
         if (!data) return
       
@@ -65,7 +75,7 @@ const CurrentProjectsPage = () => {
         setTable(newTable)
     },[data])
    
-    const {data: projectsGroups, isLoading, error} = useGetCuratorGroupsJwt()
+   
 
     if (isLoading) {
         return(
@@ -104,8 +114,8 @@ const CurrentProjectsPage = () => {
                       <ObjectSearchDropDown values={rates} displayKey={"title"} chosenOption={chosenRate} setChosenOption={setChosenRate} emptyMessage={"Оценка"}/> 
                     </div>
                 </div>
-
-                {table.length === 0 ? <EmptyTable text={"Ничего не найдено, измените фильтры "}/> : <Table titles={titles} data={table}/>}    
+                {isUpdateLoading && <Loading/>}
+                {!isUpdateLoading && (table.length === 0 ? <EmptyTable text={"Ничего не найдено, измените фильтры "}/> : <Table titles={titles} data={table}/>)}
             </div>
         </div>
       </div>
